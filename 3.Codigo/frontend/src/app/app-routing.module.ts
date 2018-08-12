@@ -28,7 +28,7 @@ const routes: Routes = [
         component: LoginComponent,
         data: {
             breadcrumb: "Inicio de Sesión"
-        }
+        },
         canActivate: [
             AlreadyInGuard
         ]
