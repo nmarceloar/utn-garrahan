@@ -1,0 +1,158 @@
+<div class="container mb-3">
+
+    <div class="row">
+
+        <div class="col">
+
+            <div class="d-flex align-items-center">
+                <h5 class="m-0 p-0 mr-3  text-primary font-weight-normal">Órdenes</h5>
+            </div>
+            <hr />
+
+            <form [formGroup]="searchForm" (submit)="search()">
+
+                <div class="form-row">
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Código</span>
+                            </div>
+                            <input type="text" class="form-control" formControlName="code">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Estado</span>
+                            </div>
+                            <select type="text" class="form-control" formControlName="statusId">
+                                <option [ngValue]="null">-</option>
+                                <option *ngFor="let status of orderStatuses" [ngValue]="status.name">{{status.name}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Prioridad</span>
+                            </div>
+                            <select type="text" class="form-control" formControlName="priorityId">
+                                <option [ngValue]="null">-</option>
+                                <option *ngFor="let priority of orderPriorities" [ngValue]="priority.name">{{priority.name}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2 flex-grow-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Institución</span>
+                            </div>
+                            <select type="text" class="form-control" formControlName="institutionId">
+                                <option [ngValue]="null">-</option>
+                                <option *ngFor="let institution of institutions" [ngValue]="institution.id">{{institution.name}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Desde</span>
+                            </div>
+                            <input type="date" class="form-control" formControlName="startDate" />
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Hasta</span>
+                            </div>
+                            <input type="date" class="form-control" formControlName="endDate" />
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 mx-auto mt-2">
+                        <button type="submit" class="btn btn-primary btn-block mb-2">Buscar</button>
+                    </div>
+
+                </div>
+
+            </form>
+            <hr />
+
+            <div class="text-center" *ngIf="isLoading">
+                <div class="loader"></div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let column of columns">
+                                <div class="d-flex align-items-center">
+                                    <span class="flex-grow-1">{{column.displayName}}</span>
+                                    <div class="ml-3" *ngIf="column.sortable">
+                                        <span ngbTooltip="Ordenar ascendententemente por {{column.displayName}}"
+                                              class="sorting-enabled"
+                                              [class.sorting-disabled]="sorting?.name === column.name && sorting?.direction === 'ASC'"
+                                              (click)="changeSorting({name: column.name, direction: 'ASC'})">&uarr;</span>
+                                        <span ngbTooltip="Ordenar descendentemente por {{column.displayName}}"
+                                              class="sorting-enabled"
+                                              [class.sorting-disabled]="sorting?.name === column.name && sorting?.direction === 'DESC'"
+                                              (click)="changeSorting({name: column.name, direction: 'DESC'})">&darr;</span>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let order of orders">
+                            <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
+                            <td>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss" }}</td>
+                            <td>{{order.code}}</td>
+                            <td>{{order.statusId}}</td>
+                            <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
+                            <td>{{order.institution.name}}</td>
+                            <td>{{order.priorityId}}</td>
+                            <td>{{order.unitCount}}</td>
+                            <td>
+                                <div class="d-inline-flex justify-content-start align-items-center p-0 m-0">
+                                    <a routerLink="ordenes/{{order.id}}/revisión">Detalles</a>
+                                    <a *ngIf="order.status.name === 'EN_PROCESO'" routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <app-pagination *ngIf="paging"
+                            [itemCount]="orderCount"
+                            [pageSizes]="pageSizes"
+                            [pageSize]="paging.pageSize"
+                            [page]="paging.page"
+                            (pageChange)="changePage($event)"
+                            (pageSizeChange)="changePageSize($event)"></app-pagination>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+

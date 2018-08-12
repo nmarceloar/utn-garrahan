@@ -1,0 +1,47 @@
+{
+  "name": "Institution",
+  "plural": "institutions",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "creation_date": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "type": {
+      "type": "belongsTo",
+      "model": "InstitutionType",
+      "foreignKey": "typeId"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "XUser",
+      "foreignKey": "institutionId"
+    },
+    "orders": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "institutionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

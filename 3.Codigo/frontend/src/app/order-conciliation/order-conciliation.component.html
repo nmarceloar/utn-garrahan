@@ -1,0 +1,134 @@
+<div class="container">
+
+    <div class="row mb-5">
+
+        <div class="col">
+
+            <div *ngIf="isLoading" class="text-center">
+                <div class="loader"></div>
+            </div>
+
+            <div *ngIf="hasOrder" class="mt-2">
+
+                <h5 class="text-primary ">Órden</h5>
+                <hr />
+
+                <div class="row mb-3">
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm:ss"}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss"}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Estado:</span><br />
+                        <span ngbTooltip="{{order.status.description}}"
+                              [class.text-success]="order.status.name === 'EN_PROCESO'"
+                              [class.text-primary]="order.status.name === 'IRRADIADA'"
+                              [class.text-warning]="order.status.name === 'PENDIENTE'"
+                              [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</span>
+                    </div>
+
+
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Prioridad:</span><br /> <span ngbTooltip="{{order.priority.description}}">{{order.priority.name}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Transportista:</span><br /> <span>{{order.carrier}}</span>
+                    </div>
+
+                </div>
+
+                <h6 class="text-primary  mt-4">Unidades</h6>
+                <hr />
+
+                <div class="row mb-3 px-5">
+
+                    <div class="col-sm-2">
+                        <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
+                    </div>
+
+                    <div *ngFor="let mapping of order.unitTypeMappings" class="col-sm-2">
+                        <span class="h6 mr-1">{{mapping.unitType.code}}: </span> <span>{{mapping.count}}</span>
+                    </div>
+
+                </div>
+
+                <div class="table-responsive mt-4">
+                    <table *ngIf="order" class="table table-bordered table-hover table-stripped">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let unit of order.units">
+                                <td>{{unit.code}}</td>
+                                <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <div *ngIf="canModify" class="d-flex flex-wrap justify-content-end">
+                    <button class="btn btn-primary rounded-0 px-5 ml-2" (click)="acceptOrder()">Aceptar</button>
+                    <button class="btn btn-danger rounded-0 px-5 ml-2" (click)="rejectOrder()">Rechazar</button>
+                </div>
+
+                <h6 class="text-primary  mt-3">Historial de revisiones</h6>
+                <hr />
+
+                <table *ngIf="order" class="table table-bordered table-hover table-stripped">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Comentario</th>
+                            <th>Operador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let comment of order.conciliationComments">
+                            <td>{{comment.date | date: "dd/MM/yyyy hh:mm"}}</td>
+                            <td>{{comment.comment}}</td>
+                            <td>{{comment.operator.firstname}} {{comment.operator.lastname}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

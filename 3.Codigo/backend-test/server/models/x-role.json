@@ -1,0 +1,36 @@
+{
+  "name": "XRole",
+  "plural": "xroles",
+  "base": "Role",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "protected": [
+    "created",
+    "modified"
+  ],
+  "properties": {
+    "description": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "principals": {
+      "type": "hasMany",
+      "model": "XRoleMapping",
+      "foreignKey": "roleId"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "XUser",
+      "foreignKey": "roleId",
+      "through": "XRoleMapping",
+      "keyThrough": "principalId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

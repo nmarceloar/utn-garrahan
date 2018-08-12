@@ -1,0 +1,61 @@
+{
+  "name": "Unit",
+  "plural": "units",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "creationDate": {
+      "type": "date",
+      "required": true,
+      "default": "now"
+    },
+    "irradiated": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "irradiationTag": {
+      "type": "string",
+      "required": false
+    },
+    "irradiationStart": {
+      "type": "date",
+      "required": false
+    },
+    "irradiationEnd": {
+      "type": "date",
+      "required": false
+    },
+    "irradiationTime": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "order": {
+      "type": "belongsTo",
+      "model": "Order",
+      "foreignKey": "orderId"
+    },
+    "type": {
+      "type": "belongsTo",
+      "model": "UnitType",
+      "foreignKey": "unitTypeId"
+    },
+    "irradiatedBy": {
+      "type": "belongsTo",
+      "model": "XUser",
+      "foreignKey": "irradiatorUserId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

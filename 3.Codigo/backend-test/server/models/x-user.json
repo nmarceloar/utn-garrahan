@@ -1,0 +1,86 @@
+{
+  "name": "XUser",
+  "plural": "xusers",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "hidden": [
+    "email",
+    "emailVerified",
+    "realm"
+  ],
+  "properties": {
+    "firstname": {
+      "type": "string",
+      "required": true
+    },
+    "lastname": {
+      "type": "string",
+      "required": true
+    },
+    "avatarUrl": {
+      "type": "string",
+      "required": true,
+      "default": "https://image.flaticon.com/icons/svg/149/149071.svg"
+    },
+    "dni": {
+      "type": "number",
+      "required": false
+    },
+    "isInternal": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "contact_number": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "institution": {
+      "type": "belongsTo",
+      "model": "Institution",
+      "foreignKey": "institutionId"
+    },
+    "createdOrders": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "ownerId"
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "XRole",
+      "foreignKey": "principalId",
+      "through": "XRoleMapping",
+      "keyThrough": "roleId"
+    },
+    "roleMappings": {
+      "type": "hasMany",
+      "model": "XRoleMapping",
+      "foreignKey": "principalId"
+    },
+    "accessTokens": {
+      "type": "hasMany",
+      "model": "XAccessToken",
+      "foreignKey": "userId"
+    },
+    "irradiatedUnits": {
+      "type": "hasMany",
+      "model": "Unit",
+      "foreignKey": "irradiatorUserId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

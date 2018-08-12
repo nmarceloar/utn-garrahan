@@ -1,0 +1,43 @@
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-6  mx-auto">
+
+            <div class="card p-5 shadow-sm mt-3">
+
+                <div class="d-block mx-auto w-50">
+                    <img src="assets/logo.png" class="img-fluid">
+                </div>
+
+                <hr class="d-block w-100 mx-auto mt-5">
+
+                <form [formGroup]="loginForm" class="mt-3" (submit)="login()">
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input focused="true" type="text" class="form-control" formControlName="username">
+                    </div>
+                    <div *ngIf="submitted" class="text-danger">
+                        <p *ngIf="loginForm.controls.username.errors?.required">Ingrese nombre de usuario</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" formControlName="password">
+                    </div>
+                    <div *ngIf="submitted" class="text-danger">
+                        <p *ngIf="loginForm.controls.password.errors?.required">Ingrese contraseña</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mb-2" >Ingresar</button>
+                    <div *ngIf="isLoading" class="text-center mt-3">
+                        <div class="d-inline-block loader"></div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

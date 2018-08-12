@@ -1,0 +1,30 @@
+<div class="d-flex  flex-wrap justify-content-start  align-items-center bg-white bg-faded  py-3 px-4 border-top border-bottom">
+
+    <div class="d-none d-lg-inline-flex flex-fill">
+        <img src="assets/logo.png" class="d-inline-block" height="35">
+    </div>
+
+    <div *ngIf="showsProfile"
+         class="d-inline-flex flex-fill flex-wrap align-items-center justify-content-start justify-content-lg-end">
+
+        <div class="d-inline-flex flex-column ml-3 order-2 order-lg-1">
+            <div class="text-lg-right">
+                <span>{{currentUser?.firstname}} {{currentUser?.lastname}}</span>
+                <span *ngIf="isClient" class="text-muted"> | {{currentUser.institution?.name}}</span>
+                <span *ngIf="!isClient" class="text-muted"> | Banco de Sangre</span>
+            </div>
+            <div class="text-lg-right">
+                <a [routerLink]="['/administradores']">Administrar Banco<span class="text-muted"> | </span></a>
+                <span class="btn-link" (click)="logout()">Cerrar sesión</span>
+            </div>
+        </div>
+
+        <div class="order-1 order-lg-2">
+            <img [src]="currentUser.avatarUrl" class="p-0 m-0 ml-lg-3 rounded-circle" height="40">
+        </div>
+
+    </div>
+
+
+
+</div>

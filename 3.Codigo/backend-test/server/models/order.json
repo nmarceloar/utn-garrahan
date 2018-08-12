@@ -1,0 +1,73 @@
+{
+  "name": "Order",
+  "plural": "orders",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "carrier": {
+      "type": "string",
+      "required": true
+    },
+    "creationDate": {
+      "type": "date",
+      "required": true,
+      "default": "now"
+    },
+    "lastModified": {
+      "type": "date",
+      "required": false
+    },
+    "unitCount": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "units": {
+      "type": "hasMany",
+      "model": "Unit",
+      "foreignKey": "orderId"
+    },
+    "priority": {
+      "type": "belongsTo",
+      "model": "OrderPriority",
+      "foreignKey": "priorityId"
+    },
+    "status": {
+      "type": "belongsTo",
+      "model": "OrderStatus",
+      "foreignKey": "statusId"
+    },
+    "owner": {
+      "type": "belongsTo",
+      "model": "XUser",
+      "foreignKey": "ownerId"
+    },
+    "conciliationComments": {
+      "type": "hasMany",
+      "model": "ConciliationComment",
+      "foreignKey": "orderId"
+    },
+    "unitTypeMappings": {
+      "type": "hasMany",
+      "model": "UnitTypeMapping",
+      "foreignKey": "orderId"
+    },
+    "institution": {
+      "type": "belongsTo",
+      "model": "Institution",
+      "foreignKey": "institutionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

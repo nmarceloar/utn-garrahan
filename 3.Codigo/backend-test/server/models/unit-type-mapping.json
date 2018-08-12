@@ -1,0 +1,28 @@
+{
+  "name": "UnitTypeMapping",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "count": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "order": {
+      "type": "belongsTo",
+      "model": "Order",
+      "foreignKey": "orderId"
+    },
+    "unitType": {
+      "type": "belongsTo",
+      "model": "UnitType",
+      "foreignKey": "unitTypeId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

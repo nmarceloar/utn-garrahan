@@ -1,0 +1,21 @@
+
+<div class="d-flex flex-column">
+
+    <div class="message">
+        <div class="flex-grow-1 m-0 p-0">
+            {{message.text}}
+        </div>
+        <div class="m-0 p-0 ml-3">
+            <button class="btn btn-link p-0 m-0 text-white" (click)="onClose()">&times;</button>
+        </div>
+    </div>
+
+    <div class="progress bg-dark rounded-0" style="height: 2px;">
+        <div class="progress-bar rounded-0"
+             [class.message-danger]="message.type === 'danger'"
+             [class.message-warning]="message.type === 'warning'"
+             [class.message-success]="message.type === 'success'"
+             [style.width.%]="percent" ></div>
+    </div>
+
+</div>

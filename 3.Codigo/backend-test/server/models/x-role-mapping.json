@@ -1,0 +1,29 @@
+{
+  "name": "XRoleMapping",
+  "plural": "role-mappings",
+  "base": "RoleMapping",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "description": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "role": {
+      "type": "belongsTo",
+      "model": "XRole",
+      "foreignKey": "roleId"
+    },
+    "principal": {
+      "type": "belongsTo",
+      "model": "XUser",
+      "foreignKey": "principalId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

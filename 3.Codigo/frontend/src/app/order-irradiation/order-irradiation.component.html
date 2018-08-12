@@ -1,0 +1,228 @@
+<div class="container">
+
+    <div class="row">
+
+        <div class="col">
+
+            <div *ngIf="isLoading" class="d-flex justify-content-center">
+                <div class="loader"></div>
+            </div>
+
+            <div *ngIf="!isLoading">
+
+                <h5 class="text-primary mt-3">Órden</h5>
+                <hr />
+
+                <div class="row mb-3">
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm:ss"}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss"}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Estado:</span><br />
+                        <span [class.text-success]="order.status.name === 'EN_PROCESO'"
+                              [class.text-primary]="order.status.name === 'IRRADIADA'"
+                              [class.text-warning]="order.status.name === 'PENDIENTE'"
+                              [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</span>
+                    </div>
+
+
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Prioridad:</span><br /> <span>{{order.priority.name}}</span>
+                    </div>
+
+                    <div class="col-sm-2 col-md-3">
+                        <span class="h6">Transportista:</span><br /> <span>{{order.carrier}}</span>
+                    </div>
+
+                </div>
+
+                <h6 class="text-primary  mt-4">Unidades</h6>
+                <hr />
+
+                <div class="row mb-3 ">
+
+                    <div class="col-sm-2">
+                        <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
+                    </div>
+
+                    <div *ngFor="let mapping of order.unitTypeMappings" class="col-sm-2">
+                        <span class="h6 mr-1">{{mapping.unitType.code}}: </span> <span>{{mapping.count}}</span>
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div *ngIf="canIrradiate">
+
+                    <h6 class="text-primary mb-3">Irradiación</h6>
+
+                    <div class="row mb-2">
+
+                        <div class="col-lg-5 mb-2">
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Etiqueta</span>
+                                </div>
+                                <input type="text" class="form-control"
+                                       [focused]="isWaitingForTag"
+                                       (keydown.enter)="onTagConfirmed(); $event.preventDefault()"
+                                       (keydown.tab)="onTagConfirmed(); $event.preventDefault()"
+                                       [formControl]="selectedTag">
+                            </div>
+                            <div *ngIf="hasTagError" class="mt-2 d-block text-danger">
+                                <span *ngIf="selectedTag.errors?.required">Ingrese etiqueta</span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-7 mb-2">
+
+                            <div class="input-group flex-fill">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Código de unidad </span>
+                                </div>
+                                <input type="text"
+                                       class="form-control"
+                                       [focused]="isWaitingForUnit"
+                                       (keydown.enter)="selectUnit(); $event.preventDefault()"
+                                       (keydown.tab)="clearTag(); $event.preventDefault()"
+                                       (keydown.shift.tab)="clearTag(); $event.preventDefault()"
+                                       [formControl]="selectedUnitCode">
+
+                            </div>
+
+                            <div class="mt-2 text-danger">
+                                <span *ngIf="hasUnitCodeError" class="d-block">Ingrese código de unidad</span>
+                                <span *ngIf="!hasUnitCodeError && unitCodeDoesNotExist" class="d-block">No existen unidades pendientes con el código ingresado   </span>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <h6 class="text-primary mb-1 mt-3">Unidades seleccionadas: </h6>
+                    <hr *ngIf="!isIrradiationInProcess" />
+                    <div class="my-3">
+                        <app-progress-bar *ngIf="isIrradiationInProcess"></app-progress-bar>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Etiqueta</th>
+                                    <th>Código</th>
+                                    <th>Tipo</th>
+                                    <th *ngIf="!isIrradiationInProcess">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let unit of selectedUnits">
+                                    <td>{{unit.irradiationTag}}</td>
+                                    <td>{{unit.code}}</td>
+                                    <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                    <td *ngIf="!isIrradiationInProcess">
+                                        <span class="btn-link" style="cursor: pointer;" (click)="removeUnit(unit)">Eliminar</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-2">
+                        <button *ngIf="!isIrradiationInProcess" class="btn btn-primary px-5 rounded-0" [disabled]="!canStart" (click)="startIrradiation()">Comenzar</button>
+                        <button *ngIf="isIrradiationInProcess" class="btn btn-danger px-5 rounded-0" (click)="stopIrradiation()">Finalizar</button>
+                    </div>
+
+                    <h6 class="text-primary mb-1 mt-3">Unidades pendientes de irradiación: </h6>
+                    <hr />
+
+                    <table class="table table-bordered table-hover table-stripped">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let unit of pendingUnits">
+                                <td>{{unit.code}}</td>
+                                <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+                <h6 class="text-primary mb-1">Historial de irradiaciones: </h6>
+                <hr />
+
+                <table class="table table-bordered table-hover table-stripped">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Etiqueta</th>
+                            <th>Codigo</th>
+                            <th>Tipo</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Total</th>
+                            <th>Operador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let unit of completedUnits">
+                            <td>{{unit.irradiationStart | date: "dd/MM/yyyy"}}</td>
+                            <td>{{unit.irradiationTag}}</td>
+                            <td>{{unit.code}}</td>
+                            <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                            <td>{{unit.irradiationStart | date: "hh:mm:ss"}}</td>
+                            <td>{{unit.irradiationEnd | date: "hh:mm:ss"}}</td>
+                            <td>{{unit.irradiationTime}} min</td>
+                            <td>{{unit.irradiatedBy.firstname}} {{unit.irradiatedBy.lastname}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h6 class="text-primary mb-1">Comentarios</h6>
+                <hr />
+                <div class="form-group">
+                    <textarea rows="5" class="form-control"></textarea>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

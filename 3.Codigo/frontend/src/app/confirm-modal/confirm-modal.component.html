@@ -1,0 +1,32 @@
+<div class="bg-white p-5">
+
+    <div class="card p-5 shadow-sm">
+
+        <h5 class="modal-title">Confirmar rechazo de orden</h5>
+        <hr />
+
+        <form [formGroup]="form" (submit)="accept()">
+
+            <div class="form-group">
+                <label class="h6 font-weight-normal text-muted">Comentario: </label>
+                <textarea class="form-control" [focused]="'true'" formControlName="comment" rows="8"></textarea>
+            </div>
+
+            <div *ngIf="hasError" class="text-danger">
+                <p *ngIf="form.controls.comment.errors?.required">Debe ingresar un comentario</p>
+                <p *ngIf="form.controls.comment.errors?.minlength">El comentario no puede tener menos de 20 caracteres</p>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary rounded-0 mr-2">Confirmar</button>
+                <button class="btn btn-secondary rounded-0" (click)="reject()">Cancelar</button>
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+

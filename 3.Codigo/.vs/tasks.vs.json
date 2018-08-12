@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-p2018",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}

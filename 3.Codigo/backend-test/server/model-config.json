@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "UnitType": {
+    "dataSource": "db",
+    "public": true
+  },
+  "OrderStatus": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Order": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Institution": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Unit": {
+    "dataSource": "db",
+    "public": true
+  },
+  "OrderPriority": {
+    "dataSource": "db",
+    "public": true
+  },
+  "InstitutionType": {
+    "dataSource": "db",
+    "public": false
+  },
+  "XUser": {
+    "dataSource": "db",
+    "public": true
+  },
+  "XAccessToken": {
+    "dataSource": "db",
+    "public": true
+  },
+  "XRoleMapping": {
+    "dataSource": "db",
+    "public": true
+  },
+  "XRole": {
+    "dataSource": "db",
+    "public": true
+  },
+  "XACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ConciliationComment": {
+    "dataSource": "db",
+    "public": true
+  },
+  "UnitTypeMapping": {
+    "dataSource": "db",
+    "public": false
+  }
+}
