@@ -83,7 +83,6 @@ const routes: Routes = [
     },
     {
         path: "clientes",
-        component: ClientComponent,
         data: {
             breadcrumb: "Clientes",
             requiredRoles: ["client"]
@@ -93,6 +92,13 @@ const routes: Routes = [
             AuthorizationGuard
         ],
         children: [
+            {
+                path: "",
+                component: ClientComponent,
+                data: {
+                    breadcrumb: "Home"
+                }
+            },
             {
                 path: "ordenes/alta",
                 component: CreateOrderComponent,

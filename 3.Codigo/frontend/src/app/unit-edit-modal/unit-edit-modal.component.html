@@ -1,0 +1,53 @@
+<div class="p-5">
+
+    <div class="modal-content p-3 rounded-0">
+
+        <div class="modal-header">
+            <h5 class="modal-title">Modificar unidad: </h5>
+        </div>
+
+        <div class="modal-body">
+
+            <form [formGroup]="unitForm">
+
+                <div class="form-row">
+
+                    <div class="col-md-4">
+                        <label>Código: </label>
+                        <input type="text" class="form-control" formControlName="code" />
+                        <div class="text-danger" *ngIf="submitted">
+                            <p *ngIf="unitForm.controls.code.errors?.required">Ingrese código de la unidad</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label>Tipo: </label>
+                        <select class="form-control flex-grow-1" formControlName="type">
+                            <option [ngValue]="null">Seleccionar</option>
+                            <option *ngFor="let unitType of unitTypes" [ngValue]="unitType">{{unitType.code}} - {{unitType.name}}</option>
+                        </select>
+                        <div class="text-danger" *ngIf="submitted">
+                            <p *ngIf="unitForm.controls.type.errors?.required">Ingrese tipo de unidad</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary rounded-0 mr-3 px-5" (click)="confirm()">Aceptar</button>
+                    <button type="button" class="btn btn-info rounded-0 px-5" (click)="cancel()">Cancelar</button>
+                </div>
+
+            </form>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+</div>
+

@@ -41,6 +41,8 @@ import { PreventDefaultDirective } from './prevent-default.directive';
 import { MessageComponent } from './message/message.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { AlreadyInGuard } from './already-in.guard';
+import { CancelConfirmationModalComponent } from './cancel-confirmation-modal/cancel-confirmation-modal.component';
+import { UnitEditModalComponent } from './unit-edit-modal/unit-edit-modal.component';
 
 
 const httpInterceptorProviders = [
@@ -73,7 +75,9 @@ const httpInterceptorProviders = [
         CreateUserComponent,
         PreventDefaultDirective,
         MessageComponent,
-        ProgressBarComponent
+        ProgressBarComponent,
+        CancelConfirmationModalComponent,
+        UnitEditModalComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -98,7 +102,9 @@ const httpInterceptorProviders = [
     ],
     entryComponents: [
         ConfirmModalComponent,
-        ModalLoginComponent
+        ModalLoginComponent,
+        CancelConfirmationModalComponent,
+        UnitEditModalComponent
     ],
     bootstrap: [
         AppComponent

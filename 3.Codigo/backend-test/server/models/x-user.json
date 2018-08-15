@@ -72,6 +72,11 @@
       "type": "hasMany",
       "model": "Unit",
       "foreignKey": "irradiatorUserId"
+    },
+    "irradiations": {
+      "type": "hasMany",
+      "model": "Irradiation",
+      "foreignKey": "irradiatorId"
     }
   },
   "acls": [

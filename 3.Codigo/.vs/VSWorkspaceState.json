@@ -1,9 +1,17 @@
 {
   "ExpandedNodes": [
     "",
-    "\\client\\src\\app",
-    "\\client\\src\\assets",
-    "\\server\\server"
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\confirm-modal",
+    "\\frontend\\src\\app\\edit-order",
+    "\\frontend\\src\\app\\expiring-alert",
+    "\\frontend\\src\\app\\modal-login",
+    "\\frontend\\src\\app\\nav",
+    "\\frontend\\src\\app\\operator",
+    "\\frontend\\src\\app\\order-conciliation"
   ],
+  "SelectedNode": "\\frontend\\src\\app\\edit-order\\edit-order.component.html",
   "PreviewInSolutionExplorer": false
 }

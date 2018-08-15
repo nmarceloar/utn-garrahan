@@ -2,14 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService, Order } from '../order.service';
 import { FormControl, Validators } from '@angular/forms';
-import { interval, GroupedObservable, Observable, from as fromPromise } from 'rxjs';
-import { map, flatMap, tap } from 'rxjs/operators';
+import { interval, GroupedObservable, Observable, from as fromPromise, timer } from 'rxjs';
+import { map, flatMap, tap, take } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { SessionService } from '../session.service';
 
 import * as moment from "moment"
 import { MessageService, MessageType } from '../message.service';
+import { CancelConfirmationModalComponent } from '../cancel-confirmation-modal/cancel-confirmation-modal.component';
 
 @Component({
     selector: 'app-order-irradiation',
@@ -18,6 +19,7 @@ import { MessageService, MessageType } from '../message.service';
 })
 export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
+    irradiations: any[];
     unitCodeDoesNotExist: boolean = false;
     order: Order
 
@@ -28,8 +30,10 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     currentUser
 
-    isWaitingForTag: boolean = true;
-    isWaitingForUnit: boolean = false;
+    comment: FormControl = new FormControl("");
+
+    isWaitingForTag: {} = { should: true }
+    isWaitingForUnit: {} = { should: false }
 
     hasUnitCodeError: boolean = false;
     hasTagError: boolean = false;
@@ -44,12 +48,13 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     selectedUnitCode: FormControl = new FormControl("", Validators.required);
 
     private orderIncludes = [
+        { irradiations: [{ units: { type: true } }, { irradiator: true }] },
         { priority: true },
         { status: true },
         { owner: { institution: true } },
         { conciliationComments: { operator: true } },
         { unitTypeMappings: { unitType: true } },
-        { units: ["type", "irradiatedBy"] }
+        { units: ["type"] }
     ];
 
     constructor(
@@ -83,13 +88,18 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
                 (err) => this.handleErr(err)
             )
 
+
     }
 
     ngOnDestroy() { }
 
     prepare(order: any) {
 
+        [this.selectedTag, this.selectedUnitCode].forEach(d => d.reset())
+
         this.order = order;
+
+        this.irradiations = order.irradiations.sort((a,b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
 
         this.selectedUnits = [];
 
@@ -104,9 +114,6 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
                     irradiationTime:
                         Math.ceil((new Date(u.irradiationEnd).getTime() - new Date(u.irradiationStart).getTime()) / (1000 * 60))
                 }))
-
-        this.isWaitingForTag = true;
-        this.isWaitingForUnit = false
 
 
     }
@@ -135,8 +142,25 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         }
 
         this.hasTagError = false;
-        this.isWaitingForTag = false;
-        this.isWaitingForUnit = true;
+
+        this.isWaitingForUnit = {should: true}
+
+
+
+    }
+
+    selectManually(unit) {
+
+        let item = this.pendingUnits.splice(this.pendingUnits.findIndex(u => u === unit), 1)[0];
+
+        item.irradiationTag = this.selectedTag.value;
+
+        this.selectedUnits.unshift(item);
+
+        this.isWaitingForUnit = { should: 1 }
+
+        this.unitCodeDoesNotExist = false;
+        this.hasUnitCodeError = false;
 
     }
 
@@ -165,14 +189,10 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.selectedUnitCode.reset();
 
-    }
-
-    clearTag() {
-
-        this.isWaitingForUnit = false;
-        this.isWaitingForTag = true;
+        this.isWaitingForUnit = {should: true}
 
     }
+
 
     startIrradiation() {
 
@@ -189,24 +209,39 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.stopTime = new Date();
 
-        this.selectedTag.enable();
-        this.selectedUnitCode.enable();
+        fromPromise(this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false }).result)
+            .subscribe((comments) => {
 
-        this.isIrradiationInProcess = false;
+                console.log(comments);
 
-        this.selectedUnits.forEach((unit) => {
-            unit.irradiated = true;
-            unit.irradiationStart = this.startTime
-            unit.irradiationEnd = this.stopTime
-            unit.irradiatorUserId = this.currentUser.id
-        })
+                this.selectedTag.enable();
+                this.selectedUnitCode.enable();
 
-        this.orderService.markUnitsAsIrradiated(this.order.id, this.selectedUnits)
-            .pipe(flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })))
-            .subscribe(
-                (d) => this.prepare(d),
-                (err) => console.error(err)
-            );
+                this.isIrradiationInProcess = false;
+
+                let irradiation = {
+                    units: this.selectedUnits.map(u => u.id),
+                    irradiationStart: this.startTime,
+                    irradiationEnd: this.stopTime,
+                    irradiationTag: this.selectedTag.value,
+                    irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                    irradiatorId: this.currentUser.id,
+                    comments: comments
+                }
+
+                this.orderService.addIrradiation(this.order.id, irradiation)
+                    .pipe(
+                        flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes }))
+                    )
+                    .subscribe(
+                        (d) => this.handleEndOfIrradiation(d),
+                        (err) => this.handleFailingEndOfIrradiation(err)
+                    );
+
+            }, () => { })
+
+
+
 
     }
 
@@ -217,9 +252,48 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     }
 
+    handleEndOfIrradiation(order: any) {
+
+        let message = "La irradiación de los componentes se registró correctamente. "
+        let add = order.status.name === "IRRADIADA" ? "La orden se ha completado en su totalidad." : "";
+
+        let m = [message, add].join("");
+
+        this.messageService.sendMessage({
+            persist: true,
+            type: MessageType.SUCCESS,
+            text: m
+        })
+
+        this.prepare(order);
+
+    }
+
+    handleFailingEndOfIrradiation(err: any) {
+
+        let message = "Error al intentar registro de irradiación. "
+        let add = err.message
+
+        let m = [message, add].join("");
+
+        this.messageService.sendMessage({
+            persist: true,
+            type: MessageType.DANGER,
+            text: m
+        })
+
+    }
+
+
     get canStart() {
 
         return this.selectedUnits.length > 0
+
+    }
+
+    get hasTag() {
+
+        return this.selectedTag.value 
 
     }
 

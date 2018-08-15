@@ -18,7 +18,7 @@
     "creationDate": {
       "type": "date",
       "required": true,
-      "default": "now"
+      "defaultFn": "now"
     },
     "lastModified": {
       "type": "date",
@@ -66,6 +66,11 @@
       "type": "belongsTo",
       "model": "Institution",
       "foreignKey": "institutionId"
+    },
+    "irradiations": {
+      "type": "hasMany",
+      "model": "Irradiation",
+      "foreignKey": "orderId"
     }
   },
   "acls": [],

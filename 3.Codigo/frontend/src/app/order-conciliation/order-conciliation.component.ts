@@ -7,6 +7,7 @@ import { take, switchMap, map, tap, finalize, flatMap, catchError } from 'rxjs/o
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { User, SessionService } from '../session.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-order-conciliation',
@@ -121,7 +122,7 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
                     this.messageService.sendMessage({
                         type: MessageType.DANGER,
                         persist: false,
-                        text: `Error. ${err.message}`
+                        text: `Error al intentar modificar la orden. ${err.message}`
                     })
                 }
             );
@@ -149,11 +150,19 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
                 flatMap(([order, comment]) => this.orderService.findById(order.id, { include: this.orderIncludes }))
             )
             .subscribe(
-                order => this.order = order,
+                order => {
+                    this.order = order
+                    this.messageService.sendMessage({
+                        type: MessageType.SUCCESS,
+                        persist: false,
+                        text: "La operación se realizó exitosamente. La orden permanecerá rechazada hasta la próxima revisión del cliente."
+                    })
+
+                },
                 err => this.messageService.sendMessage({
-                    type: MessageType.WARNING,
+                    type: MessageType.DANGER,
                     persist: false,
-                    text: err.message
+                    text: `Error al intentar modificar la orden. ${err.message}`
                 })
             )
 

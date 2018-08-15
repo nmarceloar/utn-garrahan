@@ -23,19 +23,25 @@ module.exports = async (app, cb) => {
 
         var operador = await app.models.XUser.create(data.users[0])
         var administrador = await app.models.XUser.create(data.users[1])
-        var cliente = await app.models.XUser.create({
+        var cliente1 = await app.models.XUser.create({
             ...data.users[2],
             institutionId: institutions[2].id
+        })
+        var cliente2 = await app.models.XUser.create({
+            ...data.users[3],
+            institutionId: institutions[4].id
         })
 
         var op = await app.models.XRole.create(data.roles[0]);
         var admin = await app.models.XRole.create(data.roles[1]);
         var client = await app.models.XRole.create(data.roles[2]);
+        var client = await app.models.XRole.create(data.roles[2]);
 
         await operador.roles.add(op)
         await administrador.roles.add(op)
         await administrador.roles.add(admin)
-        await cliente.roles.add(client)
+        await cliente1.roles.add(client)
+        await cliente2.roles.add(client)
 
     } catch (err) {
 

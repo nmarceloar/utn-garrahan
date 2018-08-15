@@ -68,10 +68,10 @@ export class ExpiringAlertComponent implements OnInit, OnDestroy {
 
         this.timerSubscription = interval(1000)
             .pipe(map(() => {
-                let now = Date.now();
+                let seconds = Math.floor((sessionEvent.date.getTime() - Date.now()) / 1000);
                 return {
-                    minutes: Math.floor((sessionEvent.date.getTime() - now) / 1000 / 60),
-                    seconds: Math.floor((sessionEvent.date.getTime() - now) / 1000)
+                    minutes: Math.trunc(seconds/60),
+                    seconds: seconds % 60
                 }
             }))
             .subscribe(d => this.diff = d);

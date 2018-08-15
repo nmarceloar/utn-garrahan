@@ -1,4 +1,4 @@
-<div class="d-flex  flex-wrap justify-content-start  align-items-center bg-white bg-faded  py-3 px-4 border-top border-bottom">
+<div class="d-flex  flex-wrap justify-content-start  align-items-center bg-white bg-faded  py-3 px-4 border-bottom">
 
     <div class="d-none d-lg-inline-flex flex-fill">
         <img src="assets/logo.png" class="d-inline-block" height="35">
@@ -14,7 +14,9 @@
                 <span *ngIf="!isClient" class="text-muted"> | Banco de Sangre</span>
             </div>
             <div class="text-lg-right">
-                <a [routerLink]="['/administradores']">Administrar Banco<span class="text-muted"> | </span></a>
+                <a *ngIf="canAdmin" [routerLink]="['/administradores']">Administrar Banco<span class="text-muted"> | </span></a>
+                <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/diario']" >Informe diario<span class="text-muted"> | </span></a>
+                <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/mensual']">Informe mensual<span class="text-muted"> | </span></a>
                 <span class="btn-link" (click)="logout()">Cerrar sesión</span>
             </div>
         </div>

@@ -6,36 +6,50 @@ const config = require("./../config.json")
 
 module.exports = (app, cb) => {
 
-    const login = app.models.XUser.login
+    app.post("/api/xusers/login", function (req, res) {
 
-    app.models.XUser.login = (credentials, include, callback) => {
+        app.models.XUser.login(req.body, function (err, accessToken) {
 
-        login.call(app.models.XUser, credentials, include, (err, token) => {
+            if (err)
+                return res.status(500).json({ error: { message: err.message } })
 
-            if (err || !token) {
-                callback(err, token)
-                return
-            }
+            app.models.XUser.findById(accessToken.userId, { include: ["roles", "institution"] }, function (err, user) {
 
-            app.models.XUser.findById(token.userId, { include: ['roles', 'institution'] }, (err, user) => {
-
-                let iat = Math.floor(new Date(token.created).getTime() / 1000)
+                let iat = Math.floor(new Date(accessToken.created).getTime() / 1000)
                 let exp = iat + (config.session.ttlInMinutes * 60)
 
                 let t = jwt.sign({
-                    tid: token.id,
+                    tid: accessToken.id,
                     iat: iat,
                     exp: exp,
-                    userId: token.userId,
+                    userId: accessToken.userId,
                 }, 'secret')
 
-                callback(err, { token: t, user: user.toJSON() });
+                return res.json({ token: t, user: user.toJSON() })
 
             })
 
         })
 
-    }
+    })
+
+    app.post("/api/xusers/verifyCredentials", function (req, res) {
+
+        app.models.XUser.login(req.body, function (err, accessToken) {
+
+            if (err)
+                return res.status(401).json({ error: { message: err.message } })
+
+            app.models.XAccessToken.destroyById(accessToken.id, function (err, d) {
+
+                return res.json({});
+
+            })
+
+
+        })
+
+    })
 
     cb();
 

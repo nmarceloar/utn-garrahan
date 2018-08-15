@@ -68,5 +68,9 @@
   "UnitTypeMapping": {
     "dataSource": "db",
     "public": false
+  },
+  "Irradiation": {
+    "dataSource": "db",
+    "public": false
   }
 }

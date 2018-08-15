@@ -2,7 +2,8 @@
 module.exports.users = [
     { email: 'user1@dummy.com', username: "operador", password: 'garrahan', firstname: "Juan", lastname: "Perez", isInternal: true },
     { email: 'user2@dummy.com', username: "administrador", password: 'garrahan', firstname: "Jimena", lastname: "Perez", isInternal: true },
-    { email: 'user3@dummy.com', username: "cliente", password: 'garrahan', firstname: "Pedro", lastname: "Fernandez", isInternal: false },
+    { email: 'user3@dummy.com', username: "cliente1", password: 'garrahan', firstname: "Pedro", lastname: "Fernandez", isInternal: false },
+    { email: 'user4@dummy.com', username: "cliente2", password: 'garrahan', firstname: "Juan", lastname: "Fernandez", isInternal: false },
 ];
 
 module.exports.roles = [

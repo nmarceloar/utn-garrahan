@@ -13,19 +13,18 @@ export interface Query {
     order?: string[]
     include?: any
 }
-
-interface TableColumn {
+export interface TableColumn {
     name: string,
     displayName: string
     sortable: boolean
 }
 
-interface Paging {
+export interface Paging {
     page: number,
     pageSize: number
 }
 
-interface Sorting {
+export interface Sorting {
     name: string
     direction: string
 }

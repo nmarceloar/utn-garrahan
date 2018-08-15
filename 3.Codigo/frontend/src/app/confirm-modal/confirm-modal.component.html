@@ -9,7 +9,7 @@
 
             <div class="form-group">
                 <label class="h6 font-weight-normal text-muted">Comentario: </label>
-                <textarea class="form-control" [focused]="'true'" formControlName="comment" rows="8"></textarea>
+                <textarea class="form-control" formControlName="comment" [focused]="{should: true}" rows="8"></textarea>
             </div>
 
             <div *ngIf="hasError" class="text-danger">

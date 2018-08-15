@@ -1,21 +1,23 @@
 import { Directive, ElementRef, Input, OnChanges, Renderer, SimpleChanges } from '@angular/core';
 
 @Directive({
-    selector: '[focused]'
+	selector: '[focused]'
 })
 export class AutofocusDirective implements OnChanges {
 
-    @Input()
-    focused: boolean = false;
+	@Input()
+	focused: any; 
 
-    constructor(private element: ElementRef) { }
+	constructor(private element: ElementRef) { }
 
-    ngOnChanges(data: SimpleChanges) {
+	ngOnChanges(data: SimpleChanges) {
 
-        if (this.focused)
-            this.element.nativeElement.focus(); 
+		console.log(data)
 
-    }
+		if (this.focused.should)
+			this.element.nativeElement.focus()
+
+	}
 
 
 }

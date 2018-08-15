@@ -1,61 +1,45 @@
 {
-  "name": "Unit",
-  "plural": "units",
-  "base": "PersistedModel",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "properties": {
-    "code": {
-      "type": "string",
-      "required": true
+    "name": "Unit",
+    "plural": "units",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
     },
-    "creationDate": {
-      "type": "date",
-      "required": true,
-      "default": "now"
+    "properties": {
+        "code": {
+            "type": "string",
+            "required": true
+        },
+        "creationDate": {
+            "type": "date",
+            "required": true,
+            "defaultFn": "now"
+        },
+        "irradiated": {
+            "type": "boolean",
+            "required": true,
+            "default": false
+        }
     },
-    "irradiated": {
-      "type": "boolean",
-      "required": true,
-      "default": false
+    "validations": [],
+    "relations": {
+        "order": {
+            "type": "belongsTo",
+            "model": "Order",
+            "foreignKey": "orderId"
+        },
+        "irradiation": {
+            "type": "belongsTo",
+            "model": "Irradiation",
+            "foreignKey": "irradiationId"
+        },
+        "type": {
+            "type": "belongsTo",
+            "model": "UnitType",
+            "foreignKey": "unitTypeId"
+        }
     },
-    "irradiationTag": {
-      "type": "string",
-      "required": false
-    },
-    "irradiationStart": {
-      "type": "date",
-      "required": false
-    },
-    "irradiationEnd": {
-      "type": "date",
-      "required": false
-    },
-    "irradiationTime": {
-      "type": "string",
-      "required": false
-    }
-  },
-  "validations": [],
-  "relations": {
-    "order": {
-      "type": "belongsTo",
-      "model": "Order",
-      "foreignKey": "orderId"
-    },
-    "type": {
-      "type": "belongsTo",
-      "model": "UnitType",
-      "foreignKey": "unitTypeId"
-    },
-    "irradiatedBy": {
-      "type": "belongsTo",
-      "model": "XUser",
-      "foreignKey": "irradiatorUserId"
-    }
-  },
-  "acls": [],
-  "methods": {}
+    "acls": [],
+    "methods": {}
 }

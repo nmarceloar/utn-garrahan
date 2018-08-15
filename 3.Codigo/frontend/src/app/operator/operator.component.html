@@ -121,17 +121,17 @@
                     <tbody>
                         <tr *ngFor="let order of orders">
                             <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
-                            <td>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss" }}</td>
+                            <td>{{order.lastModified | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.code}}</td>
-                            <td>{{order.statusId}}</td>
+                            <td>{{order.status.name}}</td>
                             <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
                             <td>{{order.institution.name}}</td>
-                            <td>{{order.priorityId}}</td>
+                            <td>{{order.priority.name}}</td>
                             <td>{{order.unitCount}}</td>
                             <td>
                                 <div class="d-inline-flex justify-content-start align-items-center p-0 m-0">
                                     <a routerLink="ordenes/{{order.id}}/revisión">Detalles</a>
-                                    <a *ngIf="order.status.name === 'EN_PROCESO'" routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
+                                    <a routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
                                 </div>
                             </td>
 

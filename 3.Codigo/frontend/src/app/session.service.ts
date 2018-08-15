@@ -91,6 +91,12 @@ export class SessionService {
 
     constructor(private http: HttpClient) { }
 
+    public verifyCredentials(credentials) {
+
+        return this.http.post(environment.api.verifyCredentials, credentials);
+
+    }
+
     public login({ username, password }) {
 
         return this.http.post(environment.api.login, { username, password })

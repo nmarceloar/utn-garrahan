@@ -2,7 +2,7 @@
 
     <div class="row">
 
-        <div class="col">
+        <div class="col-md-12 mx-auto">
 
             <div *ngIf="isLoading" class="d-flex justify-content-center">
                 <div class="loader"></div>
@@ -15,11 +15,11 @@
 
                 <div class="row mb-3">
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
                     </div>
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm:ss"}}</span>
                     </div>
 
@@ -88,11 +88,12 @@
                                     <span class="input-group-text">Etiqueta</span>
                                 </div>
                                 <input type="text" class="form-control"
+                                       [formControl]="selectedTag"
                                        [focused]="isWaitingForTag"
                                        (keydown.enter)="onTagConfirmed(); $event.preventDefault()"
-                                       (keydown.tab)="onTagConfirmed(); $event.preventDefault()"
-                                       [formControl]="selectedTag">
+                                       (keydown.tab)="onTagConfirmed(); $event.preventDefault()">
                             </div>
+
                             <div *ngIf="hasTagError" class="mt-2 d-block text-danger">
                                 <span *ngIf="selectedTag.errors?.required">Ingrese etiqueta</span>
                             </div>
@@ -105,13 +106,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Código de unidad </span>
                                 </div>
-                                <input type="text"
-                                       class="form-control"
+                                <input type="text" class="form-control"
+                                       [formControl]="selectedUnitCode"
                                        [focused]="isWaitingForUnit"
-                                       (keydown.enter)="selectUnit(); $event.preventDefault()"
-                                       (keydown.tab)="clearTag(); $event.preventDefault()"
-                                       (keydown.shift.tab)="clearTag(); $event.preventDefault()"
-                                       [formControl]="selectedUnitCode">
+                                       (keydown.enter)="selectUnit()"
+                                       (keydown.tab)="$event.preventDefault()"
+                                       (keydown.shift.tab)="$event.preventDefault()">
 
                             </div>
 
@@ -160,64 +160,102 @@
                         <button *ngIf="isIrradiationInProcess" class="btn btn-danger px-5 rounded-0" (click)="stopIrradiation()">Finalizar</button>
                     </div>
 
-                    <h6 class="text-primary mb-1 mt-3">Unidades pendientes de irradiación: </h6>
-                    <hr />
-
-                    <table class="table table-bordered table-hover table-stripped">
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Tipo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let unit of pendingUnits">
-                                <td>{{unit.code}}</td>
-                                <td>{{unit.type.code}} - {{unit.type.name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+                    <h6 class="text-primary mb-1 mt-3 align-self-start">Unidades pendientes de irradiación: </h6>
+                    <hr>
+                    <div class="table-responsive" *ngIf="pendingUnits">
+                        <table class="table table-bordered table-hover table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Tipo</th>
+                                    <th *ngIf="hasTag">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let unit of pendingUnits">
+                                    <td>{{unit.code}}</td>
+                                    <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                    <td *ngIf="hasTag"><button class="btn btn-link p-0 m-0" style="font-size: .925rem" (click)="selectManually(unit)">Seleccionar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
 
-                <h6 class="text-primary mb-1">Historial de irradiaciones: </h6>
+                <h6 class="text-primary mb-1 mt-3">Historial de irradiaciones: </h6>
                 <hr />
 
-                <table class="table table-bordered table-hover table-stripped">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Etiqueta</th>
-                            <th>Codigo</th>
-                            <th>Tipo</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th>Total</th>
-                            <th>Operador</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let unit of completedUnits">
-                            <td>{{unit.irradiationStart | date: "dd/MM/yyyy"}}</td>
-                            <td>{{unit.irradiationTag}}</td>
-                            <td>{{unit.code}}</td>
-                            <td>{{unit.type.code}} - {{unit.type.name}}</td>
-                            <td>{{unit.irradiationStart | date: "hh:mm:ss"}}</td>
-                            <td>{{unit.irradiationEnd | date: "hh:mm:ss"}}</td>
-                            <td>{{unit.irradiationTime}} min</td>
-                            <td>{{unit.irradiatedBy.firstname}} {{unit.irradiatedBy.lastname}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ul class="list-unstyled">
 
-                <h6 class="text-primary mb-1">Comentarios</h6>
-                <hr />
-                <div class="form-group">
-                    <textarea rows="5" class="form-control"></textarea>
-                </div>
+                    <li class="media mb-3 border-bottom" *ngFor="let irradiation of irradiations">
 
+                        <img class="mr-3" [src]="irradiation.irradiator.avatarUrl" height="50" width="50">
+                        <div class="media-body">
+
+                            <h6 class="mt-0 mb-1">Fecha: </h6>
+                            <p class="text-primary">{{irradiation.irradiationStart | date: "dd/MM/yyyy hh:mm"}}</p>
+
+                            <div class="container">
+
+                                <div class="row">
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Operador</h6>
+                                        <p>{{irradiation.irradiator.firstname}} {{irradiation.irradiator.lastname}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Etiqueta</h6>
+                                        <p>{{irradiation.irradiationTag}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Total unidades: </h6>
+                                        <p>{{irradiation.units.length}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Tiempo total de irradiación: </h6>
+                                        <p>{{irradiation.irradiationTime}} min</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <table class="table table-bordered table-hover table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th>Etiqueta</th>
+                                        <th>Codigo</th>
+                                        <th>Tipo</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let unit of irradiation.units">
+                                        <td>{{irradiation.irradiationTag}}</td>
+                                        <td>{{unit.code}}</td>
+                                        <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                        <td>{{irradiation.irradiationStart | date: "hh:mm:ss"}}</td>
+                                        <td>{{irradiation.irradiationEnd | date: "hh:mm:ss"}}</td>
+                                        <td>{{irradiation.irradiationTime}} min</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h6 class="mt-0 mb-1 text-success">Comentarios: </h6>
+                            <p class="text-muted">{{irradiation.comments}}</p>
+
+                        </div>
+
+                    </li>
+
+                </ul>
 
             </div>
 

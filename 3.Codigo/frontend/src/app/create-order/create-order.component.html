@@ -1,3 +1,137 @@
-<p>
-  create-order works!
-</p>
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <h5 class="text-primary mt-3 font-weight-normal">Datos generales: </h5>
+            <hr />
+
+            <div class="row">
+
+                <div class="col-md-3 mb-2">
+                    <h6>Fecha: </h6>
+                    <input type="text" class="form-control" value="11/02/1984" readonly />
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <h6>Orden: </h6>
+                    <input type="text" [focused]="started" class="form-control d-inline-block" placeholder="Ingresar numero de orden" [formControl]="selectedOrderCode" />
+                    <p class="text-danger" *ngIf="orderSubmitted && selectedOrderCode.errors?.required">Ingrese número de orden</p>
+                </div>
+
+
+                <div class="col-md-3 mb-2">
+                    <h6>Prioridad: </h6>
+                    <select [formControl]="selectedPriority" class="custom-select" ngbTooltip="BOOM">
+                        <option [ngValue]="null">--Seleccionar--</option>
+                        <option *ngFor="let priority of orderPriorities" [ngValue]="priority">{{priority.name}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="orderSubmitted && selectedPriority.errors?.required">Ingrese prioridad de orden</p>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <h6>Transportista: </h6>
+                    <input type="text" class="form-control" placeholder="Ingresar transportista" [formControl]="selectedCarrier" />
+                    <p class="text-danger" *ngIf="orderSubmitted && selectedCarrier.errors?.required">Ingrese transportista de la orden</p>
+                </div>
+
+            </div>
+
+            <h6 class="mt-3 text-primary font-weight-normal">Unidades</h6>
+            <hr />
+
+            <form [formGroup]="unitForm" (submit)="addUnit()">
+
+                <div class="form-row align-items-end">
+
+                    <div class="col-5">
+
+                        <div class="form-group">
+                            <label class="my-1 mr-2">Código: </label>
+                            <input type="text" class="form-control flex-grow-1" formControlName="unitCode" [focused]="isWaitingForUnit" />
+                        </div>
+
+                    </div>
+
+                    <div class="col-5">
+
+                        <div class="form-group">
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tipo de unidad: </label>
+                            <select class="custom-select flex-grow-1" formControlName="unitType">
+                                <option [ngValue]="null">Seleccionar</option>
+                                <option *ngFor="let unitType of unitTypes" [ngValue]="unitType">{{unitType.code}} - {{unitType.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary btn-block rounded-0 mb-3">Agregar</button>
+                    </div>
+
+                </div>
+
+                <div class="form-row" *ngIf="submited">
+                    <div class="col-5 text-danger">
+                        <p *ngIf="unitForm.controls.unitCode.errors?.required">Ingrese código</p>
+                    </div>
+                    <div class="col-5 text-danger">
+                        <p *ngIf="unitForm.controls.unitType.errors?.required">Ingrese tipo de unidad</p>
+                    </div>
+
+                </div>
+
+
+            </form>
+
+            <hr />
+
+            <div class="row my-3">
+
+                <div class="col-sm-2">
+                    <span class="h6 mr-1">Total: </span> <span>{{units.length}}</span>
+                </div>
+
+                <div *ngFor="let unitTypeMapping of unitTypeMappings" class="col-sm-2">
+                    <span class="h6 mr-1">{{unitTypeMapping.code}}: </span> <span>{{unitTypeMapping.count}}</span>
+                </div>
+
+            </div>
+
+            <div class="table-responsive mt-4">
+                <table class="table table-bordered table-stripped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let unit of units">
+                            <td>{{unit.code}}</td>
+                            <td>{{unit.type.code}} {{unit.type.name}}</td>
+                            <td>
+                                <div class="action-list">
+                                    <button class="btn btn-link p-0 m-0" (click)="removeUnit(unit)">Eliminar</button>
+                                    <button class="btn btn-link p-0 m-0" (click)="edit(unit)">Editar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p *ngIf="orderSubmitted && !units.length" class="text-danger">
+                Debe ingresar al menos una unidad en la orden
+            </p>
+
+            <div class="d-flex justify-content-center mb-5">
+                <button class="btn btn-primary rounded-0 mr-2" (click)="createOrder()">Guardar orden</button>
+                <button class="btn btn-danger rounded-0" (click)="cancel()">Cancelar</button>
+            </div>
+
+
+        </div>
+
+    </div>

@@ -1,8 +1,8 @@
 <div class="sticky-top" *ngIf="isShowing">
-    <div class="d-block bg-dark rounded-0 py-1 m-0" style="opacity: .8">
-        <p class="text-center m-0 p-0 text-white">
-            La sesión finaliza en <strong *ngIf="diff?.minutes">{{diff.minutes}}: </strong>
-            <strong>{{diff.seconds}} </strong>
+    <div class="alert alert-danger m-0 py-1 rounded-0 border-0">
+        <p class="text-center m-0 p-0">
+            La sesión finaliza en <strong *ngIf="diff?.minutes">{{diff.minutes}}:</strong>
+            <strong>{{diff.seconds | number:'2.0-0'}} </strong>
             <span *ngIf="diff?.minutes">minutos</span>
             <span *ngIf="!diff?.minutes">segundos</span> |
             <span class="btn-link" (click)="renovar()">Renovar</span>

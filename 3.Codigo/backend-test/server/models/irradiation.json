@@ -1,0 +1,50 @@
+{
+	"name": "Irradiation",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"irradiationStart": {
+			"type": "date",
+			"required": true
+		},
+		"irradiationEnd": {
+			"type": "date",
+			"required": true
+		},
+		"irradiationTime": {
+			"type": "number",
+			"required": true
+		},
+		"irradiationTag": {
+			"type": "string",
+			"required": true
+		},
+		"comments": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"validations": [],
+	"relations": {
+		"order": {
+			"type": "belongsTo",
+			"model": "Order",
+			"foreignKey": "orderId"
+		},
+		"irradiator": {
+			"type": "belongsTo",
+			"model": "XUser",
+			"foreignKey": "irradiatorId"
+		},
+		"units": {
+			"type": "hasMany",
+			"model": "Unit",
+			"foreignKey": "irradiationId"
+		}
+	},
+	"acls": [],
+	"methods": {}
+}

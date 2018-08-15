@@ -59,6 +59,37 @@ td > div > a:not(:first-child)::before {
     content: "|"
 }
 
+td button {
+
+    font-size: .925rem !important; 
+
+}
+
+.action-list > button:not(:first-child)::before {
+    margin: 0px;
+    padding: 0px; 
+    padding-left: .5rem;
+    padding-right: .5rem;
+
+    color: gray;
+    content: "|"
+}
+
+
+.floating-button {
+
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%; 
+    background-color: blueviolet;
+    color: white; 
+
+}
+
 .sorting-disabled {
     color: darkgray;
     font-weight: bold;
@@ -159,7 +190,7 @@ td > div > a:not(:first-child)::before {
     background-color: #343a40;
     color: white;
     padding: 1.5rem;
-    opacity: .925;
+    opacity: 1;
     margin: .5rem 0rem 0rem 0rem;
 }
 

@@ -5,15 +5,20 @@ import { Query } from './operator/operator.component';
 import { Observable } from 'rxjs';
 
 
+export interface UnitType {
+    id?
+    code?
+    name?
+    creation_date?
+}
+
+
 export interface Unit {
 
     id?
     code
-    irradiationTag?
-    irradiated?
-    irradiationStart?
-    irradiationEnd?
-    creationDate?
+    irradiated
+    creationDate
 
 }
 
@@ -76,9 +81,9 @@ export class OrderService {
 
     }
 
-    markUnitsAsIrradiated(orderId: number, units: Unit[]) {
+    addIrradiation(orderId: number, irradiation: any) {
 
-        return this.http.put(`${environment.api.orders}/${orderId}/units/irradiated`, {units: units}); 
+        return this.http.post(`${environment.api.orders}/${orderId}/irradiations`, irradiation);
 
     }
 
@@ -94,13 +99,31 @@ export class OrderService {
 
     findStatuses() {
 
-        return this.http.get(`${environment.api.orderStatus}`)
+        return this.http.get<OrderStatus[]>(`${environment.api.orderStatus}`)
 
     }
 
     findPriorities() {
 
-        return this.http.get(`${environment.api.orderPriorities}`)
+        return this.http.get<OrderPriority[]>(`${environment.api.orderPriorities}`);
+
+    }
+
+    findUnitTypes() {
+
+        return this.http.get<UnitType[]>(`${environment.api.unitTypes}`);
+
+    }
+
+    createOrder(order: Order) {
+
+        return this.http.post<Order>(`${environment.api.orders}`, order)
+
+    }
+
+    updateWithUnits(orderId: number, order: Order) {
+
+        return this.http.put<Order>(`${environment.api.orders}/update/${orderId}`, order)
 
     }
 

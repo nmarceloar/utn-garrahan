@@ -15,15 +15,15 @@
 
                 <div class="row mb-3">
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
                     </div>
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm:ss"}}</span>
                     </div>
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss"}}</span>
                     </div>
 
@@ -62,7 +62,7 @@
                 <h6 class="text-primary  mt-4">Unidades</h6>
                 <hr />
 
-                <div class="row mb-3 px-5">
+                <div class="row mb-3 px-2">
 
                     <div class="col-sm-2">
                         <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
@@ -74,7 +74,7 @@
 
                 </div>
 
-                <div class="table-responsive mt-4">
+                <div class="table-responsive mt-4 px-2">
                     <table *ngIf="order" class="table table-bordered table-hover table-stripped">
                         <thead>
                             <tr>
