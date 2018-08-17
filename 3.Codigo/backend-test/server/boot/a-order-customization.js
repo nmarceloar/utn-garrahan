@@ -1,5 +1,5 @@
 'use strict';
-
+var random = new require("chance").Chance();
 module.exports = (app, cb) => {
 
     app.get("/api/orders/page", (req, res) => {
@@ -74,7 +74,7 @@ module.exports = (app, cb) => {
             let pendingOrder = (await app.models.OrderStatus.find({ where: { name: { regexp: `.*PENDIENTE.*` } } }))[0]
 
             let order = await app.models.Order.create({
-                code: orderInfo.code,
+                code: random.guid(),
                 priorityId: orderInfo.priorityId,
                 statusId: pendingOrder.id,
                 carrier: orderInfo.carrier,

@@ -123,7 +123,9 @@
                             <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.lastModified | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.code}}</td>
-                            <td>{{order.status.name}}</td>
+                            <td [class.text-danger]="order.status.name === 'RECHAZADA'"
+                            [class.text-success]="order.status.name === 'IRRADIADA'"
+                            >{{order.status.name}}</td>
                             <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
                             <td>{{order.institution.name}}</td>
                             <td>{{order.priority.name}}</td>

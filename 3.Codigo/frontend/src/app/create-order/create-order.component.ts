@@ -25,6 +25,8 @@ export class CreateOrderComponent implements OnInit {
     currentUser
 
     private units: any[] = []
+    
+    currentDate = new Date()
 
     private unitTypeMappings: any[] = [];
 
@@ -148,6 +150,7 @@ export class CreateOrderComponent implements OnInit {
                     ttlInSeconds: 5
                 })
 
+
             }
 
             this.isWaitingForUnit = { should: true }
@@ -187,8 +190,22 @@ export class CreateOrderComponent implements OnInit {
         }
 
         this.orderService.createOrder(order)
-            .subscribe(order => console.log(order))
-
+            .subscribe(order => {                
+            	    this.messageService.sendMessage({
+                    persist: true,
+                    type: MessageType.SUCCESS,
+                    text: "La operacion se completo exitosamente. Los operadores ya tienen disponible su orden",
+                    ttlInSeconds: 5})
+                this.locationService.back();}
+                ,(err)=>{
+                	this.messageService.sendMessage({
+		        persist: false,
+		        type: MessageType.DANGER,
+		        text: "Error al intentar grabar la orden. " + err.message,
+                    ttlInSeconds: 5
+                })
+})
+		
 
     }
 

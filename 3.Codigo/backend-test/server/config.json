@@ -20,6 +20,6 @@
     "cors": false
   },
   "session": {
-    "ttlInMinutes": 2
+    "ttlInMinutes": 60
   }
 }
