@@ -9,12 +9,15 @@ export const environment = {
         verifyCredentials: `${api}/xusers/verifyCredentials`,
         users: `${api}/xusers`,
         orders: `${api}/orders`,
+        dailyReport: `${api}/orders/dailyReport`,
+        monthlyReport: `${api}/orders/monthlyReport`,
         institutions: `${api}/institutions`,
+        institutionTypes: `${api}/institutionTypes`,
         orderStatus: `${api}/orderstatus`,
         orderPriorities: `${api}/order-priorities`,
         unitTypes: `${api}/unit-types`
     },
     storage: sessionStorage,
-    sessionAlertOffsetInMin: 1
+    sessionAlertOffsetInMin: 2
 
 };

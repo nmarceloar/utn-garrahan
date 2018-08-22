@@ -255,9 +255,6 @@ export class EditOrderComponent implements OnInit {
             removedUnitIds: this.removedUnitIds
         }
 
-        console.log(order)
-
-
         this.orderService.updateWithUnits(this.order.id, order)
             .pipe(
                 flatMap(order => this.orderService.findById(order.id, { include: this.orderIncludes }))
@@ -269,7 +266,7 @@ export class EditOrderComponent implements OnInit {
                     this.messageService.sendMessage({
                         type: MessageType.SUCCESS,
                         persist: false,
-                        text: "La operación se realizó correctamente. La orden ya permanecerá pendiente hasta ser revisada por un operador"
+                        text: "La operación se realizó correctamente. La orden permanecerá pendiente hasta ser revisada por un operador."
                     })
                 },
                 err => {
@@ -285,11 +282,31 @@ export class EditOrderComponent implements OnInit {
 
     cancelOrder() {
 
-        this.messageService.sendMessage({
-            type: MessageType.DANGER,
-            persist: false,
-            text: `PROXIMAMENTE. Cancelación de órdenes`
-        })
+        this.nextStatus =
+            this.statuses.filter((status) => status.name === "CANCELADA")[0];
+
+        this.orderService.markOrderAs(this.order.id, this.nextStatus)
+            .pipe(
+                tap(order => console.log(order)),
+                flatMap(order => this.orderService.findById(order.id, { include: this.orderIncludes }))
+            )
+            .subscribe(
+                (order) => {
+                    this.order = order
+                    this.messageService.sendMessage({
+                        type: MessageType.SUCCESS,
+                        persist: false,
+                        text: "La operación se realizó correctamente. La orden ya no será tenida en cuenta por el Banco."
+                    })
+                },
+                err => {
+                    this.messageService.sendMessage({
+                        type: MessageType.DANGER,
+                        persist: false,
+                        text: `Error al intentar cancelar la orden. ${err.message}`
+                    })
+                }
+            );
 
 
     }
@@ -305,7 +322,7 @@ export class EditOrderComponent implements OnInit {
 
     get canModify() {
 
-        return this.order.status.name === "PENDIENTE" // isPending 
+        return this.order.status.name === "RECHAZADA"  // isRejected ??
 
     }
 

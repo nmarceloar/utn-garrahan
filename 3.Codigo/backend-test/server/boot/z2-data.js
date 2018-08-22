@@ -27,7 +27,7 @@ module.exports = async (app, cb) => {
                 var client = clientes[randomBetween(0, clientes.length - 1)];
 
                 var order = await app.models.Order.create({
-                    code: random.guid(),
+                    code: random.string({ length: 8, pool: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"}),
                     carrier: random.name(),
                     creationDate: random.date({ year: 2017 }),
                     priorityId: orderPriorities[randomBetween(0, orderPriorities.length - 1)].id,

@@ -11,6 +11,7 @@
             <div *ngIf="hasOrder" class="mt-2">
 
                 <h5 class="text-primary ">Órden</h5>
+                <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
                 <hr />
 
                 <div class="row mb-3">
@@ -30,6 +31,7 @@
                     <div class="col-sm-2 col-md-3">
                         <span class="h6">Estado:</span><br />
                         <span ngbTooltip="{{order.status.description}}"
+                              [class.text-muted]="order.status.name === 'CANCELADA'"
                               [class.text-success]="order.status.name === 'EN_PROCESO'"
                               [class.text-primary]="order.status.name === 'IRRADIADA'"
                               [class.text-warning]="order.status.name === 'PENDIENTE'"
@@ -56,7 +58,7 @@
                     <div class="col-sm-2 col-md-3">
                         <span class="h6">Transportista:</span>
                         <input *ngIf="order.status.name === 'RECHAZADA'" type="text" class="form-control" [formControl]="selectedCarrier" />
-                        <span *ngIf="order.status.name !== 'RECHAZADA'" > <br />{{order.carrier}}</span>
+                        <span *ngIf="order.status.name !== 'RECHAZADA'"> <br />{{order.carrier}}</span>
                     </div>
 
                 </div>
@@ -127,7 +129,7 @@
                                 <th>Código</th>
                                 <th>Tipo</th>
                                 <th>Fecha</th>
-                                <th *ngIf="order.status.name ==='RECHAZADA'">Acciones</th>
+                                <th *ngIf="canModify">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -135,7 +137,7 @@
                                 <td>{{unit.code}}</td>
                                 <td>{{unit.type.code}} - {{unit.type.name}}</td>
                                 <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
-                                <td *ngIf="order.status.name === 'RECHAZADA'">
+                                <td *ngIf="canModify">
                                     <div class="action-list">
                                         <button class="btn btn-link p-0 m-0" (click)="removeUnit(unit)">Eliminar</button>
                                         <button class="btn btn-link p-0 m-0" (click)="edit(unit)">Editar</button>
@@ -153,7 +155,7 @@
                     <p class="text-danger">La orden debe tener por lo menos una unidad a irradiar</p>
                 </div>
 
-                <div class="d-flex flex-wrap justify-content-end" *ngIf="order.status.name == 'RECHAZADA'">
+                <div class="d-flex flex-wrap justify-content-end" *ngIf="canModify">
                     <button class="btn btn-primary rounded-0 px-5 ml-2" (click)="confirmChanges()" [disabled]="!order.units.length">Confirmar cambios</button>
                     <button class="btn btn-danger rounded-0 px-5 ml-2" (click)="cancelOrder()">Cancelar orden</button>
                 </div>

@@ -15,7 +15,7 @@ td > button {
     display: inline-block;
     border: 1px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 1px solid #3498db;
+    border-top: 1px solid #007bff;
     width: 1.5rem;
     min-height: 1.5rem;
     animation: spin .5s linear infinite;
@@ -180,7 +180,7 @@ td button {
     padding: 1rem;
     padding-top: 0px;
     min-width: 30%;
-    max-width: 70%;
+    max-width: 60%;
 }
 
 .message {

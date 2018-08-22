@@ -6,30 +6,38 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {
-    "code": {
-      "type": "string",
-      "required": true
+    "properties": {
+        "code": {
+            "type": "string",
+            "required": true
+        },
+        "carrier": {
+            "type": "string",
+            "required": true
+        },
+        "creationDate": {
+            "type": "date",
+            "required": true,
+            "defaultFn": "now"
+        },
+        "completionDate": {
+            "type": "date",
+            "required": false
+        },
+        "acceptedOn": {
+            "type": "date",
+            "required": false
+        },
+        "lastModified": {
+            "type": "date",
+            "required": false
+        },
+        "unitCount": {
+            "type": "number",
+            "required": true,
+            "default": 0
+        }
     },
-    "carrier": {
-      "type": "string",
-      "required": true
-    },
-    "creationDate": {
-      "type": "date",
-      "required": true,
-      "defaultFn": "now"
-    },
-    "lastModified": {
-      "type": "date",
-      "required": false
-    },
-    "unitCount": {
-      "type": "number",
-      "required": true,
-      "default": 0
-    }
-  },
   "validations": [],
   "relations": {
     "units": {
@@ -71,6 +79,11 @@
       "type": "hasMany",
       "model": "Irradiation",
       "foreignKey": "orderId"
+    },
+    "orderAcceptor": {
+      "type": "belongsTo",
+      "model": "XUser",
+      "foreignKey": "operatorId"
     }
   },
   "acls": [],

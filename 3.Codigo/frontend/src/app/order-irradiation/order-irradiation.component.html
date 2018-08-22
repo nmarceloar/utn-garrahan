@@ -11,6 +11,7 @@
             <div *ngIf="!isLoading">
 
                 <h5 class="text-primary mt-3">Órden</h5>
+                <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
                 <hr />
 
                 <div class="row mb-3">
@@ -41,11 +42,18 @@
                 <div class="row mb-3">
 
                     <div class="col-sm-2 col-md-3">
-                        <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                        <span class="h6">Ingresada por:</span>
+                        <br />
+                        <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                        <span> /</span>
+                        <br />
+                        <span class="text-primary">{{order.owner.institution.name}}</span>
                     </div>
 
                     <div class="col-sm-2 col-md-3">
-                        <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
+                        <span class="h6">Aceptada por:</span><br />
+                        <span *ngIf="!order.orderAcceptor">-</span>
+                        <span *ngIf="order.orderAcceptor">{{order.orderAcceptor.firstname}} {{order.orderAcceptor.lastname}} <br /> {{order.acceptedOn | date: "dd/MM/yyyy hh:mm"}}</span>
                     </div>
 
                     <div class="col-sm-2 col-md-3">

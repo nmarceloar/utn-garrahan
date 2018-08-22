@@ -39,7 +39,7 @@
   },
   "InstitutionType": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "XUser": {
     "dataSource": "db",

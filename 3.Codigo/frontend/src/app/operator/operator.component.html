@@ -12,7 +12,19 @@
             <form [formGroup]="searchForm" (submit)="search()">
 
                 <div class="form-row">
-                    <div class="col-lg-4">
+
+
+                    <div class="col-lg-3">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">ID</span>
+                            </div>
+                            <input type="text" class="form-control" formControlName="id">
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-3">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Código</span>
@@ -20,7 +32,9 @@
                             <input type="text" class="form-control" formControlName="code">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+
+
+                    <div class="col-lg-3">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Estado</span>
@@ -32,14 +46,14 @@
                         </div>
 
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Prioridad</span>
                             </div>
                             <select type="text" class="form-control" formControlName="priorityId">
                                 <option [ngValue]="null">-</option>
-                                <option *ngFor="let priority of orderPriorities" [ngValue]="priority.name">{{priority.name}}</option>
+                                <option *ngFor="let priority of orderPriorities" [ngValue]="priority.id">{{priority.name}}</option>
                             </select>
                         </div>
 
@@ -83,7 +97,7 @@
                     </div>
 
                     <div class="col-lg-2 mx-auto mt-2">
-                        <button type="submit" class="btn btn-primary btn-block mb-2">Buscar</button>
+                        <button type="submit" class="btn btn-primary btn-block mb-2 rounded-0">Buscar</button>
                     </div>
 
                 </div>
@@ -120,12 +134,11 @@
 
                     <tbody>
                         <tr *ngFor="let order of orders">
+                            <td class="text-muted">{{order.id | leftzeroes}}</td>
                             <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.lastModified | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.code}}</td>
-                            <td [class.text-danger]="order.status.name === 'RECHAZADA'"
-                            [class.text-success]="order.status.name === 'IRRADIADA'"
-                            >{{order.status.name}}</td>
+                            <td [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</td>
                             <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
                             <td>{{order.institution.name}}</td>
                             <td>{{order.priority.name}}</td>
@@ -133,7 +146,7 @@
                             <td>
                                 <div class="d-inline-flex justify-content-start align-items-center p-0 m-0">
                                     <a routerLink="ordenes/{{order.id}}/revisión">Detalles</a>
-                                    <a routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
+                                    <a *ngIf="order.status.name === 'EN_PROCESO' || order.status.name === 'IRRADIADA'" routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
                                 </div>
                             </td>
 

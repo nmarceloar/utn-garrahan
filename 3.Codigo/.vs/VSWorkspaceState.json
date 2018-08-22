@@ -4,14 +4,16 @@
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\confirm-modal",
+    "\\frontend\\src\\app\\alert",
+    "\\frontend\\src\\app\\create-order",
     "\\frontend\\src\\app\\edit-order",
-    "\\frontend\\src\\app\\expiring-alert",
-    "\\frontend\\src\\app\\modal-login",
-    "\\frontend\\src\\app\\nav",
+    "\\frontend\\src\\app\\message",
+    "\\frontend\\src\\app\\not-found",
     "\\frontend\\src\\app\\operator",
-    "\\frontend\\src\\app\\order-conciliation"
+    "\\frontend\\src\\app\\order-conciliation",
+    "\\frontend\\src\\app\\order-irradiation",
+    "\\frontend\\src\\app\\pagination"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\edit-order\\edit-order.component.html",
+  "SelectedNode": "\\frontend\\src\\app\\client\\client.component.html",
   "PreviewInSolutionExplorer": false
 }

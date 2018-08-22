@@ -51,6 +51,26 @@ module.exports = (app, cb) => {
 
     })
 
+    app.post("/api/orders/createNew", async (req, res) => {
+
+        var orderId;
+
+        await app.dataSources.db.transaction(async (models) => {
+
+            let order = await models.Order.create(req.body.orderInfo);
+            let units = await order.units.create(req.body.units);
+
+            orderId = order.id;
+
+        });
+
+        let m = await app.models.Order.findById(orderId, { include: { units: true } })
+
+        res.json({ data: m });
+
+
+    })
+
     cb();
 
 }

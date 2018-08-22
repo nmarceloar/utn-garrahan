@@ -2,9 +2,108 @@
 
     <div class="row">
 
-        <div class="col">
+        <div class="col-12">
 
-            <span class="display-4">Informes mensuales</span>
+            <h5 class="font-weight-normal text-primary mt-4">Informe mensual de unidades irradiadas</h5>
+            <hr />
+
+            <form class="form-inline" [formGroup]="searchForm" (submit)="generateReport()">
+                <label class="mr-2 font-weight-bold">Seleccione período: </label>
+                <input type="month" class="form-control d-inline-block flex-grow-1 mr-2 rounded-0" formControlName="selectedDate" />
+                <button type="submit" class="btn btn-primary rounded-0" [disabled]="searchForm.invalid">Generar</button>
+            </form>
+            <hr class="mt-4" />
+
+            <div class="d-flex justify-content-center" *ngIf="isLoading">
+                <div class="loader"></div>
+            </div>
+
+            <div *ngIf="!isLoading && hasReport">
+
+                <h5 class="font-weight-normal mt-4 text-primary">Datos generales</h5>
+                <hr />
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Período</th>
+                            <th>Total unidades irradiadas</th>
+                            <th *ngFor="let unitType of report.unitTypes">Total {{unitType.code}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{report.startOfMonth | date: "MM/yyyy"}}</td>
+                            <td>{{report.unitCount}}</td>
+                            <td *ngFor="let unitCountMapping of report.unitCountMappings">{{unitCountMapping.unitCount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por institución</h6>
+                <hr />
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Institución</th>
+                            <th>Total unidades irradiadas</th>
+                            <th *ngFor="let unitType of report.unitTypes">Total {{unitType.code}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let mappingPerInstitution of report.mappingsPerInstitution">
+                            <td class="text-primary">
+                                {{mappingPerInstitution.institution.name}}
+                                <br />
+                                <span class="text-muted">{{mappingPerInstitution.institution.type.name}}</span>
+                                <br />
+                                <span class="text-muted">{{mappingPerInstitution.institution.address}}</span>
+                            </td>
+                            <td>{{mappingPerInstitution.unitCount}}</td>
+                            <td *ngFor="let unitTypeMapping of mappingPerInstitution.unitCountPerUnitTypeMappings">
+                                {{unitTypeMapping.unitCount}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por tipo de institución</h6>
+                <hr />
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Institución</th>
+                            <th>Total unidades irradiadas</th>
+                            <th *ngFor="let unitType of report.unitTypes">Total {{unitType.code}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let mappingPerInstitutionType of report.mappingsPerInstitutionType">
+                            <td class="text-primary">
+                                {{mappingPerInstitutionType.institutionType.name}} <br />
+                                <span class="text-muted">{{mappingPerInstitutionType.institutionType.description}}</span>
+                            </td>
+                            <td>{{mappingPerInstitutionType.unitCount}}</td>
+                            <td *ngFor="let unitTypeMapping of mappingPerInstitutionType.unitCountPerUnitTypeMappings">
+                                {{unitTypeMapping.unitCount}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <div class="d-flex justify-content-end my-4">
+                    <button class="btn btn-primary rounded-0 px-5" (click)="printReport()">Imprimir informe</button>
+                </div>
+
+
+
+
+            </div>
+
 
         </div>
 

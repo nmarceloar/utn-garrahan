@@ -11,6 +11,7 @@
             <div *ngIf="hasOrder" class="mt-2">
 
                 <h5 class="text-primary ">Órden</h5>
+                <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
                 <hr />
 
                 <div class="row mb-3">
@@ -27,9 +28,10 @@
                         <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss"}}</span>
                     </div>
 
-                    <div class="col-sm-2 col-md-3">
+                    <div class="col-sm-2 col-md-3 mb-2">
                         <span class="h6">Estado:</span><br />
                         <span ngbTooltip="{{order.status.description}}"
+                              [class.text-muted]="order.status.name === 'CANCELADA'"
                               [class.text-success]="order.status.name === 'EN_PROCESO'"
                               [class.text-primary]="order.status.name === 'IRRADIADA'"
                               [class.text-warning]="order.status.name === 'PENDIENTE'"
@@ -42,11 +44,18 @@
                 <div class="row mb-3">
 
                     <div class="col-sm-2 col-md-3">
-                        <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                        <span class="h6">Ingresada por:</span>
+                        <br />
+                        <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                        <span> /</span>
+                        <br />
+                        <span class="text-primary">{{order.owner.institution.name}}</span>
                     </div>
 
                     <div class="col-sm-2 col-md-3">
-                        <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
+                        <span class="h6">Aceptada por:</span><br />
+                        <span *ngIf="!order.orderAcceptor">-</span>
+                        <span *ngIf="order.orderAcceptor">{{order.orderAcceptor.firstname}} {{order.orderAcceptor.lastname}} <br /> {{order.acceptedOn | date: "dd/MM/yyyy hh:mm"}}</span>
                     </div>
 
                     <div class="col-sm-2 col-md-3">
@@ -62,7 +71,7 @@
                 <h6 class="text-primary  mt-4">Unidades</h6>
                 <hr />
 
-                <div class="row mb-3 px-2">
+                <div class="row mb-3">
 
                     <div class="col-sm-2">
                         <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
@@ -74,7 +83,7 @@
 
                 </div>
 
-                <div class="table-responsive mt-4 px-2">
+                <div class="table-responsive mt-3">
                     <table *ngIf="order" class="table table-bordered table-hover table-stripped">
                         <thead>
                             <tr>

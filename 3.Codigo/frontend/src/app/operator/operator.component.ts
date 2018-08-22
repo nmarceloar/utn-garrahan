@@ -61,6 +61,7 @@ export class OperatorComponent implements OnInit, OnDestroy {
     isLoading: boolean = false;
 
     searchForm: FormGroup = new FormGroup({
+        id: new FormControl(),
         code: new FormControl(),
         institutionId: new FormControl(),
         statusId: new FormControl(),
@@ -70,7 +71,8 @@ export class OperatorComponent implements OnInit, OnDestroy {
     })
 
     columns: TableColumn[] = [
-        { name: "creationDate", displayName: "Alta", sortable: true },
+        { name: "id", displayName: "ID", sortable: true },
+        { name: "creationDate", displayName: "Creada", sortable: true },
         { name: "lastModified", displayName: "Modificada", sortable: true },
         { name: "code", displayName: "Código", sortable: true },
         { name: "statusId", displayName: "Estado", sortable: true },
@@ -95,6 +97,8 @@ export class OperatorComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
+
+        this.searchForm.valueChanges.subscribe(d => console.log(d))
 
 
         this.isLoading = true;
@@ -141,14 +145,23 @@ export class OperatorComponent implements OnInit, OnDestroy {
     where() {
 
         let fns = {
-
+            id: (id) => ({ id: id }),
             code: (code) => ({ code: { regexp: `.*${code}.*` } }),
             institutionId: (id) => ({ institutionId: id }),
             priorityId: (id) => ({ priorityId: id }),
             statusId: (id) => ({ statusId: id }),
-            startDate: (date) => ({ creationDate: { gt: new Date(date).toISOString() } }),
-            endDate: (date) => ({ creationDate: { lt: new Date(date).toISOString() } })
-
+            startDate: (date) => ({
+                or: [
+                    { creationDate: new Date(date.split("-").join("/")).toISOString() },
+                    { creationDate: { gt: new Date(date.split("-").join("/")).toISOString() } }
+                ]
+            }),
+            endDate: (date) => ({
+                or: [
+                    { creationDate: new Date(date.split("-").join("/")).toISOString() },
+                    { creationDate: { lt: new Date(date.split("-").join("/")).toISOString() } }
+                ]
+            })
         }
 
         let clauses = Object.entries(this.searchForm.value)

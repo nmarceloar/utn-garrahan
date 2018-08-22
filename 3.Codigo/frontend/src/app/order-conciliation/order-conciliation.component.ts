@@ -26,6 +26,7 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
 
     private orderIncludes = [
         { units: { type: true } },
+        { orderAcceptor: true},
         { priority: true },
         { status: true },
         { owner: { institution: true } },
@@ -104,7 +105,7 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
         this.nextStatus =
             this.statuses.filter((status) => status.name === "EN_PROCESO")[0];
 
-        this.orderService.markOrderAs(this.order.id, this.nextStatus)
+        this.orderService.markOrderAsAcceptedBy(this.order.id, this.nextStatus, this.user.id)
             .pipe(
                 tap(order => console.log(order)),
                 flatMap(order => this.orderService.findById(order.id, { include: this.orderIncludes }))
@@ -135,39 +136,35 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
             this.statuses.filter((status) => status.name === "RECHAZADA")[0];
 
         fromPromise(this.modalService.open(ConfirmModalComponent, { size: "lg" }).result)
-            .pipe(
-                catchError(() => throwError({
-                    message: "Operación cancelada por el usuario"
-                })),
-                flatMap((comment) => zip(
+            .subscribe(
+                (comment) => zip(
                     this.orderService.markOrderAs(this.order.id, this.nextStatus),
                     this.orderService.addConciliationComment(this.order.id, {
                         operatorId: this.user.id,
                         comment: comment,
                         date: new Date()
                     })
-                )),
-                flatMap(([order, comment]) => this.orderService.findById(order.id, { include: this.orderIncludes }))
+                )
+                    .pipe(flatMap(([order, comment]) => this.orderService.findById(order.id, { include: this.orderIncludes })))
+                    .subscribe(
+                        order => {
+                            this.order = order
+                            this.messageService.sendMessage({
+                                type: MessageType.SUCCESS,
+                                persist: false,
+                                text: "La operación se realizó exitosamente. La orden permanecerá rechazada hasta la próxima revisión del cliente."
+                            })
+
+                        },
+                        err => this.messageService.sendMessage({
+                            type: MessageType.DANGER,
+                            persist: false,
+                            text: `Error al intentar modificar la orden. ${err.message}`
+                        })
+                    ),
+                (err) => { console.log("Operación cancelada por el usuario") }
+
             )
-            .subscribe(
-                order => {
-                    this.order = order
-                    this.messageService.sendMessage({
-                        type: MessageType.SUCCESS,
-                        persist: false,
-                        text: "La operación se realizó exitosamente. La orden permanecerá rechazada hasta la próxima revisión del cliente."
-                    })
-
-                },
-                err => this.messageService.sendMessage({
-                    type: MessageType.DANGER,
-                    persist: false,
-                    text: `Error al intentar modificar la orden. ${err.message}`
-                })
-            )
-
-
-
 
     }
 

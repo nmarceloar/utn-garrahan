@@ -42,8 +42,8 @@ export class ClientComponent implements OnInit, OnDestroy {
     isLoading: boolean = false;
 
     searchForm: FormGroup = new FormGroup({
+        id: new FormControl(),
         code: new FormControl(),
-        institutionId: new FormControl(),
         statusId: new FormControl(),
         priorityId: new FormControl(),
         startDate: new FormControl(),
@@ -51,22 +51,16 @@ export class ClientComponent implements OnInit, OnDestroy {
     })
 
     columns: TableColumn[] = [
-        { name: "creationDate", displayName: "Alta", sortable: true },
+        { name: "id", displayName: "ID", sortable: true },
+        { name: "creationDate", displayName: "Creada", sortable: true },
         { name: "lastModified", displayName: "Modificada", sortable: true },
         { name: "code", displayName: "Código", sortable: true },
+        { name: "ownerId", displayName: "Alta", sortable: true },
         { name: "carrier", displayName: "Transportista", sortable: true },
         { name: "statusId", displayName: "Estado", sortable: true },
         { name: "priorityId", displayName: "Prioridad", sortable: true },
         { name: "unitCount", displayName: "Unidades", sortable: true }
     ]
-
-    private readonly initialQuery = {
-        where: {},
-        skip: 0,
-        limit: this.pageSizes[0],
-        order: [`lastModified DESC`],
-        include: this.includes
-    };
 
     constructor(
         private institutionService: InstitutionsService,
@@ -75,7 +69,7 @@ export class ClientComponent implements OnInit, OnDestroy {
         private messageService: MessageService) {
 
         this.sessionService.events.subscribe(s => {
-            this.currentUser = s.user; 
+            this.currentUser = s.user;
         })
     }
 
@@ -91,8 +85,6 @@ export class ClientComponent implements OnInit, OnDestroy {
             include: this.includes
 
         };
-
-
 
         this.isLoading = true;
         zip(this.fetchData(), this.fetchOrders(q))
@@ -139,12 +131,22 @@ export class ClientComponent implements OnInit, OnDestroy {
 
         let fns = {
 
+            id: (id) => ({ id: id }),
             code: (code) => ({ code: { regexp: `.*${code}.*` } }),
-            institutionId: (id) => ({ institutionId: id }),
             priorityId: (id) => ({ priorityId: id }),
             statusId: (id) => ({ statusId: id }),
-            startDate: (date) => ({ creationDate: { gt: new Date(date).toISOString() } }),
-            endDate: (date) => ({ creationDate: { lt: new Date(date).toISOString() } })
+            startDate: (date) => ({
+                or: [
+                    { creationDate: new Date(date.split("-").join("/")).toISOString() },
+                    { creationDate: { gt: new Date(date.split("-").join("/")).toISOString() } }
+                ]
+            }),
+            endDate: (date) => ({
+                or: [
+                    { creationDate: new Date(date.split("-").join("/")).toISOString() },
+                    { creationDate: { lt: new Date(date.split("-").join("/")).toISOString() } }
+                ]
+            })
 
         }
 
@@ -154,7 +156,7 @@ export class ClientComponent implements OnInit, OnDestroy {
             .reduce((clauses, clause) => [...clauses, clause], [])
 
         let where = {
-            and: [...clauses]
+            and: [{ institutionId: this.currentUser.institutionId }, ...clauses]
         }
 
         return where;

@@ -13,29 +13,46 @@ module.exports.roles = [
 ]
 
 module.exports.unitTypes = [
-    { code: "AFR", name: "Aféresis" },
-    { code: "GRN", name: "Granulocitos" },
-    { code: "CP", name: "Plaquetas" },
-    { code: "CGR", name: "Globulos Rójos" },
-    { code: "OTRO", name: "Tipo de hemocomponente no identificado" }
+    { code: "AFR", name: "Aféresis", billingDivider: 2 },
+    { code: "GRN", name: "Granulocitos", billingDivider: 1 },
+    { code: "CP", name: "Plaquetas", billingDivider: 4 },
+    { code: "CGR", name: "Globulos Rójos", billingDivider: 1 },
+    { code: "OTRO", name: "Tipo de hemocomponente no identificado", billingDivider: 1 }
 ]
 
 module.exports.orderPriorities = [
     { name: "NORMAL", description: "Prioridad simple" },
-    { name: "URGENTE", description: "Ordenes urgentes" }
+    { name: "URGENTE", description: "Órdenes urgentes" }
 ]
 
 module.exports.institutionTypes = [
-    { name: "PUBLICA", description: "Públicas" },
-    { name: "PRIVADA", description: "Privadas" },
-    { name: "UBA", description: "UBA dependientes" }
+    { name: "PÚBLICA", description: "Instituciones públicas de salud" },
+    { name: "PRIVADA", description: "Instituciones privadas de salud" },
+    { name: "UBA", description: "Instituciones de salud dependientes de la Universidad de Buenos Aires" },
+    { name: "Ins. Prov. Bs As", description: "Instituciones en Provincia de Buenos Aires" }
 ]
 
 module.exports.orderStatuses = [
-    { name: "EN_PROCESO", description: "Ordenes que fueron aceptadas y pueden ser irradiadas" },
-    { name: "RECHAZADA", description: "Ordenes que fueron rechazadas por algún operador y deben ser revisadas/conciliadas por el cliente" },
-    { name: "PENDIENTE", description: "Ordenes recién ingresadas, ó recientemente revisadas y modificadas por el cliente. Deben ser aceptadas o rechazadas" },
-    { name: "IRRADIADA", description: "Ordenes que ya fueron irradiadas en forma completa" }
+    {
+        name: "EN_PROCESO",
+        description: "Órdenes que fueron aceptadas y pueden ser irradiadas o bien están siendo irradiadas."
+    },
+    {
+        name: "RECHAZADA",
+        description: "Órdenes que fueron rechazadas por algún operador y deben ser revisadas/conciliadas por el cliente."
+    },
+    {
+        name: "PENDIENTE",
+        description: "Órdenes recién ingresadas, ó recientemente revisadas y modificadas por el cliente. Deben ser aceptadas o rechazadas."
+    },
+    {
+        name: "IRRADIADA",
+        description: "Órdenes que ya fueron irradiadas en forma completa."
+    },
+    {
+        name: "CANCELADA",
+        description: "Órdenes canceladas por los clientes. No son tenidas en cuenta para futuras revisiones ni irradiaciones."
+    }
 ]
 
 module.exports.institutions = [{

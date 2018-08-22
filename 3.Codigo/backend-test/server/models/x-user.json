@@ -77,6 +77,11 @@
       "type": "hasMany",
       "model": "Irradiation",
       "foreignKey": "irradiatorId"
+    },
+    "acceptedOrders": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "operatorId"
     }
   },
   "acls": [

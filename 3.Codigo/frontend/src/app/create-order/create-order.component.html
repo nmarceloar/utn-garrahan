@@ -11,7 +11,7 @@
 
                 <div class="col-md-3 mb-2">
                     <h6>Fecha: </h6>
-                    <span >{{currentDate | date: "dd/MM/yyyy"}}</span>
+                    <input type="text" class="form-control" value="{{currentDate | date: 'dd/MM/yyyy'}}" readonly />
                 </div>
 
                 <div class="col-md-3 mb-2">
@@ -23,7 +23,7 @@
 
                 <div class="col-md-3 mb-2">
                     <h6>Prioridad: </h6>
-                    <select [formControl]="selectedPriority" class="custom-select" >
+                    <select [formControl]="selectedPriority" class="custom-select" ngbTooltip="Seleccione prioridad de la órden">
                         <option [ngValue]="null">--Seleccionar--</option>
                         <option *ngFor="let priority of orderPriorities" [ngValue]="priority">{{priority.name}}</option>
                     </select>

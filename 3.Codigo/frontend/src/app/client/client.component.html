@@ -12,6 +12,16 @@
             <form [formGroup]="searchForm" (submit)="search()">
 
                 <div class="form-row">
+
+                    <div class="col-lg-4">
+                        <div class="input-group mb-2 mr-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text text-primary">ID</span>
+                            </div>
+                            <input type="text" class="form-control" formControlName="id">
+                        </div>
+                    </div>
+
                     <div class="col-lg-4">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
@@ -20,6 +30,7 @@
                             <input type="text" class="form-control" formControlName="code">
                         </div>
                     </div>
+
                     <div class="col-lg-4">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
@@ -32,6 +43,10 @@
                         </div>
 
                     </div>
+                </div>
+
+                <div class="form-row">
+
                     <div class="col-lg-4">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
@@ -39,23 +54,7 @@
                             </div>
                             <select type="text" class="form-control" formControlName="priorityId">
                                 <option [ngValue]="null">-</option>
-                                <option *ngFor="let priority of orderPriorities" [ngValue]="priority.name">{{priority.name}}</option>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-lg-4">
-                        <div class="input-group mb-2 mr-2 flex-grow-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Institución</span>
-                            </div>
-                            <select type="text" class="form-control" formControlName="institutionId">
-                                <option [ngValue]="null">-</option>
-                                <option *ngFor="let institution of institutions" [ngValue]="institution.id">{{institution.name}}</option>
+                                <option *ngFor="let priority of orderPriorities" [ngValue]="priority.id">{{priority.name}}</option>
                             </select>
                         </div>
 
@@ -72,6 +71,7 @@
 
 
                     </div>
+
                     <div class="col-lg-4">
                         <div class="input-group mb-2 mr-2">
                             <div class="input-group-prepend">
@@ -82,11 +82,12 @@
 
                     </div>
 
-                    <div class="col-lg-2 mx-auto mt-2">
-                        <button type="submit" class="btn btn-primary btn-block mb-2">Buscar</button>
-                    </div>
-
                 </div>
+
+                <div class="col-lg-2 mx-auto mt-2">
+                    <button type="submit" class="btn btn-primary btn-block mb-2 rounded-0">Buscar</button>
+                </div>
+
 
             </form>
 
@@ -121,11 +122,13 @@
 
                     <tbody>
                         <tr *ngFor="let order of orders">
-                            <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
-                            <td>{{order.lastModified | date: "dd/MM/yyyy" }}</td>
+                            <td class="text-muted">{{order.id | leftzeroes}}</td>
+                            <td>{{order.creationDate | date: "dd/MM/yyyy hh:mm" }}</td>
+                            <td>{{order.lastModified | date: "dd/MM/yyyy hh:mm" }}</td>
                             <td>{{order.code}}</td>
+                            <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
                             <td>{{order.carrier}}</td>
-                            <td>{{order.statusId}}</td>
+                            <td [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</td>
                             <td>{{order.priority.name}}</td>
                             <td>{{order.unitCount}}</td>
                             <td>

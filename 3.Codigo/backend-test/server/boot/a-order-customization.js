@@ -1,6 +1,22 @@
 'use strict';
-var random = new require("chance").Chance();
+
 module.exports = (app, cb) => {
+
+    app.models.Order.observe("before save", (ctx, next) => {
+
+        if (ctx.instance) {
+
+            ctx.instance.lastModified = new Date()
+
+        } else {
+
+            ctx.data.lastModified = new Date()
+
+        }
+
+        next();
+
+    });
 
     app.get("/api/orders/page", (req, res) => {
 
@@ -27,22 +43,6 @@ module.exports = (app, cb) => {
 
     })
 
-    app.models.Order.observe("before save", (ctx, next) => {
-
-        if (ctx.instance) {
-
-            ctx.instance.lastModified = new Date()
-
-        } else {
-
-            ctx.data.lastModified = new Date()
-
-        }
-
-        next();
-
-    });
-
     app.post("/api/orders/:orderId/irradiations", function (req, res) {
 
         app.models.Order.findById(req.params.orderId)
@@ -64,7 +64,6 @@ module.exports = (app, cb) => {
 
     })
 
-
     app.post("/api/orders", async (req, res) => {
 
         let orderInfo = req.body;
@@ -74,7 +73,7 @@ module.exports = (app, cb) => {
             let pendingOrder = (await app.models.OrderStatus.find({ where: { name: { regexp: `.*PENDIENTE.*` } } }))[0]
 
             let order = await app.models.Order.create({
-                code: random.guid(),
+                code: orderInfo.code,
                 priorityId: orderInfo.priorityId,
                 statusId: pendingOrder.id,
                 carrier: orderInfo.carrier,
@@ -181,6 +180,71 @@ module.exports = (app, cb) => {
             return res.status(500).json({ error: { message: err.message } })
 
         }
+
+    })
+
+    app.get("/api/orders/dailyReport", async function (req, res) {
+
+        var startOfDay = new Date(req.query.date)
+
+        var startOfNextDay = new Date(req.query.date)
+        startOfNextDay.setUTCDate(startOfNextDay.getUTCDate() + 1)
+        startOfNextDay.setTime(startOfNextDay.getTime() - 1)
+
+        let institutionTypes = await app.models.InstitutionType.find()
+
+        let orders = await app.models.Order.find({
+            where: {
+                completionDate: { between: [startOfDay.toISOString(), startOfNextDay.toISOString()] }
+            },
+            include: [
+                { institution: { type: true } },
+                { unitTypeMappings: { unitType: true } }
+            ]
+        })
+
+        let report = {
+            date: new Date(req.query.date),
+            total: orders.length,
+            orders: orders,
+            institutionTypes: institutionTypes
+        }
+
+        res.json(report);
+
+    })
+
+    app.get("/api/orders/monthlyReport", async (req, res) => {
+
+        var startOfMonth = new Date(req.query.date)
+
+        var endOfMonth = new Date(req.query.date)
+        endOfMonth.setUTCMonth(endOfMonth.getUTCMonth() + 1)
+        endOfMonth.setTime(endOfMonth.getTime() - 1)
+
+        let institutions = await app.models.Institution.find({ include: [{ type: true }] })
+        let unitTypes = await app.models.UnitType.find()
+        let institutionTypes = await app.models.InstitutionType.find()
+
+        let orders = await app.models.Order.find({
+            where: {
+                completionDate: { between: [startOfMonth.toISOString(), endOfMonth.toISOString()] }
+            },
+            include: [
+                { unitTypeMappings: { unitType: true } },
+                { institution: { type: true } }
+            ]
+        })
+
+        let report = {
+            startOfMonth,
+            institutions,
+            institutionTypes,
+            unitTypes,
+            orders
+        }
+
+        res.json(report);
 
     })
 

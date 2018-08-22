@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService, Order } from '../order.service';
 import { FormControl, Validators } from '@angular/forms';
@@ -50,6 +50,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     private orderIncludes = [
         { irradiations: [{ units: { type: true } }, { irradiator: true }] },
         { priority: true },
+        { orderAcceptor: true },
         { status: true },
         { owner: { institution: true } },
         { conciliationComments: { operator: true } },
@@ -99,7 +100,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.order = order;
 
-        this.irradiations = order.irradiations.sort((a,b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
+        this.irradiations = order.irradiations.sort((a, b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
 
         this.selectedUnits = [];
 
@@ -143,7 +144,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.hasTagError = false;
 
-        this.isWaitingForUnit = {should: true}
+        this.isWaitingForUnit = { should: true }
 
 
 
@@ -189,7 +190,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.selectedUnitCode.reset();
 
-        this.isWaitingForUnit = {should: true}
+        this.isWaitingForUnit = { should: true }
 
     }
 
@@ -293,7 +294,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     get hasTag() {
 
-        return this.selectedTag.value 
+        return this.selectedTag.value
+
+    }
+
+    @HostListener('window:beforeunload', ['$event'])
+    preventPageRefresh(event) {
+
+        if (this.isIrradiationInProcess)
+            event.returnValue = "Está seguro que desea salir ?"
 
     }
 

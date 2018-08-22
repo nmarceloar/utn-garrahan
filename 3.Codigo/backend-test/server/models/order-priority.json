@@ -1,23 +1,23 @@
 {
-    "name": "OrderPriority",
-    "plural": "order-priorities",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "OrderPriority",
+  "plural": "order-priorities",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
     },
-    "properties": {
-        "name": {
-            "type": "string",
-            "required": true
-        },
-        "description": {
-            "type": "string",
-            "required": "true"
-        }
-    },
-    "validations": [],
-    "relations": {},
-    "acls": [],
-    "methods": {}
+    "description": {
+      "type": "string",
+      "required": "true"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

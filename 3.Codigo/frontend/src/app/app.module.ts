@@ -43,6 +43,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { AlreadyInGuard } from './already-in.guard';
 import { CancelConfirmationModalComponent } from './cancel-confirmation-modal/cancel-confirmation-modal.component';
 import { UnitEditModalComponent } from './unit-edit-modal/unit-edit-modal.component';
+import { InstitutionsComponent } from './institutions/institutions.component';
+import { LeftzeroesPipe } from './leftzeroes.pipe';
 
 
 const httpInterceptorProviders = [
@@ -77,7 +79,9 @@ const httpInterceptorProviders = [
         MessageComponent,
         ProgressBarComponent,
         CancelConfirmationModalComponent,
-        UnitEditModalComponent
+        UnitEditModalComponent,
+        InstitutionsComponent,
+        LeftzeroesPipe
     ],
     imports: [
         NgbModule.forRoot(),

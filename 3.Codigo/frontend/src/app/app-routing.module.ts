@@ -15,6 +15,7 @@ import { EditOrderComponent } from './edit-order/edit-order.component';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { ClientComponent } from './client/client.component';
 import { AlreadyInGuard } from './already-in.guard';
+import { InstitutionsComponent } from './institutions/institutions.component';
 
 
 const routes: Routes = [
@@ -131,6 +132,13 @@ const routes: Routes = [
                 component: AdministratorComponent,
                 data: {
                     breadcrumb: "Home"
+                }
+            },
+            {
+                path: "instituciones",
+                component: InstitutionsComponent,
+                data: {
+                    breadcrumb: "Instituciones clientes"
                 }
             },
             {

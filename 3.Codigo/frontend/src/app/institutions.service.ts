@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from "./../environments/environment";
+import { Query } from "./operator/operator.component";
 
 export interface Institution {
 
@@ -14,14 +15,29 @@ export interface Institution {
 
 }
 
+export interface InstitutionType {
+
+    id?: number
+    name: string
+    description: string
+
+}
+
+
 @Injectable()
 export class InstitutionsService {
 
     constructor(private http: HttpClient) { }
 
-    find() {
+    find(q: Query = {}) {
 
-        return this.http.get<Institution[]>(environment.api.institutions)
+        return this.http.get<Institution[]>(`${environment.api.institutions}?filter=${JSON.stringify(q)}`)
+
+    }
+
+    findTypes(q: Query = {}) {
+
+        return this.http.get<InstitutionType[]>(`${environment.api.institutionTypes}?filter=${JSON.stringify(q)}`)
 
     }
 

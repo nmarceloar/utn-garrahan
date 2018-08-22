@@ -20,13 +20,13 @@ export class CreateOrderComponent implements OnInit {
     submited = false;
     orderSubmitted = false;
 
-    started  = { should: true }
+    started = { should: true }
 
     currentUser
 
+    currentDate
+
     private units: any[] = []
-    
-    currentDate = new Date()
 
     private unitTypeMappings: any[] = [];
 
@@ -55,6 +55,8 @@ export class CreateOrderComponent implements OnInit {
         this.sessionService.events.subscribe(s => {
             this.currentUser = s.user;
         })
+
+        this.currentDate = new Date();
 
     }
 
@@ -118,7 +120,7 @@ export class CreateOrderComponent implements OnInit {
     removeUnit(unit) {
 
         this.units.splice(this.units.findIndex(u => u === unit), 1)
-        this.updateMappings(); 
+        this.updateMappings();
 
     }
 
@@ -139,7 +141,7 @@ export class CreateOrderComponent implements OnInit {
                 this.units.splice(i, 1)
                 this.units.splice(i, 0, data.actual)
 
-                this.updateMappings() 
+                this.updateMappings()
 
             } else {
 
@@ -149,7 +151,6 @@ export class CreateOrderComponent implements OnInit {
                     text: "Ya existe una unidad con ese codigo",
                     ttlInSeconds: 5
                 })
-
 
             }
 
@@ -178,7 +179,7 @@ export class CreateOrderComponent implements OnInit {
 
 
         let order = {
-            code: Math.random(),
+            code: this.selectedOrderCode.value,
             carrier: this.selectedCarrier.value,
             priorityId: this.selectedPriority.value.id,
             ownerId: this.currentUser.id,
@@ -190,22 +191,32 @@ export class CreateOrderComponent implements OnInit {
         }
 
         this.orderService.createOrder(order)
-            .subscribe(order => {                
-            	    this.messageService.sendMessage({
-                    persist: true,
-                    type: MessageType.SUCCESS,
-                    text: "La operacion se completo exitosamente. Los operadores ya tienen disponible su orden",
-                    ttlInSeconds: 5})
-                this.locationService.back();}
-                ,(err)=>{
-                	this.messageService.sendMessage({
-		        persist: false,
-		        type: MessageType.DANGER,
-		        text: "Error al intentar grabar la orden. " + err.message,
-                    ttlInSeconds: 5
-                })
-})
-		
+            .subscribe(
+                order => {
+
+                    this.messageService.sendMessage({
+                        persist: true,
+                        type: MessageType.SUCCESS,
+                        text: "La orden se ha registrado correctamente. La misma permanecerá pendiente hasta ser revisada por los operadores del banco.",
+                        ttlInSeconds: 8
+                    })
+
+                    this.locationService.back(); 
+
+                },
+                err => {
+
+                    this.messageService.sendMessage({
+                        persist: false,
+                        type: MessageType.DANGER,
+                        text: `Error al intentar registar la orden. ${err.message}`,
+                        ttlInSeconds: 8
+                    })
+
+
+                }
+            )
+
 
     }
 

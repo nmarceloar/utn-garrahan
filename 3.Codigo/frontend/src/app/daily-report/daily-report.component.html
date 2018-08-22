@@ -2,9 +2,88 @@
 
     <div class="row">
 
-        <div class="col">
+        <div class="col-12">
 
-            <span class="display-4">Informes diarios</span>
+            <h5 class="font-weight-normal text-primary mt-4">Informe diario de órdenes irradiadas</h5>
+            <hr />
+
+            <form class="form-inline" [formGroup]="searchForm" (submit)="generateReport()">
+                <label class="mr-2 font-weight-bold">Seleccione fecha: </label>
+                <input type="date" class="form-control d-inline-block flex-grow-1 mr-2" formControlName="selectedDate" />
+                <button type="submit" class="btn btn-primary rounded-0" [disabled]="searchForm.invalid">Generar</button>
+            </form>
+            <hr class="mt-4" />
+
+            <div class="d-flex justify-content-center" *ngIf="isLoading">
+                <div class="loader"></div>
+            </div>
+
+            <div *ngIf="!isLoading && hasReport">
+
+                <h5 class="font-weight-normal mt-3 text-primary">Datos generales: </h5>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Total órdenes irradiadas</th>
+                                <th colspan="4">Totales por tipo de institución</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{report.date | date: "dd/MM/yyyy"}}</td>
+                                <td>{{report.orderCount}}</td>
+                                <td *ngFor="let orderCount of report.orderCountPerInstitutionType">
+                                    <span [ngbTooltip]="orderCount.it.description" class="text-capitalize">{{orderCount.it.name}}: </span>
+                                    <span class="text-primary">{{orderCount.count}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h6 class="font-weight-normal text-primary">Órdenes</h6>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Código</th>
+                                <th>Institución</th>
+                                <th>Total unidades</th>
+                                <th colspan="5">Totales por tipo de unidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let order of report.orders">
+                                <td>{{order.id}}</td>
+                                <td class="text-muted">{{order.code}}</td>
+                                <td>{{order.institution.name}}</td>
+                                <td>{{order.unitCount}}</td>
+                                <td *ngFor="let mapping of order.unitTypeMappings">
+                                    <span class="font-weight-bold">{{mapping.unitType.code}}</span><br />
+                                    Total: {{mapping.count}} <br />
+                                    Facturables: <span class="text-success">{{mapping.billing}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="d-flex justify-content-end my-4">
+                    <button class="btn btn-primary rounded-0 px-5" (click)="printReport()">Imprimir informe</button>
+                </div>
+
+
+
+
+            </div>
+
 
         </div>
 
