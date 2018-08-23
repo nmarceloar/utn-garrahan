@@ -14,7 +14,7 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
     hasError: boolean = false;
 
     form: FormGroup = new FormGroup({
-        comment: new FormControl("", [Validators.required, Validators.minLength(20)])
+        comment: new FormControl("Faltan Unidades", [Validators.required, Validators.minLength(8)])
     })
 
     constructor(private activeModal: NgbActiveModal) { }
