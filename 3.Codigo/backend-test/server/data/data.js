@@ -16,7 +16,7 @@ module.exports.unitTypes = [
     { code: "AFR", name: "Aféresis", billingDivider: 2 },
     { code: "GRN", name: "Granulocitos", billingDivider: 1 },
     { code: "CP", name: "Plaquetas", billingDivider: 4 },
-    { code: "CGR", name: "Globulos Rójos", billingDivider: 1 },
+    { code: "CGR", name: "Globulos Rojos", billingDivider: 1 },
     { code: "OTRO", name: "Tipo de hemocomponente no identificado", billingDivider: 1 }
 ]
 
