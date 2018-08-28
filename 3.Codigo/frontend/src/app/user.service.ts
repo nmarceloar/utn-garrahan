@@ -17,7 +17,7 @@ export class UserService {
 
     findAll() {
 
-        return this.http.get(api.users)
+        return this.http.get(environment.api.users)
             .pipe(catchError(err => throwError(err.error.error)))
 
     }

@@ -45,6 +45,7 @@ import { CancelConfirmationModalComponent } from './cancel-confirmation-modal/ca
 import { UnitEditModalComponent } from './unit-edit-modal/unit-edit-modal.component';
 import { InstitutionsComponent } from './institutions/institutions.component';
 import { LeftzeroesPipe } from './leftzeroes.pipe';
+import { UsersComponent } from './users/users.component';
 
 
 const httpInterceptorProviders = [
@@ -81,7 +82,8 @@ const httpInterceptorProviders = [
         CancelConfirmationModalComponent,
         UnitEditModalComponent,
         InstitutionsComponent,
-        LeftzeroesPipe
+        LeftzeroesPipe,
+        UsersComponent
     ],
     imports: [
         NgbModule.forRoot(),

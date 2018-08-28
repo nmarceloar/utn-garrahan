@@ -1,0 +1,24 @@
+<div class="container">
+<div class="row">
+  <div class="col-12">
+    <table class="table table-bordered table-hover table-stripped">
+        <thead>
+            <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Email</th>
+                  <th>Interno/Externo</th>
+            </tr>
+        </thead>  
+      <tbody>
+            <tr *ngFor="let user of users">
+                  <td>{{user.firstname}}</td>
+                  <td>{{user.lastname}}</td>
+                  <td>{{user.email}}</td>
+                  <td>{{user.isInternal}}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+</div>

@@ -16,6 +16,7 @@ import { CreateUserComponent } from './create-user/create-user.component';
 import { ClientComponent } from './client/client.component';
 import { AlreadyInGuard } from './already-in.guard';
 import { InstitutionsComponent } from './institutions/institutions.component';
+import { UsersComponent } from './users/users.component';
 
 
 const routes: Routes = [
@@ -139,6 +140,13 @@ const routes: Routes = [
                 component: InstitutionsComponent,
                 data: {
                     breadcrumb: "Instituciones clientes"
+                }
+            },
+            {
+                path: "usuarios",
+                component: UsersComponent,
+                data: {
+                    breadcrumb: "Administracion de usuarios"
                 }
             },
             {
