@@ -164,51 +164,107 @@ export class OrderService {
 
     monthlyReport(date: string) {
 
-        return this.http.get(`${environment.api.monthlyReport}?date=${date}`).pipe(map((reportData: any) => ({
-            ...reportData,
-            unitCount: reportData.orders.reduce((unitCount, order) => unitCount + order.unitCount, 0),
-            unitCountMappings: reportData.unitTypes.map((ut) => ({
-                unitType: ut,
-                unitCount:
-                    reportData.orders
-                        .map(o => o.unitTypeMappings)
-                        .map(utms => (utms.filter(utm => utm.unitType.code === ut.code))[0])
-                        .reduce((unitCount, item) => unitCount + item.count, 0)
-            })),
-            mappingsPerInstitution: reportData.institutions.map((i) => ({
-                institution: i,
-                unitCount: reportData.orders.filter(o => o.institution.id === i.id)
-                    .reduce((unitCount, order) => unitCount + order.unitCount, 0),
-                unitCountPerUnitTypeMappings:
-                    reportData.unitTypes.map((ut) => ({
-                        unitType: ut,
-                        unitCount:
-                            reportData.orders
-                                .filter(o => o.institution.id === i.id)
-                                .map(o => o.unitTypeMappings)
-                                .map(utms => (utms.filter(utm => utm.unitType.code === ut.code))[0])
-                                .reduce((unitCount, item) => unitCount + item.count, 0)
+        return this.http.get(`${environment.api.monthlyReport}?date=${date}`)
+            .pipe(map((reportData: any) => ({
+                ...reportData,
+                unitCount: reportData.orders.reduce((unitCount, order) => unitCount + order.unitCount, 0),
+                unitCountMappings: reportData.unitTypes.map((ut) => ({
+                    unitType: ut,
+                    unitCount:
+                        reportData.orders
+                            .map(o => o.unitTypeMappings)
+                            .map(utms => (utms.filter(utm => utm.unitType.code === ut.code))[0])
+                            .reduce((unitCount, item) => unitCount + item.count, 0)
+                })),
+                mappingsPerInstitution: reportData.institutions.map((i) => ({
+                    institution: i,
+                    unitCount:
+                        reportData.orders
+                            .filter(o => o.institution.id === i.id)
+                            .reduce((unitCount, order) => unitCount + order.unitCount, 0),
+                    unitCountBefore19Hs:
+                        reportData.orders
+                            .filter(o => o.institution.id === i.id)
+                            .map(order => order.irradiations.filter(i => new Date(i.irradiationStart).getHours() < 19)
+                                .reduce((count, i) => count + i.units.length, 0))
+                            .reduce((sum, item) => sum + item, 0),
+                    unitCountAfter19Hs:
+                        reportData.orders
+                            .filter(o => o.institution.id === i.id)
+                            .map(order => order.irradiations.filter(i => new Date(i.irradiationStart).getHours() >= 19)
+                                .reduce((count, i) => count + i.units.length, 0))
+                            .reduce((sum, item) => sum + item, 0),
+                    unitCountPerUnitTypeMappings:
+                        reportData.unitTypes.map((ut) => ({
+                            unitType: ut,
+                            unitCountBefore19Hs:
+                                reportData.orders
+                                    .filter(o => o.institution.id === i.id)
+                                    .map(o => o.irradiations
+                                        .filter(i => new Date(i.irradiationStart).getHours() < 19)
+                                        .reduce((units, i) => [...units, ...i.units], [])
+                                        .filter(u => u.type.code === ut.code)
+                                        .length
+                                    )
+                                    .reduce((sum, i) => sum + i, 0),
+                            unitCountAfter19Hs:
+                                reportData.orders
+                                    .filter(o => o.institution.id === i.id)
+                                    .map(o => o.irradiations
+                                        .filter(i => new Date(i.irradiationStart).getHours() >= 19)
+                                        .reduce((units, i) => [...units, ...i.units], [])
+                                        .filter(u => u.type.code === ut.code)
+                                        .length
+                                    )
+                                    .reduce((sum, i) => sum + i, 0)
 
-                    }))
-            })),
-            mappingsPerInstitutionType: reportData.institutionTypes.map((it) => ({
-                institutionType: it,
-                unitCount: reportData.orders.filter(o => o.institution.type.name === it.name)
-                    .reduce((unitCount, order) => unitCount + order.unitCount, 0),
-                unitCountPerUnitTypeMappings:
-                    reportData.unitTypes.map((ut) => ({
-                        unitType: ut,
-                        unitCount:
-                            reportData.orders
-                                .filter(o => o.institution.type.name === it.name)
-                                .map(o => o.unitTypeMappings)
-                                .map(utms => (utms.filter(utm => utm.unitType.code === ut.code))[0])
-                                .reduce((unitCount, item) => unitCount + item.count, 0)
+                        }))
+                })),
+                mappingsPerInstitutionType: reportData.institutionTypes.map((it) => ({
+                    institutionType: it,
+                    unitCount:
+                        reportData.orders.filter(o => o.institution.type.name === it.name)
+                            .reduce((unitCount, order) => unitCount + order.unitCount, 0),
+                    unitCountBefore19Hs:
+                        reportData.orders
+                            .filter(o => o.institution.type.name === it.name)
+                            .map(order => order.irradiations.filter(i => new Date(i.irradiationStart).getHours() < 19)
+                                .reduce((count, i) => count + i.units.length, 0))
+                            .reduce((sum, item) => sum + item, 0),
+                    unitCountAfter19Hs:
+                        reportData.orders
+                            .filter(o => o.institution.type.name === it.name)
+                            .map(order => order.irradiations.filter(i => new Date(i.irradiationStart).getHours() >= 19)
+                                .reduce((count, i) => count + i.units.length, 0))
+                            .reduce((sum, item) => sum + item, 0),
+                    unitCountPerUnitTypeMappings:
+                        reportData.unitTypes.map((ut) => ({
+                            unitType: ut,
+                            unitCountBefore19Hs:
+                                reportData.orders
+                                    .filter(o => o.institution.type.name === it.name)
+                                    .map(o => o.irradiations
+                                        .filter(i => new Date(i.irradiationStart).getHours() < 19)
+                                        .reduce((units, i) => [...units, ...i.units], [])
+                                        .filter(u => u.type.code === ut.code)
+                                        .length
+                                    )
+                                    .reduce((sum, i) => sum + i, 0),
+                            unitCountAfter19Hs:
+                                reportData.orders
+                                    .filter(o => o.institution.type.name === it.name)
+                                    .map(o => o.irradiations
+                                        .filter(i => new Date(i.irradiationStart).getHours() >= 19)
+                                        .reduce((units, i) => [...units, ...i.units], [])
+                                        .filter(u => u.type.code === ut.code)
+                                        .length
+                                    )
+                                    .reduce((sum, i) => sum + i, 0)
 
-                    }))
-            }))
+                        }))
+                }))
 
-        })))
+            })))
 
 
     }

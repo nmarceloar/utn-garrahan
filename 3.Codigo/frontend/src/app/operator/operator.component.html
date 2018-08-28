@@ -138,15 +138,17 @@
                             <td>{{order.creationDate | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.lastModified | date: "dd/MM/yyyy" }}</td>
                             <td>{{order.code}}</td>
-                            <td [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</td>
+                            <td [class.text-danger]="order.status.name === 'RECHAZADA'">
+                                {{order.status.name}}
+                            </td>
                             <td>{{order.owner.firstname}} {{order.owner.lastname}}</td>
                             <td>{{order.institution.name}}</td>
                             <td>{{order.priority.name}}</td>
                             <td>{{order.unitCount}}</td>
                             <td>
                                 <div class="d-inline-flex justify-content-start align-items-center p-0 m-0">
-                                    <a routerLink="ordenes/{{order.id}}/revisión">Detalles</a>
-                                    <a *ngIf="order.status.name === 'EN_PROCESO' || order.status.name === 'IRRADIADA'" routerLink="ordenes/{{order.id}}/irradiación">Irradiar</a>
+                                    <button class="btn btn-primary py-1 rounded-0 mr-1" routerLink="ordenes/{{order.id}}/revisión">Detalles</button>
+                                    <button class="btn btn-success py-1 rounded-0 mr-1" *ngIf="order.status.name === 'EN_PROCESO'" routerLink="ordenes/{{order.id}}/irradiación">Irradiar</button>
                                 </div>
                             </td>
 

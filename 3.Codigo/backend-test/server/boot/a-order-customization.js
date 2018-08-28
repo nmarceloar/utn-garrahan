@@ -232,7 +232,8 @@ module.exports = (app, cb) => {
             },
             include: [
                 { unitTypeMappings: { unitType: true } },
-                { institution: { type: true } }
+                { institution: { type: true } },
+                { irradiations: { units: {type: true} } }
             ]
         })
 
@@ -247,7 +248,6 @@ module.exports = (app, cb) => {
         res.json(report);
 
     })
-
 
     cb()
 

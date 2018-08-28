@@ -42,6 +42,7 @@
       "foreignKey": "institutionId"
     }
   },
-  "acls": [],
+  "acls": [
+  ],
   "methods": {}
 }
