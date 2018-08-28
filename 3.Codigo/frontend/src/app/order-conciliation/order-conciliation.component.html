@@ -131,6 +131,80 @@
                 </table>
 
 
+                <h6 class="text-primary mb-1 mt-3">Historial de irradiaciones: </h6>
+                <hr />
+
+                <ul class="list-unstyled">
+
+                    <li class="media mb-3 border-bottom" *ngFor="let irradiation of order.irradiations">
+
+                        <img class="mr-3" [src]="irradiation.irradiator.avatarUrl" height="50" width="50">
+                        <div class="media-body">
+
+                            <h6 class="mt-0 mb-1">Fecha: </h6>
+                            <p class="text-primary">{{irradiation.irradiationStart | date: "dd/MM/yyyy hh:mm"}}</p>
+
+                            <div class="container">
+
+                                <div class="row">
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Operador</h6>
+                                        <p>{{irradiation.irradiator.firstname}} {{irradiation.irradiator.lastname}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Etiqueta</h6>
+                                        <p>{{irradiation.irradiationTag}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Total unidades: </h6>
+                                        <p>{{irradiation.units.length}}</p>
+                                    </div>
+
+                                    <div class="col-md-3 pl-0">
+                                        <h6>Tiempo total de irradiación: </h6>
+                                        <p>{{irradiation.irradiationTime}} min</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <table class="table table-bordered table-hover table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th>Etiqueta</th>
+                                        <th>Codigo</th>
+                                        <th>Tipo</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let unit of irradiation.units">
+                                        <td>{{irradiation.irradiationTag}}</td>
+                                        <td>{{unit.code}}</td>
+                                        <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                        <td>{{irradiation.irradiationStart | date: "hh:mm:ss"}}</td>
+                                        <td>{{irradiation.irradiationEnd | date: "hh:mm:ss"}}</td>
+                                        <td>{{irradiation.irradiationTime}} min</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h6 class="mt-0 mb-1 text-success">Comentarios: </h6>
+                            <p class="text-muted">{{irradiation.comments}}</p>
+
+                        </div>
+
+                    </li>
+
+                </ul>
+
+
 
 
 

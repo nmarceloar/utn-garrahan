@@ -55,7 +55,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         { owner: { institution: true } },
         { conciliationComments: { operator: true } },
         { unitTypeMappings: { unitType: true } },
-        { units: ["type"] }
+        { units: { type: true } }
     ];
 
     constructor(
@@ -210,7 +210,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.stopTime = new Date();
 
-        fromPromise(this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false }).result)
+        fromPromise(this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" }).result)
             .subscribe((comments) => {
 
                 console.log(comments);

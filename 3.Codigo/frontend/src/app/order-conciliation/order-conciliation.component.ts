@@ -26,12 +26,13 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
 
     private orderIncludes = [
         { units: { type: true } },
-        { orderAcceptor: true},
+        { orderAcceptor: true },
         { priority: true },
         { status: true },
         { owner: { institution: true } },
         { conciliationComments: { operator: true } },
-        { unitTypeMappings: { unitType: true } }
+        { unitTypeMappings: { unitType: true } },
+        { irradiations: [{ units: { type: true } }, { irradiator: true }] }
     ];
 
     constructor(
@@ -112,20 +113,24 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
             )
             .subscribe(
                 (order) => {
+
                     this.order = order
                     this.messageService.sendMessage({
                         type: MessageType.SUCCESS,
                         persist: false,
                         text: "La operación se realizó correctamente. La orden ya puede comenzar a ser irradiada"
                     })
+
                 },
                 err => {
+
                     this.messageService.sendMessage({
                         type: MessageType.DANGER,
                         persist: false,
                         text: `Error al intentar modificar la orden. ${err.message}`
                     })
                 }
+
             );
 
     }

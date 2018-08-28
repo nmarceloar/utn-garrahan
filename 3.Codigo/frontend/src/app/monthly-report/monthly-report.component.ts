@@ -39,7 +39,9 @@ export class MonthlyReportComponent implements OnInit {
         this.isLoading = true;
         this.orderService.monthlyReport(date)
             .subscribe(
-                (report) => {
+            (report) => {
+                console.log(report)
+
                     this.isLoading = false
                     this.report = report
                 },

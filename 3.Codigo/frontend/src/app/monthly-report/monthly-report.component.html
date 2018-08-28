@@ -40,7 +40,7 @@
                     </tbody>
                 </table>
 
-                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por institución</h6>
+                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por institución <br /> <span class="text-dark">Antes 19Hs / Después 19Hs</span></h6>
                 <hr />
 
                 <table class="table table-bordered table-hover">
@@ -60,16 +60,16 @@
                                 <br />
                                 <span class="text-muted">{{mappingPerInstitution.institution.address}}</span>
                             </td>
-                            <td>{{mappingPerInstitution.unitCount}}</td>
+                            <td>{{mappingPerInstitution.unitCountBefore19Hs}} / {{mappingPerInstitution.unitCountAfter19Hs}}</td>
                             <td *ngFor="let unitTypeMapping of mappingPerInstitution.unitCountPerUnitTypeMappings">
-                                {{unitTypeMapping.unitCount}}
+                                {{unitTypeMapping.unitCountBefore19Hs}} / {{unitTypeMapping.unitCountAfter19Hs}}
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
 
-                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por tipo de institución</h6>
+                <h6 class="font-weight-normal text-primary mt-4">Unidades irradiadas por institución <br /> <span class="text-dark">Antes 19Hs / Después 19Hs</span></h6>
                 <hr />
 
                 <table class="table table-bordered table-hover">
@@ -86,9 +86,9 @@
                                 {{mappingPerInstitutionType.institutionType.name}} <br />
                                 <span class="text-muted">{{mappingPerInstitutionType.institutionType.description}}</span>
                             </td>
-                            <td>{{mappingPerInstitutionType.unitCount}}</td>
+                            <td>{{mappingPerInstitutionType.unitCountBefore19Hs}} / {{mappingPerInstitutionType.unitCountAfter19Hs}}  </td>
                             <td *ngFor="let unitTypeMapping of mappingPerInstitutionType.unitCountPerUnitTypeMappings">
-                                {{unitTypeMapping.unitCount}}
+                                {{unitTypeMapping.unitCountBefore19Hs}} / {{unitTypeMapping.unitCountAfter19Hs}}
                             </td>
                         </tr>
                     </tbody>

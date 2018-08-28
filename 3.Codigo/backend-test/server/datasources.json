@@ -4,7 +4,7 @@
     "port": 3306,
     "url": "",
     "database": "p2018",
-    "password": "generador",
+    "password": "root",
     "name": "db",
     "user": "root",
     "connector": "mysql"

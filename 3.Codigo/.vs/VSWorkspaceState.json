@@ -4,16 +4,10 @@
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\alert",
-    "\\frontend\\src\\app\\create-order",
-    "\\frontend\\src\\app\\edit-order",
-    "\\frontend\\src\\app\\message",
-    "\\frontend\\src\\app\\not-found",
     "\\frontend\\src\\app\\operator",
     "\\frontend\\src\\app\\order-conciliation",
-    "\\frontend\\src\\app\\order-irradiation",
-    "\\frontend\\src\\app\\pagination"
+    "\\frontend\\src\\app\\order-irradiation"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\client\\client.component.html",
+  "SelectedNode": "\\frontend\\src\\app\\order-conciliation\\order-conciliation.component.ts",
   "PreviewInSolutionExplorer": false
 }
