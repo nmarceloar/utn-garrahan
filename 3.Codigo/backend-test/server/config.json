@@ -1,25 +1,32 @@
 {
-  "restApiRoot": "/api",
-  "host": "0.0.0.0",
-  "port": 3000,
-  "remoting": {
-    "context": false,
-    "rest": {
-      "handleErrors": false,
-      "normalizeHttpPath": false,
-      "xml": false
+    "restApiRoot": "/api",
+    "host": "0.0.0.0",
+    "port": 3000,
+    "remoting": {
+        "context": false,
+        "rest": {
+            "handleErrors": false,
+            "normalizeHttpPath": false,
+            "xml": false
+        },
+        "json": {
+            "strict": false,
+            "limit": "100kb"
+        },
+        "urlencoded": {
+            "extended": true,
+            "limit": "100kb"
+        },
+        "cors": false
     },
-    "json": {
-      "strict": false,
-      "limit": "100kb"
+    "session": {
+        "ttlInMinutes": 60
     },
-    "urlencoded": {
-      "extended": true,
-      "limit": "100kb"
-    },
-    "cors": false
-  },
-  "session": {
-    "ttlInMinutes": 60
-  }
+    "secretPassword": "password:)",
+    "confirmExpirationInHours": 24,
+    "mail": {
+        "activationMessage": "Hospital Garrahan - Active su cuenta",
+        "resetMessage": "Hospital Garrahan - Reseteo de contraseña",
+        "sender": "nmarcelo.ar@gmail.com"
+    }
 }

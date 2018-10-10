@@ -47,6 +47,13 @@ import { InstitutionsComponent } from './institutions/institutions.component';
 import { LeftzeroesPipe } from './leftzeroes.pipe';
 import { UsersComponent } from './users/users.component';
 
+import { CreateInstitutionComponent } from "./create-institution/create-institution.component";
+import { InstitutionDetailsComponent } from './institution-details/institution-details.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { PasswordChangeComponent } from './password-change/password-change.component';
+import { CuitPipe } from './cuit.pipe'
+
 
 const httpInterceptorProviders = [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
@@ -83,7 +90,13 @@ const httpInterceptorProviders = [
         UnitEditModalComponent,
         InstitutionsComponent,
         LeftzeroesPipe,
-        UsersComponent
+        UsersComponent,
+        CreateInstitutionComponent,
+        InstitutionDetailsComponent,
+        AccountActivationComponent,
+        PasswordResetComponent,
+        PasswordChangeComponent,
+        CuitPipe
     ],
     imports: [
         NgbModule.forRoot(),

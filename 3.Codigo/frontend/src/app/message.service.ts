@@ -38,5 +38,10 @@ export class MessageService {
 
     }
 
+    public error(message) {
+
+        this.sendMessage({ text: message, type: MessageType.DANGER, persist: false, ttlInSeconds: 8 })
+    }
+
 
 }

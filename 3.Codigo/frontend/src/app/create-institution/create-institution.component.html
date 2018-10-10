@@ -1,0 +1,78 @@
+<div class="row">
+
+    <div class="col-8 mx-auto">
+
+        <h5 class="text-primary mt-3 font-weight-normal">Alta de instituciónes</h5>
+        <hr />
+
+        <h6 class="mb-4">Datos generales</h6>
+
+
+        <form [formGroup]="form" (submit)="create()">
+            <div class="form-row">
+
+                <div class="form-group col-md-12">
+                    <label for="inputPassword4">Nombre</label>
+                    <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre de la institución" formControlName="name">
+                    <div class="d-flex flex-column" *ngIf="submitted && form.controls.name.errors">
+                        <span class="text-danger" *ngIf="form.controls.name.errors.required">Ingrese el nombre completo de la institución</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="inputCity">Dirección</label>
+                    <input type="text" class="form-control" placeholder="Dirección" formControlName="address">
+                    <div class="d-flex flex-column" *ngIf="submitted && form.controls.address.errors">
+                        <span class="text-danger" *ngIf="form.controls.address.errors.required">Ingrese la dirección completa de la institución</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">CUIT</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Ej: 20-23323323-1" formControlName="cuit">
+                    <div class="d-flex flex-column" *ngIf="submitted && form.controls.cuit.errors">
+                        <span class="text-danger" *ngIf="form.controls.cuit.errors.required">Ingrese el cuit de la institución</span>
+                        <span class="text-danger" *ngIf="form.controls.cuit.errors.pattern">El formato de CUIT no es válido</span>
+                        <span class="text-danger" *ngIf="form.controls.cuit.errors.cuit">Digito verificador no válido</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputAddress">Email</label>
+                    <input type="text" class="form-control" id="inputAddress" placeholder="Ej: hospital@salud.com" formControlName="email">
+                    <div class="d-flex flex-column" *ngIf="submitted && form.controls.email.errors">
+                        <span class="text-danger" *ngIf="form.controls.email.errors.required">Ingrese un mail de contacto</span>
+                        <span class="text-danger" *ngIf="form.controls.email.errors.email">Email no válido</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-12">
+
+                    <label for="inputState">Tipo de Institución</label>
+                    <select class="form-control" formControlName="type">
+                        <option [ngValue]="null">Seleccionar ...</option>
+                        <option *ngFor="let type of types" [ngValue]="type">{{type.name}} - {{type.description}}</option>
+                    </select>
+                    <div class="d-flex flex-column" *ngIf="submitted && form.controls.type.errors">
+                        <span class="text-danger" *ngIf="form.controls.type.errors.required">Ingres el tipo de institución</span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary rounded-0 px-5">Aceptar</button>
+                <button (click)="cancel()" class="btn btn-secondary ml-2 rounded-0 px-5">Cancelar</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>

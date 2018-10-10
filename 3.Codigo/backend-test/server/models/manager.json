@@ -1,0 +1,30 @@
+{
+    "name": "Manager",
+    "plural": "managers",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "projectCount": {
+            "type": "number",
+            "required": false,
+            "default": 0
+        }
+    },
+    "validations": [],
+    "relations": {
+        "projects": {
+            "type": "hasMany",
+            "model": "Project",
+            "foreignKey": "managerId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

@@ -11,6 +11,13 @@ td > button {
     font-size: .925rem;
 }
 
+.fb {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 50px;
+}
+
 .loader {
     display: inline-block;
     border: 1px solid #f3f3f3;
@@ -60,34 +67,29 @@ td > div > a:not(:first-child)::before {
 }
 
 td button {
-
-    font-size: .925rem !important; 
-
+    font-size: .925rem !important;
 }
 
 .action-list > button:not(:first-child)::before {
     margin: 0px;
-    padding: 0px; 
+    padding: 0px;
     padding-left: .5rem;
     padding-right: .5rem;
-
     color: gray;
     content: "|"
 }
 
 
 .floating-button {
-
     display: inline-block;
     position: absolute;
     top: 0px;
     right: 0px;
     height: 60px;
     width: 60px;
-    border-radius: 50%; 
+    border-radius: 50%;
     background-color: blueviolet;
-    color: white; 
-
+    color: white;
 }
 
 .sorting-disabled {

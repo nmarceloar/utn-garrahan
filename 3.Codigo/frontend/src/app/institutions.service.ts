@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from "./../environments/environment";
 import { Query } from "./operator/operator.component";
@@ -11,6 +11,7 @@ export interface Institution {
     name: string
     email: string
     address: string
+    cuit: string
     [key: string]: any
 
 }
@@ -28,6 +29,22 @@ export interface InstitutionType {
 export class InstitutionsService {
 
     constructor(private http: HttpClient) { }
+
+
+    create(institution: Institution): Observable<Institution> {
+
+        return this.http.post<Institution>(`${environment.api.institutions}`, institution)
+
+    }
+
+    findById(id, q = {}): Observable<Institution> {
+
+        return this.http.get<Institution>(`${environment.api.institutions}/${id}?filter=${JSON.stringify(q)}`)
+
+    }
+
+
+
 
     find(q: Query = {}) {
 

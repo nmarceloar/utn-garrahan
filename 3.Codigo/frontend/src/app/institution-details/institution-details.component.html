@@ -1,0 +1,206 @@
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-12 mx-auto" *ngIf="hasInstitution">
+
+            <h5 class="text-primary ">Institución</h5>
+            <h6 class="text-muted">{{institution.id | leftzeroes}}</h6>
+            <hr />
+
+            <div class="row mb-3">
+
+                <div class=" col-md-3 mb-2">
+                    <span class="h6">CUIT: </span><br /> <span>{{institution.cuit | cuit}}</span>
+                </div>
+
+                <div class=" col-md-6 mb-2">
+                    <span class="h6">Nombre: </span><br /> <span>{{institution.name}}</span>
+                </div>
+
+                <div class=" col-md-3 mb-2">
+                    <span class="h6">Tipo: </span><br /> <span>{{institution.type.name}}</span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+
+                <div class=" col-md-3 mb-2">
+                    <span class="h6">Email: </span><br /> <span>{{institution.email}}</span>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <span class="h6">Dirección:</span><br /> <span>{{institution.address}}</span>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <span class="h6">Alta:</span><br /> <span>{{institution.creation_date | date: "dd/MM/yyyy"}}</span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+
+                <div class=" col-md-3 mb-2">
+                    <span class="h6">Usuarios: </span><br /> <span>{{institution.userCount}}</span>
+                </div>
+
+                <div class=" col-md-6 mb-2">
+                    <span class="h6">Órdenes: </span><br /> <span>{{institution.orderCount}}</span>
+                </div>
+
+                <div class=" col-md-3 mb-2">
+                    <span class="h6">Tipo: </span><br /> <span>{{institution.type.name}}</span>
+                </div>
+
+            </div>
+
+            <div *ngIf="newUserInProcess">
+
+                <h6 class="text-primary ">Alta de usuario</h6>
+                <hr />
+
+                <form [formGroup]="userForm" (submit)="createUser()">
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Apellido</label>
+                            <input type="text" class="form-control" id="inputPassword4" placeholder="Apellido" formControlName="firstname">
+                            <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.firstname.errors">
+                                <span class="text-danger" *ngIf="userForm.controls.firstname.errors.required">Ingres el nombre completo de la institucion</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">Nombre</label>
+                            <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre" formControlName="lastname">
+                            <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.lastname.errors">
+                                <span class="text-danger" *ngIf="userForm.controls.lastname.errors.required">Ingres el nombre completo de la institucion</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword4">DNI</label>
+                            <input type="text" class="form-control" id="inputPassword4" placeholder="DNI" formControlName="dni">
+                            <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.dni.errors">
+                                <span class="text-danger" *ngIf="userForm.controls.dni.errors.required">Ingrese el dni</span>
+                                <span class="text-danger" *ngIf="userForm.controls.dni.errors.pattern">DNI no válido</span>
+                                <span class="text-danger" *ngIf="userForm.controls.dni.errors.minLength">DNI no válido</span>
+                                <span class="text-danger" *ngIf="userForm.controls.dni.errors.maxLength">DNI no válido</span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">Nombre de usuario</label>
+                            <input type="text" class="form-control" formControlName="username" placeholder="Nombre de usuario">
+                            <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.username.errors">
+                                <span class="text-danger" *ngIf="userForm.controls.username.errors.required">Ingrese la dirección completa de la institucion</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">Email</label>
+                            <input type="text" class="form-control" formControlName="email" placeholder="Email">
+                            <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.email.errors">
+                                <span class="text-danger" *ngIf="userForm.controls.email.errors.required">Ingrese la dirección completa de la institucion</span>
+                                <span class="text-danger" *ngIf="userForm.controls.email.errors.email">Email no válido</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary rounded-0 px-3">Crear</button>
+                        <button class="btn btn-secondary rounded-0 px-3 ml-2" (click)="cancelUser()">Cancelar</button>
+                    </div>
+
+                </form>
+
+
+            </div>
+
+
+            <div *ngIf="!newUserInProcess">
+                <h6 class="text-primary " *ngIf="!newUserInProcess">Usuarios</h6>
+                <hr />
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Nombre</th>
+                                <th>DNI</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Alta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of institution.users">
+                                <td>{{user.id}}</td>
+                                <td>{{user.username}}</td>
+                                <td>{{user.firstname}} {{user.lastname}}</td>
+                                <td>{{user.dni}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.accountConfirmed ? (user.active ? 'ACTIVO' : 'INACTIVO') : 'PENDIENTE'}}</td>
+                                <td>{{user.creationDate | date: "dd/MM/yyyy"}}</td>
+                                <td>
+                                    <ul class="list-inline m-0">
+                                        <li class="list-item m-0"><span class="text-primary" (click)="enableUser(user.id)">Habilitar</span></li>
+                                        <li class="list-item m-0"><span class="text-primary" (click)="disableUser(user.id)">Deshabilitar</span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary rounded-0 px-3 shadow-sm" (click)="newUser()">Nuevo usuario</button>
+                </div>
+
+
+                <h6 class="text-primary">Últimas 5 órdenes</h6>
+                <hr />
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Codigo</th>
+                                <th>Alta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let order of orders">
+                                <td>{{order.id}}</td>
+                                <td>{{order.code}}</td>
+                                <td>{{order.creationDate | date: "dd/MM/yyyy hh:mm"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

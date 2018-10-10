@@ -1,102 +1,120 @@
 {
-  "name": "XUser",
-  "plural": "xusers",
-  "base": "User",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "hidden": [
-    "emailVerified",
-    "realm"
-  ],
-  "properties": {
-    "firstname": {
-      "type": "string",
-      "required": true
+    "name": "XUser",
+    "plural": "xusers",
+    "base": "User",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
     },
-    "lastname": {
-      "type": "string",
-      "required": true
+    "hidden": [
+        "emailVerified",
+        "realm"
+    ],
+    "properties": {
+        "firstname": {
+            "type": "string",
+            "required": true
+        },
+        "lastname": {
+            "type": "string",
+            "required": true
+        },
+        "avatarUrl": {
+            "type": "string",
+            "required": true,
+            "default": "http://localhost:4200/assets/avatar.svg"
+        },
+        "dni": {
+            "type": "number",
+            "required": false
+        },
+        "isInternal": {
+            "type": "boolean",
+            "required": true,
+            "default": false
+        },
+
+        "creationDate": {
+            "type": "date",
+            "required": false,
+            "defaultFn": "now"
+        },
+
+        "accountConfirmed": {
+            "type": "boolean",
+            "required": false,
+            "default": false
+        },
+        "active": {
+            "type": "boolean",
+            "required": false,
+            "default": true
+        },
+        "orderCount": {
+            "type": "number",
+            "required": false,
+            "default": 0
+        }
     },
-    "avatarUrl": {
-      "type": "string",
-      "required": true,
-      "default": "https://image.flaticon.com/icons/svg/149/149071.svg"
+    "validations": [],
+    "relations": {
+        "institution": {
+            "type": "belongsTo",
+            "model": "Institution",
+            "foreignKey": "institutionId"
+        },
+        "createdOrders": {
+            "type": "hasMany",
+            "model": "Order",
+            "foreignKey": "ownerId"
+        },
+        "roles": {
+            "type": "hasMany",
+            "model": "XRole",
+            "foreignKey": "principalId",
+            "through": "XRoleMapping",
+            "keyThrough": "roleId"
+        },
+        "roleMappings": {
+            "type": "hasMany",
+            "model": "XRoleMapping",
+            "foreignKey": "principalId"
+        },
+        "accessTokens": {
+            "type": "hasMany",
+            "model": "XAccessToken",
+            "foreignKey": "userId"
+        },
+        "irradiatedUnits": {
+            "type": "hasMany",
+            "model": "Unit",
+            "foreignKey": "irradiatorUserId"
+        },
+        "irradiations": {
+            "type": "hasMany",
+            "model": "Irradiation",
+            "foreignKey": "irradiatorId"
+        },
+        "acceptedOrders": {
+            "type": "hasMany",
+            "model": "Order",
+            "foreignKey": "operatorId"
+        }
     },
-    "dni": {
-      "type": "number",
-      "required": false
-    },
-    "isInternal": {
-      "type": "boolean",
-      "required": true,
-      "default": false
-    },
-    "contact_number": {
-      "type": "string",
-      "required": false
-    }
-  },
-  "validations": [],
-  "relations": {
-    "institution": {
-      "type": "belongsTo",
-      "model": "Institution",
-      "foreignKey": "institutionId"
-    },
-    "createdOrders": {
-      "type": "hasMany",
-      "model": "Order",
-      "foreignKey": "ownerId"
-    },
-    "roles": {
-      "type": "hasMany",
-      "model": "XRole",
-      "foreignKey": "principalId",
-      "through": "XRoleMapping",
-      "keyThrough": "roleId"
-    },
-    "roleMappings": {
-      "type": "hasMany",
-      "model": "XRoleMapping",
-      "foreignKey": "principalId"
-    },
-    "accessTokens": {
-      "type": "hasMany",
-      "model": "XAccessToken",
-      "foreignKey": "userId"
-    },
-    "irradiatedUnits": {
-      "type": "hasMany",
-      "model": "Unit",
-      "foreignKey": "irradiatorUserId"
-    },
-    "irradiations": {
-      "type": "hasMany",
-      "model": "Irradiation",
-      "foreignKey": "irradiatorId"
-    },
-    "acceptedOrders": {
-      "type": "hasMany",
-      "model": "Order",
-      "foreignKey": "operatorId"
-    }
-  },
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$authenticated",
-      "permission": "ALLOW"
-    },
-    {
-      "accessType": "EXECUTE",
-      "principalType": "ROLE",
-      "principalId": "admin",
-      "permission": "ALLOW",
-      "property": "create"
-    }
-  ],
-  "methods": {}
+    "acls": [
+        {
+            "accessType": "*",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "admin",
+            "permission": "ALLOW",
+            "property": "create"
+        }
+    ],
+    "methods": {}
 }

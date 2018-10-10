@@ -70,6 +70,8 @@ module.exports = (app, cb) => {
 
         try {
 
+            let institution = await app.models.Institution.findById(orderInfo.institutionId)
+
             let pendingOrder = (await app.models.OrderStatus.find({ where: { name: { regexp: `.*PENDIENTE.*` } } }))[0]
 
             let order = await app.models.Order.create({
@@ -106,6 +108,8 @@ module.exports = (app, cb) => {
                 unitTypeId: mapping[1],
                 count: mapping[2]
             })))
+
+            await institution.updateAttributes({ orderCount: (institution.orderCount + 1) })
 
             return res.json(order.toJSON())
 
@@ -233,7 +237,7 @@ module.exports = (app, cb) => {
             include: [
                 { unitTypeMappings: { unitType: true } },
                 { institution: { type: true } },
-                { irradiations: { units: {type: true} } }
+                { irradiations: { units: { type: true } } }
             ]
         })
 

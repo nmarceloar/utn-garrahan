@@ -6,7 +6,33 @@ function randomBetween(min, max) {
     return Math.round(min + Math.random() * (max - min))
 }
 
+
 module.exports = async (app, cb) => {
+
+    async function updateOrderCount(institutionId) {
+
+        let count = await app.models.Order.count({ institutionId: institutionId })
+        await app.models.Institution.updateAll({ id: institutionId }, { orderCount: count })
+
+        return
+
+    }
+
+    async function updateUserCount(institutionId) {
+
+        let count = await app.models.XUser.count({ institutionId: institutionId })
+        await app.models.Institution.updateAll({ id: institutionId }, { userCount: count })
+
+        return
+
+    }
+
+    async function updateCount(userId) {
+
+        let count = await app.models.Order.count({ ownerId: userId })
+        await app.models.XUser.updateAll({ id: userId }, { orderCount: count })
+
+    }
 
     try {
 
@@ -27,7 +53,7 @@ module.exports = async (app, cb) => {
                 var client = clientes[randomBetween(0, clientes.length - 1)];
 
                 var order = await app.models.Order.create({
-                    code: random.string({ length: 8, pool: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"}),
+                    code: random.string({ length: 8, pool: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" }),
                     carrier: random.name(),
                     creationDate: random.date({ year: 2017 }),
                     priorityId: orderPriorities[randomBetween(0, orderPriorities.length - 1)].id,
@@ -72,6 +98,15 @@ module.exports = async (app, cb) => {
 
             })()))
 
+
+        let inst = await app.models.Institution.find({})
+
+        await Promise.all(inst.map(i => updateUserCount(i.id)))
+        await Promise.all(inst.map(i => updateOrderCount(i.id)))
+
+        let users = await app.models.XUser.find({})
+
+        await Promise.all(users.map(u => updateCount(u.id)))
 
     } catch (err) {
 

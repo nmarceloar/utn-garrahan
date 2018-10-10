@@ -43,6 +43,11 @@ module.exports = async (app, cb) => {
         await cliente1.roles.add(client)
         await cliente2.roles.add(client)
 
+        let users = await app.models.XUser.find()
+
+        await Promise.all(users.map(u => u.updateAttributes({ accountConfirmed: true })))
+
+
     } catch (err) {
 
         console.log(err)

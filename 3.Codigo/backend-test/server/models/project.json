@@ -1,0 +1,31 @@
+{
+    "name": "Project",
+    "plural": "projects",
+    "base": "PersistedModel",
+    "idInjection": false,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "typeId": {
+            "type": "number",
+            "required": true,
+            "id": 1
+        },
+        "orderId": {
+            "type": "number",
+            "required": true,
+            "id": 2
+        }
+    },
+    "validations": [],
+    "relations": {
+        "manager": {
+            "type": "belongsTo",
+            "model": "Manager",
+            "foreignKey": "managerId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

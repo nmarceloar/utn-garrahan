@@ -27,11 +27,17 @@
                     <div *ngIf="submitted" class="text-danger">
                         <p *ngIf="loginForm.controls.password.errors?.required">Ingrese contraseña</p>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block mb-2" >Ingresar</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-2 rounded-0">Ingresar</button>
                     <div *ngIf="isLoading" class="text-center mt-3">
                         <div class="d-inline-block loader"></div>
                     </div>
                 </form>
+
+                <div class="d-flex justify-content-end mt-2">
+                    <a routerLink="/password-reset">No recuerdo mis datos de acceso</a>
+                </div>
+
+
 
             </div>
 

@@ -17,6 +17,11 @@ import { ClientComponent } from './client/client.component';
 import { AlreadyInGuard } from './already-in.guard';
 import { InstitutionsComponent } from './institutions/institutions.component';
 import { UsersComponent } from './users/users.component';
+import { CreateInstitutionComponent } from './create-institution/create-institution.component';
+import { InstitutionDetailsComponent } from './institution-details/institution-details.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { PasswordChangeComponent } from './password-change/password-change.component';
 
 
 const routes: Routes = [
@@ -34,6 +39,27 @@ const routes: Routes = [
         canActivate: [
             AlreadyInGuard
         ]
+    },
+    {
+        path: "password-reset",
+        component: PasswordResetComponent,
+        data: {
+            breadcrumb: "Blanqueo de contraseña"
+        }
+    },
+    {
+        path: "password-change",
+        component: PasswordChangeComponent,
+        data: {
+            breadcrumb: "Cambiar contraseña"
+        }
+    },
+    {
+        path: "confirmar-cuenta",
+        component: AccountActivationComponent,
+        data: {
+            breadcrumb: "Confirmar cuenta"
+        }
     },
     {
         path: "operadores",
@@ -139,7 +165,21 @@ const routes: Routes = [
                 path: "instituciones",
                 component: InstitutionsComponent,
                 data: {
-                    breadcrumb: "Instituciones clientes"
+                    breadcrumb: "Listado de instituciones clientes"
+                }
+            },
+            {
+                path: "instituciones/alta",
+                component: CreateInstitutionComponent,
+                data: {
+                    breadcrumb: "Alta de instituciones"
+                }
+            },
+            {
+                path: "instituciones/:id",
+                component: InstitutionDetailsComponent,
+                data: {
+                    breadcrumb: "Información"
                 }
             },
             {
