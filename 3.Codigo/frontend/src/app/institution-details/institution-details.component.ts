@@ -21,8 +21,7 @@ export class InstitutionDetailsComponent implements OnInit {
     userForm: FormGroup = new FormGroup({
         firstname: new FormControl("", Validators.required),
         lastname: new FormControl("", Validators.required),
-        dni: new FormControl("",
-            [Validators.required, Validators.pattern(/[0-9]{7,8}/)]),
+        dni: new FormControl("", [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]),
         username: new FormControl("", Validators.required),
         email: new FormControl("", [, Validators.required, Validators.email])
     })

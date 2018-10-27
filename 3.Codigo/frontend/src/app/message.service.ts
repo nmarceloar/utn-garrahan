@@ -43,5 +43,10 @@ export class MessageService {
         this.sendMessage({ text: message, type: MessageType.DANGER, persist: false, ttlInSeconds: 8 })
     }
 
+    public success(message) {
+
+        this.sendMessage({ text: message, type: MessageType.SUCCESS, persist: false, ttlInSeconds: 8 })
+    }
+
 
 }

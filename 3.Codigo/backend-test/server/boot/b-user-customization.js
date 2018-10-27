@@ -14,12 +14,18 @@ module.exports = (app, cb) => {
 
         app.models.XUser.findOne({ where: { username: req.body.username } }, function (err, user) {
 
+            if (err)
+                return res.status(500).json({ message: err.message });
+
+            if (!user)
+                return res.status(401).json({ message: "El usuario especificado no existe" });
+
             if (!user.accountConfirmed) {
-                return res.status(500).json({ message: "Error. La cuenta no ha sido confirmada" })
+                return res.status(401).json({ message: "Error. La cuenta no ha sido confirmada" })
             }
 
             if (!user.active) {
-                return res.status(500).json({ message: "Error. La cuenta se encuentra deshabilitada" })
+                return res.status(401).json({ message: "Error. La cuenta se encuentra deshabilitada" })
             }
 
             app.models.XUser.login(req.body, function (err, accessToken) {

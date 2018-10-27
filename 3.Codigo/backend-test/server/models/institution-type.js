@@ -1,5 +1,5 @@
 'use strict';
 
-module.exports = function(Institutiontype) {
+module.exports = function(InstitutionType) {
 
 };

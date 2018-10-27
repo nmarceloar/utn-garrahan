@@ -12,13 +12,13 @@ export class CancelConfirmationModalComponent implements OnInit {
     isWaitingForComments = false;
     isConfirmed = false;
 
-    submitted = false; 
+    submitted = false;
 
     comments: FormControl = new FormControl("", Validators.required);
 
     constructor(private activeModal: NgbActiveModal) { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     close() {
 
@@ -28,8 +28,8 @@ export class CancelConfirmationModalComponent implements OnInit {
             return;
 
         }
- 
-        this.activeModal.close(this.comments.value); 
+
+        this.activeModal.close(this.comments.value);
 
     }
 

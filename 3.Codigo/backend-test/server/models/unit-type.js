@@ -1,6 +1,5 @@
 'use strict';
 
-module.exports = function(Unittype) {
+module.exports = function (UnitType) {
 
 };
-	

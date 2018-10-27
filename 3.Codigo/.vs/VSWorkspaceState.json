@@ -1,13 +1,18 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend-test",
+    "\\backend-test\\server",
+    "\\backend-test\\server\\boot",
+    "\\backend-test\\server\\models",
+    "\\backend-test\\static\\assets",
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\operator",
-    "\\frontend\\src\\app\\order-conciliation",
-    "\\frontend\\src\\app\\order-irradiation"
+    "\\frontend\\src\\app\\create-institution",
+    "\\frontend\\src\\app\\institution-details",
+    "\\frontend\\src\\app\\institutions"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\order-conciliation\\order-conciliation.component.ts",
+  "SelectedNode": "\\backend-test\\server\\server.js",
   "PreviewInSolutionExplorer": false
 }

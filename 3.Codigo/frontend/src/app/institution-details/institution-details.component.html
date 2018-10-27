@@ -69,7 +69,7 @@
                             <label for="inputPassword4">Apellido</label>
                             <input type="text" class="form-control" id="inputPassword4" placeholder="Apellido" formControlName="firstname">
                             <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.firstname.errors">
-                                <span class="text-danger" *ngIf="userForm.controls.firstname.errors.required">Ingres el nombre completo de la institucion</span>
+                                <span class="text-danger" *ngIf="userForm.controls.firstname.errors.required">Ingrese el apellido del usuario</span>
                             </div>
                         </div>
 
@@ -77,7 +77,7 @@
                             <label for="inputPassword4">Nombre</label>
                             <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre" formControlName="lastname">
                             <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.lastname.errors">
-                                <span class="text-danger" *ngIf="userForm.controls.lastname.errors.required">Ingres el nombre completo de la institucion</span>
+                                <span class="text-danger" *ngIf="userForm.controls.lastname.errors.required">Ingrese el nombre del usuario</span>
                             </div>
                         </div>
 
@@ -102,7 +102,7 @@
                             <label for="inputCity">Nombre de usuario</label>
                             <input type="text" class="form-control" formControlName="username" placeholder="Nombre de usuario">
                             <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.username.errors">
-                                <span class="text-danger" *ngIf="userForm.controls.username.errors.required">Ingrese la dirección completa de la institucion</span>
+                                <span class="text-danger" *ngIf="userForm.controls.username.errors.required">Ingrese nombre de usuario</span>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                             <label for="inputCity">Email</label>
                             <input type="text" class="form-control" formControlName="email" placeholder="Email">
                             <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.email.errors">
-                                <span class="text-danger" *ngIf="userForm.controls.email.errors.required">Ingrese la dirección completa de la institucion</span>
+                                <span class="text-danger" *ngIf="userForm.controls.email.errors.required">Ingrese el email del usuario</span>
                                 <span class="text-danger" *ngIf="userForm.controls.email.errors.email">Email no válido</span>
                             </div>
                         </div>
@@ -158,8 +158,8 @@
                                 <td>{{user.creationDate | date: "dd/MM/yyyy"}}</td>
                                 <td>
                                     <ul class="list-inline m-0">
-                                        <li class="list-item m-0"><span class="text-primary" (click)="enableUser(user.id)">Habilitar</span></li>
-                                        <li class="list-item m-0"><span class="text-primary" (click)="disableUser(user.id)">Deshabilitar</span></li>
+                                        <li class="list-item m-0" *ngIf="!user.active"><button class="btn btn-primary" (click)="enableUser(user.id)">Habilitar</button></li>
+                                        <li class="list-item m-0" *ngIf="user.active"><button class="btn btn-danger" (click)="disableUser(user.id)">Deshabilitar</button></li>
                                     </ul>
                                 </td>
                             </tr>

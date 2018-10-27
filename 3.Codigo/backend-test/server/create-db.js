@@ -1,15 +1,10 @@
 var server = require('./server');
 
-var ds = server.dataSources.db;
+server.dataSources.db.automigrate(function (err) {
 
+    if (err)
+        throw err;
 
-ds.automigrate(function(err) {
-
-	if (err) 
-		throw err;
-
-	ds.disconnect();
-
-	
+    ds.disconnect();
 
 });

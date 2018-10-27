@@ -18,7 +18,7 @@ export class CreateInstitutionComponent implements OnInit {
         address: new FormControl("", Validators.required),
         cuit: new FormControl("", [
             Validators.required,
-            Validators.pattern(/[0-9]{2}(\-)[0-9]{8}(\-)[0-9]{1}/),
+            Validators.pattern(/\b(20|23|24|27|30|33|34)(\-)[0-9]{8}(\-)[0-9]{1}/ig),
             cuitValidator()
         ]),
         email: new FormControl("", [Validators.required, Validators.email]),
@@ -28,9 +28,9 @@ export class CreateInstitutionComponent implements OnInit {
     submitted: boolean = false;
 
     constructor(
-        private locationService: Location,
+        private institutionService: InstitutionsService,
         private messageService: MessageService,
-        private institutionService: InstitutionsService) { }
+        private locationService: Location) { }
 
     ngOnInit() {
 
@@ -55,26 +55,29 @@ export class CreateInstitutionComponent implements OnInit {
             ...this.form.value,
             cuit: this.form.controls.cuit.value.split("-").join(""),
             typeId: (this.form.controls.type as any).name
-        })
-            .subscribe(i => this.onSuccess(i), err => this.handleError(err))
+        }).subscribe((i) => this.onSuccess(i), (err) => this.handleError(err))
 
 
     }
 
     handleError(err) {
 
-        this.messageService.sendMessage({ text: err.message, type: MessageType.DANGER, ttlInSeconds: 8, persist: false })
+        this.messageService.sendMessage({
+            text: err.message,
+            type: MessageType.DANGER,
+            ttlInSeconds: 8,
+            persist: false
+        })
 
 
     }
 
     onSuccess(i) {
 
-        this.form.reset()
         this.submitted = false;
-        this.messageService.sendMessage({
-            text: "La operación se realizó exitosamente", type: MessageType.SUCCESS, ttlInSeconds: 8, persist: false
-        })
+        this.form.reset({ cuit: "" })
+
+        this.messageService.success("Ok");
 
 
     }
@@ -89,11 +92,9 @@ export class CreateInstitutionComponent implements OnInit {
 
 function cuitValidator(): ValidatorFn {
 
-    return (control: AbstractControl): { [key: string]: any } | null => {
+    return (cuitControl: AbstractControl): { [key: string]: any } | null => {
 
-        let cuit = control.value.split("-").join("")
-
-        console.log(cuit)
+        let cuit = cuitControl.value.split("-").join("")
 
         if (cuit.length !== 11) {
             return null;

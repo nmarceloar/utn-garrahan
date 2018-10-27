@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService, Order } from '../order.service';
 import { FormControl, Validators } from '@angular/forms';
-import { interval, GroupedObservable, Observable, from as fromPromise, timer } from 'rxjs';
-import { map, flatMap, tap, take } from 'rxjs/operators';
+import { interval, GroupedObservable, Observable, from as fromPromise, timer, throwError } from 'rxjs';
+import { map, flatMap, tap, take, catchError } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { SessionService } from '../session.service';
@@ -161,6 +161,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         this.isWaitingForUnit = { should: 1 }
 
         this.unitCodeDoesNotExist = false;
+
         this.hasUnitCodeError = false;
 
     }
@@ -168,13 +169,16 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     selectUnit() {
 
         if (this.selectedUnitCode.invalid) {
+
             this.hasUnitCodeError = true;
             return;
+
         }
 
         this.hasUnitCodeError = false;
 
         let i = this.pendingUnits.findIndex(u => u.code === this.selectedUnitCode.value);
+
         if (i === -1) {
             this.unitCodeDoesNotExist = true;
             return;
@@ -204,16 +208,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.isIrradiationInProcess = true;
 
+
     }
 
     stopIrradiation() {
 
         this.stopTime = new Date();
 
-        fromPromise(this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" }).result)
+        this.showConfirmationModal()
             .subscribe((comments) => {
-
-                console.log(comments);
 
                 this.selectedTag.enable();
                 this.selectedUnitCode.enable();
@@ -231,19 +234,26 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
                 }
 
                 this.orderService.addIrradiation(this.order.id, irradiation)
-                    .pipe(
-                        flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes }))
-                    )
+                    .pipe(flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })))
                     .subscribe(
                         (d) => this.handleEndOfIrradiation(d),
                         (err) => this.handleFailingEndOfIrradiation(err)
                     );
 
-            }, () => { })
+            }, () => {
+
+                console.log(`Modal closed`);
+
+            })
 
 
 
 
+    }
+
+    private showConfirmationModal() {
+        return fromPromise(
+            this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" }).result);
     }
 
     removeUnit(unit) {
