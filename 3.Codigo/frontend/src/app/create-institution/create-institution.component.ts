@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from
 import { InstitutionsService, InstitutionType } from '../institutions.service';
 import { MessageService, MessageType } from '../message.service';
 import { Location } from '@angular/common';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { from } from 'rxjs';
+import { ConfirmActionModalComponent } from '../confirm-action-modal/confirm-action-modal.component';
 
 @Component({
     selector: 'app-create-institution',
@@ -18,7 +21,7 @@ export class CreateInstitutionComponent implements OnInit {
         address: new FormControl("", Validators.required),
         cuit: new FormControl("", [
             Validators.required,
-            Validators.pattern(/\b(20|23|24|27|30|33|34)(\-)[0-9]{8}(\-)[0-9]{1}/ig),
+            Validators.pattern(/^(30|33|34)(\-)[0-9]{8}(\-)[0-9]{1}$/),
             cuitValidator()
         ]),
         email: new FormControl("", [Validators.required, Validators.email]),
@@ -30,6 +33,7 @@ export class CreateInstitutionComponent implements OnInit {
     constructor(
         private institutionService: InstitutionsService,
         private messageService: MessageService,
+        private modalService: NgbModal,
         private locationService: Location) { }
 
     ngOnInit() {
@@ -51,11 +55,27 @@ export class CreateInstitutionComponent implements OnInit {
             return;
         }
 
-        this.institutionService.create({
-            ...this.form.value,
-            cuit: this.form.controls.cuit.value.split("-").join(""),
-            typeId: (this.form.controls.type as any).name
-        }).subscribe((i) => this.onSuccess(i), (err) => this.handleError(err))
+        this.showConfirmActionModal()
+            .subscribe(() => {
+
+                this.institutionService.create({
+                    ...this.form.value,
+                    cuit: this.form.controls.cuit.value.split("-").join(""),
+                    typeId: (this.form.controls.type as any).name
+                }).subscribe((i) => this.onSuccess(i), (err) => this.handleError(err))
+
+            }, () => { })
+
+
+    }
+
+    private showConfirmActionModal() {
+
+        let modal: NgbModalRef = this.modalService.open(ConfirmActionModalComponent, { size: "lg" });
+        modal.componentInstance.title = `Confirmar alta de institución`
+        modal.componentInstance.message = `Está seguro que desea realizar el alta de la institución ${this.form.controls.name.value}?`
+
+        return from(modal.result);
 
 
     }
@@ -74,11 +94,14 @@ export class CreateInstitutionComponent implements OnInit {
 
     onSuccess(i) {
 
-        this.submitted = false;
-        this.form.reset({ cuit: "" })
+        this.messageService.sendMessage({
+            text: "La operación se realizó correctamente",
+            type: MessageType.SUCCESS,
+            persist: true,
+            ttlInSeconds: 8
+        })
 
-        this.messageService.success("Ok");
-
+        this.locationService.back()
 
     }
 

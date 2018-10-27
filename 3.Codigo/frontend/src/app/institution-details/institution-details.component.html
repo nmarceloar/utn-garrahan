@@ -67,7 +67,7 @@
 
                         <div class="form-group col-md-4">
                             <label for="inputPassword4">Apellido</label>
-                            <input type="text" class="form-control" id="inputPassword4" placeholder="Apellido" formControlName="firstname">
+                            <input type="text" class="form-control" id="inputPassword4" placeholder="Apellido" formControlName="firstname" [focused]="{should: true}">
                             <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.firstname.errors">
                                 <span class="text-danger" *ngIf="userForm.controls.firstname.errors.required">Ingrese el apellido del usuario</span>
                             </div>
@@ -158,8 +158,8 @@
                                 <td>{{user.creationDate | date: "dd/MM/yyyy"}}</td>
                                 <td>
                                     <ul class="list-inline m-0">
-                                        <li class="list-item m-0" *ngIf="!user.active"><button class="btn btn-primary" (click)="enableUser(user.id)">Habilitar</button></li>
-                                        <li class="list-item m-0" *ngIf="user.active"><button class="btn btn-danger" (click)="disableUser(user.id)">Deshabilitar</button></li>
+                                        <li class="list-item m-0" *ngIf="!user.active"><button class="btn btn-primary rounded-0" (click)="enableUser(user.id)">Habilitar</button></li>
+                                        <li class="list-item m-0" *ngIf="user.active"><button class="btn btn-danger rounded-0" (click)="disableUser(user.id)">Deshabilitar</button></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -184,6 +184,9 @@
                                 <th>ID</th>
                                 <th>Codigo</th>
                                 <th>Alta</th>
+                                <th>Unidades</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -191,6 +194,11 @@
                                 <td>{{order.id}}</td>
                                 <td>{{order.code}}</td>
                                 <td>{{order.creationDate | date: "dd/MM/yyyy hh:mm"}}</td>
+                                <td>{{order.unitCount}}</td>
+                                <td>{{order.statusId}}</td>
+                                <td>
+                                    <a routerLink="/operadores/ordenes/{{order.id}}/revisión">Detalles</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -204,3 +212,5 @@
 
     </div>
 </div>
+
+

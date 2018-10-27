@@ -11,6 +11,7 @@ import { SessionService } from '../session.service';
 import * as moment from "moment"
 import { MessageService, MessageType } from '../message.service';
 import { CancelConfirmationModalComponent } from '../cancel-confirmation-modal/cancel-confirmation-modal.component';
+import { ModalReloginComponent } from '../modal-relogin/modal-relogin.component';
 
 @Component({
     selector: 'app-order-irradiation',
@@ -20,6 +21,7 @@ import { CancelConfirmationModalComponent } from '../cancel-confirmation-modal/c
 export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     irradiations: any[];
+
     unitCodeDoesNotExist: boolean = false;
     order: Order
 
@@ -218,31 +220,46 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         this.showConfirmationModal()
             .subscribe((comments) => {
 
-                this.selectedTag.enable();
-                this.selectedUnitCode.enable();
+                this.showReloginModal()
+                    .subscribe(() => {
 
-                this.isIrradiationInProcess = false;
+                        this.selectedTag.enable();
+                        this.selectedUnitCode.enable();
 
-                let irradiation = {
-                    units: this.selectedUnits.map(u => u.id),
-                    irradiationStart: this.startTime,
-                    irradiationEnd: this.stopTime,
-                    irradiationTag: this.selectedTag.value,
-                    irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
-                    irradiatorId: this.currentUser.id,
-                    comments: comments
-                }
+                        this.isIrradiationInProcess = false;
 
-                this.orderService.addIrradiation(this.order.id, irradiation)
-                    .pipe(flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })))
-                    .subscribe(
-                        (d) => this.handleEndOfIrradiation(d),
-                        (err) => this.handleFailingEndOfIrradiation(err)
-                    );
+                        let irradiation = {
+                            units: this.selectedUnits.map(u => u.id),
+                            irradiationStart: this.startTime,
+                            irradiationEnd: this.stopTime,
+                            irradiationTag: this.selectedTag.value,
+                            irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                            irradiatorId: this.currentUser.id,
+                            comments: comments
+                        }
+
+                        this.orderService.addIrradiation(this.order.id, irradiation)
+                            .pipe(
+                                catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
+                                flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
+                                catchError(err => throwError(new Error(`Error. ${err.message}`))),
+                            )
+                            .subscribe(
+                                (d) => this.handleEndOfIrradiation(d),
+                                (err) => this.handleFailingEndOfIrradiation(err)
+                            );
+
+
+
+                    }, () => {
+
+                        console.log(`Login modal closed or dismissed`)
+
+                    })
 
             }, () => {
 
-                console.log(`Modal closed`);
+                console.log(`Confirm modal closed`);
 
             })
 
@@ -255,6 +272,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         return fromPromise(
             this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" }).result);
     }
+
+    private showReloginModal() {
+
+        return fromPromise(
+            this.modalService.open(ModalReloginComponent, { backdrop: "static", keyboard: false, size: "lg" }).result);
+
+    }
+
+
 
     removeUnit(unit) {
 
@@ -282,16 +308,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     handleFailingEndOfIrradiation(err: any) {
 
-        let message = "Error al intentar registro de irradiación. "
-        let add = err.message
-
-        let m = [message, add].join("");
-
-        this.messageService.sendMessage({
-            persist: true,
-            type: MessageType.DANGER,
-            text: m
-        })
+        this.messageService.error(err.message)
 
     }
 

@@ -20,12 +20,12 @@ module.exports = (app, cb) => {
             if (!user)
                 return res.status(401).json({ message: "El usuario especificado no existe" });
 
-            if (!user.accountConfirmed) {
-                return res.status(401).json({ message: "Error. La cuenta no ha sido confirmada" })
-            }
-
             if (!user.active) {
                 return res.status(401).json({ message: "Error. La cuenta se encuentra deshabilitada" })
+            }
+
+            if (!user.accountConfirmed) {
+                return res.status(401).json({ message: "Error. La cuenta no ha sido confirmada" })
             }
 
             app.models.XUser.login(req.body, function (err, accessToken) {
@@ -82,7 +82,7 @@ module.exports = (app, cb) => {
 
         try {
 
-            await app.dataSources.db.transaction(async models => {
+            await app.dataSources.db.transaction(async (models) => {
 
                 const { XUser, XRole, Institution } = models
 
@@ -91,7 +91,13 @@ module.exports = (app, cb) => {
                 if (!institution)
                     throw new Error("Error. La institución para la cual se desea crear el usuario no existe");
 
-                let count = await XUser.count({ or: [{ username: user.username }, { email: user.email }] })
+                let count = await XUser.count({
+                    or: [
+                        { username: user.username },
+                        { email: user.email },
+                        { dni: user.dni }
+                    ]
+                })
 
                 if (count > 0)
                     throw new Error("Error. Ya existe otro usuario con los datos ingresados")
@@ -118,7 +124,7 @@ module.exports = (app, cb) => {
                 })
 
 
-            })
+            }, { isolationLevel: app.models.Order.Transaction.REPETEABLE_READ })
 
             res.json(u)
 
@@ -148,6 +154,10 @@ module.exports = (app, cb) => {
 
                 if (!user)
                     throw new Error("El usuario especificado no existe")
+
+                if (!user.active) {
+                    return res.status(401).json({ message: "Error. La cuenta se encuentra deshabilitada" })
+                }
 
                 if (user.accountConfirmed)
                     throw new Error("Error. La cuenta ya está activada.")
@@ -194,6 +204,10 @@ module.exports = (app, cb) => {
 
                 if (!user)
                     throw new Error("El usuario especificado no existe")
+
+                if (!user.active) {
+                    return res.status(401).json({ message: "Error. La cuenta se encuentra deshabilitada" })
+                }
 
                 if (!user.accountConfirmed)
                     throw new Error("No se puede resetear la contraseña. La cuenta no fue confirmada.")

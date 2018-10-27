@@ -64,6 +64,7 @@ export class ModalLoginComponent implements OnInit {
 
         this.isLoading = true;
         this.errorMsg = "";
+
         this.sessionService.login(this.loginForm.value)
             .subscribe(
                 () => {

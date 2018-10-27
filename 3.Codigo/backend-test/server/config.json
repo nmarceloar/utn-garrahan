@@ -23,7 +23,7 @@
         "ttlInMinutes": 60
     },
     "secretPassword": "password:)",
-    "confirmExpirationInHours": 24,
+    "confirmExpirationInHours": 48,
     "mail": {
         "activationMessage": "Hospital Garrahan - Active su cuenta",
         "resetMessage": "Hospital Garrahan - Reseteo de contraseña",

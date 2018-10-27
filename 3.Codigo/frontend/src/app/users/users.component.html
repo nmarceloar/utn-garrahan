@@ -29,8 +29,8 @@
                         <td>{{user.orderCount}}</td>
                         <td>
                             <ul class="list-inline m-0">
-                                <li class="list-item m-0"><span class="text-primary" (click)="enableUser(user.id)">Habilitar</span></li>
-                                <li class="list-item m-0"><span class="text-primary" (click)="disableUser(user.id)">Deshabilitar</span></li>
+                                <li *ngIf="!user.active" class="list-item m-0"><span class="text-primary" (click)="enableUser(user.id)">Habilitar</span></li>
+                                <li *ngIf="user.active" class="list-item m-0"><span class="text-primary" (click)="disableUser(user.id)">Deshabilitar</span></li>
                             </ul>
                         </td>
                     </tr>

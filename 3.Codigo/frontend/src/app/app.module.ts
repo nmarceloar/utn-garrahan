@@ -52,7 +52,9 @@ import { InstitutionDetailsComponent } from './institution-details/institution-d
 import { AccountActivationComponent } from './account-activation/account-activation.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
-import { CuitPipe } from './cuit.pipe'
+import { CuitPipe } from './cuit.pipe';
+import { ModalReloginComponent } from './modal-relogin/modal-relogin.component';
+import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component'
 
 
 const httpInterceptorProviders = [
@@ -96,7 +98,9 @@ const httpInterceptorProviders = [
         AccountActivationComponent,
         PasswordResetComponent,
         PasswordChangeComponent,
-        CuitPipe
+        CuitPipe,
+        ModalReloginComponent,
+        ConfirmActionModalComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -123,7 +127,9 @@ const httpInterceptorProviders = [
         ConfirmModalComponent,
         ModalLoginComponent,
         CancelConfirmationModalComponent,
-        UnitEditModalComponent
+        UnitEditModalComponent,
+        ModalReloginComponent,
+        ConfirmActionModalComponent
     ],
     bootstrap: [
         AppComponent

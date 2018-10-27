@@ -1,6 +1,10 @@
 'use strict';
 
+
 var data = require("../data/data")
+
+const random = new require("chance")();
+const pool = "0123456789"
 
 function randomBetween(min, max) {
     return Math.floor(min + Math.random() * (max - min))
@@ -14,6 +18,7 @@ module.exports = async (app, cb) => {
         var institutions = await app.models.Institution.create(
             data.institutions.map(i => ({
                 ...i,
+                cuit: `30${random.string({ length: 8, pool: pool })}${random.string({ length: 1, pool: pool })}`,
                 typeId: institutionTypes[randomBetween(0, institutionTypes.length - 1)].id
             }))
         )

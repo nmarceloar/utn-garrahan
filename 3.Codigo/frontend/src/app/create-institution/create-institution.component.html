@@ -9,13 +9,13 @@
 
             <h6 class="mb-4 text-primary font-weight-normal">Datos generales</h6>
 
-            <form [formGroup]="form" (submit)="create()">
+            <form [formGroup]="form" (submit)="create()" autocomplete="off">
 
                 <div class="form-row">
 
                     <div class="form-group col-md-12">
                         <label for="inputPassword4">Nombre</label>
-                        <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre de la institución" formControlName="name">
+                        <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre de la institución" formControlName="name" [focused]="{should: true}">
                         <div class="d-flex flex-column" *ngIf="submitted && form.controls.name.errors">
                             <span class="text-danger" *ngIf="form.controls.name.errors.required">Ingrese el nombre completo de la institución</span>
                         </div>
@@ -37,7 +37,7 @@
 
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">CUIT</label>
-                        <input type="email" class="form-control" id="inputEmail4" placeholder="Ej: 20-23323323-1" formControlName="cuit">
+                        <input type="email" class="form-control" id="inputEmail4" placeholder="Ej: 30-23323323-1" formControlName="cuit">
                         <div class="d-flex flex-column" *ngIf="submitted && form.controls.cuit.errors">
                             <span class="text-danger" *ngIf="form.controls.cuit.errors.required">Ingrese el cuit de la institución</span>
                             <span class="text-danger" *ngIf="form.controls.cuit.errors.pattern">El formato de CUIT no es válido</span>

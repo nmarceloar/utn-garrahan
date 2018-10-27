@@ -91,18 +91,20 @@ export class SessionService {
 
     constructor(private http: HttpClient) { }
 
-    public verifyCredentials(credentials) {
-
-        return this.http.post(environment.api.verifyCredentials, credentials);
-
-    }
-
     public login({ username, password }) {
 
         return this.http.post(environment.api.login, { username, password })
             .pipe(tap((loginInfo) => this.setSession(loginInfo)))
 
     }
+
+    public check(credentials) {
+
+        return this.http.post(environment.api.verifyCredentials, credentials);
+
+    }
+
+
 
     private setSession(loginInfo) {
 
@@ -211,6 +213,8 @@ export class SessionService {
         })
 
     }
+
+
 
 
     get events() {
