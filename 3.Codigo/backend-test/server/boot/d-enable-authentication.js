@@ -2,10 +2,10 @@
 
 module.exports = function (app, cb) {
 
-	app.enableAuth({
-		datasource: "db"
-	});
+    app.enableAuth({
+        datasource: "db"
+    });
 
-	cb()
+    cb()
 
 };

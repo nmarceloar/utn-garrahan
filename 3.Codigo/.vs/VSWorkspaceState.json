@@ -1,11 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend-test",
     "\\backend-test\\server",
-    "\\frontend\\src",
-    "\\frontend\\src\\app"
+    "\\backend-test\\server\\boot"
   ],
-  "SelectedNode": "\\backend-test\\server\\server.js",
+  "SelectedNode": "\\backend-test",
   "PreviewInSolutionExplorer": false
 }
