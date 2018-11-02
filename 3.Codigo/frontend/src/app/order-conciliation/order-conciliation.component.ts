@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order, OrderStatus } from '../order.service';
 import { MessageService, MessageType } from '../message.service';
 import { interval, from as fromPromise, zip, throwError } from 'rxjs';
@@ -39,6 +39,7 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
         private orderService: OrderService,
         private messageService: MessageService,
         private sessionService: SessionService,
+        private router: Router,
         private modalService: NgbModal,
         private route: ActivatedRoute) {
 
@@ -117,9 +118,11 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
                     this.order = order
                     this.messageService.sendMessage({
                         type: MessageType.SUCCESS,
-                        persist: false,
+                        persist: true,
                         text: "La operación se realizó correctamente. La orden ya puede comenzar a ser irradiada"
                     })
+
+                    this.router.navigateByUrl(`/operadores/ordenes/${this.order.id}/irradiación`);
 
                 },
                 err => {

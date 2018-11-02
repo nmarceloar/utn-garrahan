@@ -50,7 +50,7 @@ export class CreateOrderComponent implements OnInit {
         private messageService: MessageService,
         private modalService: NgbModal,
         private sessionService: SessionService,
-        private locationService: Location, ) {
+        private locationService: Location) {
 
         this.sessionService.events.subscribe(s => {
             this.currentUser = s.user;
@@ -78,13 +78,13 @@ export class CreateOrderComponent implements OnInit {
             return
         }
 
-        if (this.units.findIndex(unit => unit.code === this.unitForm.value.unitCode) !== -1) {
+        if (this.unitExists()) {
 
             this.messageService.sendMessage({
                 persist: false,
                 type: MessageType.DANGER,
-                text: "Ya existe una unidad con ese codigo",
-                ttlInSeconds: 5
+                text: "Ya existe una unidad con igual tipo y código",
+                ttlInSeconds: 3
             })
 
             this.isWaitingForUnit = { should: true }
@@ -97,12 +97,23 @@ export class CreateOrderComponent implements OnInit {
             type: this.unitForm.value.unitType
         })
 
-        this.updateMappings();
+        this.sortUnits()
 
-        this.unitForm.reset();
+        this.updateMappings()
+
+        this.unitForm.controls.unitCode.reset();
+
         this.submited = false;
 
         this.isWaitingForUnit = { should: true }
+
+    }
+
+    private unitExists() {
+
+        return this.units.some(unit =>
+            (unit.type.code === this.unitForm.value.unitType.code) && (unit.code === this.unitForm.value.unitCode)
+        )
 
     }
 
@@ -130,39 +141,47 @@ export class CreateOrderComponent implements OnInit {
         m.componentInstance.unitTypes = this.unitTypes
         m.componentInstance.unit = unit
 
-        from(m.result).subscribe((data) => {
+        from(m.result)
+            .subscribe((data) => {
 
-            let canReplace = (data.previous.code === data.actual.code) ||
-                (this.units.findIndex(unit => unit.code === data.actual.code) === -1)
+                let canReplace = (data.previous.code === data.actual.code) ||
+                    (this.units.findIndex(unit => unit.code === data.actual.code) === -1)
 
-            if (canReplace) {
+                if (canReplace) {
 
-                let i = this.units.findIndex(u => u.code === data.previous.code)
-                this.units.splice(i, 1)
-                this.units.splice(i, 0, data.actual)
+                    let i = this.units.findIndex(u => u.code === data.previous.code)
+                    this.units.splice(i, 1)
+                    this.units.splice(i, 0, data.actual)
 
-                this.updateMappings()
+                    this.updateMappings()
 
-            } else {
+                } else {
 
-                this.messageService.sendMessage({
-                    persist: false,
-                    type: MessageType.DANGER,
-                    text: "Ya existe una unidad con ese codigo",
-                    ttlInSeconds: 5
-                })
+                    this.messageService.sendMessage({
+                        persist: false,
+                        type: MessageType.DANGER,
+                        text: "Ya existe una unidad con ese codigo",
+                        ttlInSeconds: 5
+                    })
 
-            }
+                }
 
-            this.isWaitingForUnit = { should: true }
+                this.isWaitingForUnit = { should: true }
 
-        }, () => { })
+            }, () => { })
 
     }
 
     cancel() {
 
         this.locationService.back();
+
+    }
+
+    sortUnits() {
+
+        this.units =
+            this.units.sort((u1, u2) => u1.type.code < u2.type.code ? -1 : 1);
 
     }
 
@@ -201,7 +220,7 @@ export class CreateOrderComponent implements OnInit {
                         ttlInSeconds: 8
                     })
 
-                    this.locationService.back(); 
+                    this.locationService.back();
 
                 },
                 err => {

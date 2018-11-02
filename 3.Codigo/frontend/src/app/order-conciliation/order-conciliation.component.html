@@ -69,7 +69,6 @@
                 </div>
 
                 <h6 class="text-primary  mt-4">Unidades</h6>
-                <hr />
 
                 <div class="row mb-3">
 
@@ -87,15 +86,15 @@
                     <table *ngIf="order" class="table table-bordered table-hover table-stripped">
                         <thead>
                             <tr>
-                                <th>Código</th>
                                 <th>Tipo</th>
+                                <th>Código</th>
                                 <th>Fecha</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let unit of order.units">
-                                <td>{{unit.code}}</td>
                                 <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                <td>{{unit.code}}</td>
                                 <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
 
                             </tr>

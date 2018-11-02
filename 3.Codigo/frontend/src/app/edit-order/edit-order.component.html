@@ -63,7 +63,7 @@
 
                 </div>
 
-                <h6 class="text-primary  mt-4">Unidades</h6>
+                <h6 class="text-primary my-4">Unidades</h6>
                 <hr />
 
                 <form [formGroup]="unitForm" (submit)="addUnit()" *ngIf="order.status.name === 'RECHAZADA'">
@@ -126,16 +126,16 @@
                     <table *ngIf="order" class="table table-bordered table-hover table-stripped">
                         <thead>
                             <tr>
-                                <th>Código</th>
                                 <th>Tipo</th>
+                                <th>Código</th>
                                 <th>Fecha</th>
                                 <th *ngIf="canModify">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let unit of order.units">
-                                <td>{{unit.code}}</td>
                                 <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                <td>{{unit.code}}</td>
                                 <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
                                 <td *ngIf="canModify">
                                     <div class="action-list">

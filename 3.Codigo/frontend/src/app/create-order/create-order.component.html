@@ -48,21 +48,21 @@
                     <div class="col-5">
 
                         <div class="form-group">
-                            <label class="my-1 mr-2">Código: </label>
-                            <input type="text" class="form-control flex-grow-1" formControlName="unitCode" [focused]="isWaitingForUnit" />
-                        </div>
-
-                    </div>
-
-                    <div class="col-5">
-
-                        <div class="form-group">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tipo de unidad: </label>
                             <select class="custom-select flex-grow-1" formControlName="unitType">
                                 <option [ngValue]="null">Seleccionar</option>
                                 <option *ngFor="let unitType of unitTypes" [ngValue]="unitType">{{unitType.code}} - {{unitType.name}}</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="col-5">
+
+                        <div class="form-group">
+                            <label class="my-1 mr-2">Código: </label>
+                            <input type="text" class="form-control flex-grow-1" formControlName="unitCode" [focused]="isWaitingForUnit" />
+                        </div>
+
                     </div>
 
                     <div class="col-2">
@@ -73,10 +73,11 @@
 
                 <div class="form-row" *ngIf="submited">
                     <div class="col-5 text-danger">
-                        <p *ngIf="unitForm.controls.unitCode.errors?.required">Ingrese código</p>
-                    </div>
-                    <div class="col-5 text-danger">
                         <p *ngIf="unitForm.controls.unitType.errors?.required">Ingrese tipo de unidad</p>
+                    </div>
+
+                    <div class="col-5 text-danger">
+                        <p *ngIf="unitForm.controls.unitCode.errors?.required">Ingrese código</p>
                     </div>
 
                 </div>
@@ -86,7 +87,7 @@
 
             <hr />
 
-            <div class="row my-3">
+            <div class="row my-4">
 
                 <div class="col-sm-2">
                     <span class="h6 mr-1">Total: </span> <span>{{units.length}}</span>
@@ -102,15 +103,15 @@
                 <table class="table table-bordered table-stripped table-hover">
                     <thead>
                         <tr>
-                            <th>Código</th>
                             <th>Tipo</th>
+                            <th>Código</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let unit of units">
+                            <td>{{unit.type.code}} - {{unit.type.name}}</td>
                             <td>{{unit.code}}</td>
-                            <td>{{unit.type.code}} {{unit.type.name}}</td>
                             <td>
                                 <div class="action-list">
                                     <button class="btn btn-link p-0 m-0" (click)="removeUnit(unit)">Eliminar</button>
@@ -126,9 +127,9 @@
                 Debe ingresar al menos una unidad en la orden
             </p>
 
-            <div class="d-flex justify-content-center mb-5">
+            <div class="d-flex justify-content-end mb-5 mt-3">
                 <button class="btn btn-primary rounded-0 mr-2" (click)="createOrder()">Guardar orden</button>
-                <button class="btn btn-danger rounded-0" (click)="cancel()">Cancelar</button>
+                <button class="btn btn-secondary rounded-0" (click)="cancel()">Cancelar</button>
             </div>
 
 
