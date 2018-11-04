@@ -42,7 +42,7 @@ td > button {
     background-color: transparent;
 }
 
-input[type] {
+input[type="*"] {
     font-size: .925rem !important;
 }
 

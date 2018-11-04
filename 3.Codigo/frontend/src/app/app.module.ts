@@ -54,7 +54,12 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { CuitPipe } from './cuit.pipe';
 import { ModalReloginComponent } from './modal-relogin/modal-relogin.component';
-import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component'
+import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component';
+import { HemocomponentsComponent } from './hemocomponents/hemocomponents.component';
+import { EditHemocomponentModalComponent } from './edit-hemocomponent-modal/edit-hemocomponent-modal.component';
+import { ConfigManagementComponent } from './config-management/config-management.component'
+import { ConfigService } from './config.service';
+import { SelectUnitModalComponent } from './select-unit-modal/select-unit-modal.component';
 
 
 const httpInterceptorProviders = [
@@ -100,7 +105,11 @@ const httpInterceptorProviders = [
         PasswordChangeComponent,
         CuitPipe,
         ModalReloginComponent,
-        ConfirmActionModalComponent
+        ConfirmActionModalComponent,
+        HemocomponentsComponent,
+        EditHemocomponentModalComponent,
+        ConfigManagementComponent,
+        SelectUnitModalComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -115,6 +124,7 @@ const httpInterceptorProviders = [
         UserService,
         SessionService,
         MessageService,
+        ConfigService,
         PendingChangesGuard,
         AuthenticationGuard,
         AuthorizationGuard,
@@ -124,8 +134,10 @@ const httpInterceptorProviders = [
         httpInterceptorProviders
     ],
     entryComponents: [
+        SelectUnitModalComponent,
         ConfirmModalComponent,
         ModalLoginComponent,
+        EditHemocomponentModalComponent,
         CancelConfirmationModalComponent,
         UnitEditModalComponent,
         ModalReloginComponent,

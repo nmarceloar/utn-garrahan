@@ -87,9 +87,9 @@
 
                     <h6 class="text-primary mb-3">Irradiación</h6>
 
-                    <div class="row mb-2">
+                    <div class="row">
 
-                        <div class="col-lg-5 mb-2">
+                        <div class="col">
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -108,31 +108,32 @@
 
                         </div>
 
-                        <div class="col-lg-7 mb-2">
+                        <div class="col">
 
-                            <div class="input-group flex-fill">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Código de unidad </span>
+                                    <span class="input-group-text">Etiqueta</span>
                                 </div>
-                                <input type="text" class="form-control"
+                                <input class="form-control" type="text"
                                        [formControl]="selectedUnitCode"
                                        [focused]="isWaitingForUnit"
-                                       (keydown.enter)="selectUnit()"
-                                       (keydown.tab)="$event.preventDefault()"
-                                       (keydown.shift.tab)="$event.preventDefault()">
-
+                                       (keydown.enter)="selectUnit(); $event.preventDefault()"
+                                       (keydown.tab)="selectUnit(); $event.preventDefault()">
                             </div>
 
-                            <div class="mt-2 text-danger">
-                                <span *ngIf="hasUnitCodeError" class="d-block">Ingrese código de unidad</span>
-                                <span *ngIf="!hasUnitCodeError && unitCodeDoesNotExist" class="d-block">No existen unidades pendientes con el código ingresado   </span>
+                            <div *ngIf="hasUnitCodeError" class="mt-2 d-block text-danger">
+                                <span *ngIf="selectedUnitCode.errors?.required">Ingrese código de la unidad</span>
                             </div>
+                            <div *ngIf="unitCodeDoesNotExist" class="mt-2 d-block text-danger">
+                                <span>No existen unidades pendientes con el código {{lastErrorCode}}</span>
+                            </div>
+
 
                         </div>
 
 
-
                     </div>
+
 
                     <h6 class="text-primary mb-1 mt-3">Unidades seleccionadas: </h6>
                     <hr *ngIf="!isIrradiationInProcess" />
@@ -145,16 +146,16 @@
                             <thead>
                                 <tr>
                                     <th>Etiqueta</th>
-                                    <th>Código</th>
                                     <th>Tipo</th>
+                                    <th>Código</th>
                                     <th *ngIf="!isIrradiationInProcess">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let unit of selectedUnits">
                                     <td>{{unit.irradiationTag}}</td>
-                                    <td>{{unit.code}}</td>
                                     <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                    <td>{{unit.code}}</td>
                                     <td *ngIf="!isIrradiationInProcess">
                                         <span class="btn-link" style="cursor: pointer;" (click)="removeUnit(unit)">Eliminar</span>
                                     </td>
@@ -165,7 +166,7 @@
 
                     <div class="d-flex justify-content-center mb-2">
                         <button *ngIf="!isIrradiationInProcess" class="btn btn-primary px-5 rounded-0" [disabled]="!canStart" (click)="startIrradiation()">Comenzar</button>
-                        <button *ngIf="isIrradiationInProcess" class="btn btn-danger px-5 rounded-0" (click)="stopIrradiation()">Finalizar</button>
+                        <button *ngIf="isIrradiationInProcess" class="btn btn-danger px-5 rounded-0" (click)="stopIrradiation()" [disabled]="!canStop">Finalizar</button>
                     </div>
 
                     <h6 class="text-primary mb-1 mt-3 align-self-start">Unidades pendientes de irradiación: </h6>
@@ -174,16 +175,18 @@
                         <table class="table table-bordered table-hover table-stripped">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
                                     <th>Tipo</th>
+                                    <th>Código</th>
                                     <th *ngIf="hasTag">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let unit of pendingUnits">
-                                    <td>{{unit.code}}</td>
                                     <td>{{unit.type.code}} - {{unit.type.name}}</td>
-                                    <td *ngIf="hasTag"><button class="btn btn-link p-0 m-0" style="font-size: .925rem" (click)="selectManually(unit)">Seleccionar</button></td>
+                                    <td>{{unit.code}}</td>
+                                    <td *ngIf="hasTag">
+                                        <button class="btn btn-link p-0 m-0" style="font-size: .925rem" (click)="selectManually(unit)">Seleccionar</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

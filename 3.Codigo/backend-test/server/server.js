@@ -3,23 +3,11 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 
+
 var app = loopback();
 
-boot(app, __dirname, function (err) {
+boot(app, __dirname);
 
-    if (err)
-        throw err;
-
-    app.listen(function (err) {
-
-        if (err)
-            throw err
-
-        console.log(`Listening ...`);
-
-    })
-
-});
-
+app.listen();
 
 module.exports = app; 

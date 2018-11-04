@@ -1,0 +1,32 @@
+{
+    "name": "ConfigElement",
+    "plural": "config",
+    "base": "PersistedModel",
+    "idInjection": false,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "name": {
+            "type": "string",
+            "required": true,
+            "id": true
+        },
+        "value": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "string",
+            "required": true
+        },
+        "lastUpdated": {
+            "type": "date",
+            "required": false
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+}

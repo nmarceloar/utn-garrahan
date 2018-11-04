@@ -23,6 +23,11 @@
     "billingDivider": {
       "type": "number",
       "required": true
+    },
+    "enabled": {
+      "type": "boolean",
+      "required": false,
+      "default": true
     }
   },
   "validations": [],

@@ -12,6 +12,14 @@ module.exports.roles = [
     { name: "client", description: "Usuarios externos al Banco" }
 ]
 
+
+module.exports.config = [
+    { name: "tagCodeCharDiscard", value: "2", description: "Cantidad de caracteres a descartar en la lectura de una etiqueta" },
+    { name: "unitCodeCharDiscard", value: "2", description: "Cantidad de caracteres a descartar en la lectura de un código de unidad" },
+    { name: "minTimeOfIrradiationInMinutes", value: "1", description: "Duración mínima obligatoria del proceso de irradiación en minutos." }
+]
+
+
 module.exports.unitTypes = [
     { code: "AFR", name: "Aféresis", billingDivider: 2 },
     { code: "GRN", name: "Granulocitos", billingDivider: 1 },

@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend-test",
     "\\backend-test\\server",
     "\\backend-test\\server\\boot"
   ],
-  "SelectedNode": "\\backend-test",
+  "SelectedNode": "\\backend-test\\server\\boot\\a-order-customization.js",
   "PreviewInSolutionExplorer": false
 }

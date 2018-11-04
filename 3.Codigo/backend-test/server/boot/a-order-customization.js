@@ -62,6 +62,7 @@ module.exports = (app, cb) => {
             .then((updateInfo) => res.json(updateInfo))
             .catch(err => res.status(500).json({ error: { message: err.message } }))
 
+
     })
 
     app.post("/api/orders", async (req, res) => {
@@ -70,7 +71,8 @@ module.exports = (app, cb) => {
 
         try {
 
-            let institution = await app.models.Institution.findById(orderInfo.institutionId)
+            let institution =
+                await app.models.Institution.findById(orderInfo.institutionId)
 
             let pendingOrder = (await app.models.OrderStatus.find({ where: { name: { regexp: `.*PENDIENTE.*` } } }))[0]
 

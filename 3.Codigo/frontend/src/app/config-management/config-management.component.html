@@ -1,0 +1,41 @@
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-12 mx-auto">
+
+            <h5 class="text-primary font-weight-normal mt-4">Configuración del sistema</h5>
+            <span class="text-muted">Parámetros principales</span>
+            <hr />
+
+            <div class="table-responsive">
+
+                <table class="table table-stripped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Valor</th>
+                            <th>Descripción</th>
+                            <th>Última actualización</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let configelem of config">
+                            <td>{{configelem.name}}</td>
+                            <td>{{configelem.value}}</td>
+                            <td>{{configelem.description}}</td>
+                            <td>{{configelem.lastUpdated | date: "dd/MM/yyyy"}}</td>
+                            <td><button class="btn btn-link m-0 p-0">Editar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>

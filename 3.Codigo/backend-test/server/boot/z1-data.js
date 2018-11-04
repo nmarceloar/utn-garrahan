@@ -14,6 +14,8 @@ module.exports = async (app, cb) => {
 
     try {
 
+        var configItems = await app.models.ConfigElement.create(data.config);
+
         var institutionTypes = await app.models.InstitutionType.create(data.institutionTypes)
         var institutions = await app.models.Institution.create(
             data.institutions.map(i => ({

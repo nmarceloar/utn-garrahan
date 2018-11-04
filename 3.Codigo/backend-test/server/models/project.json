@@ -1,31 +1,31 @@
 {
-    "name": "Project",
-    "plural": "projects",
-    "base": "PersistedModel",
-    "idInjection": false,
-    "options": {
-        "validateUpsert": true
+  "name": "Project",
+  "plural": "projects",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "typeId": {
+      "type": "number",
+      "id": 1,
+      "required": true
     },
-    "properties": {
-        "typeId": {
-            "type": "number",
-            "required": true,
-            "id": 1
-        },
-        "orderId": {
-            "type": "number",
-            "required": true,
-            "id": 2
-        }
-    },
-    "validations": [],
-    "relations": {
-        "manager": {
-            "type": "belongsTo",
-            "model": "Manager",
-            "foreignKey": "managerId"
-        }
-    },
-    "acls": [],
-    "methods": {}
+    "orderId": {
+      "type": "number",
+      "id": 2,
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "manager": {
+      "type": "belongsTo",
+      "model": "Manager",
+      "foreignKey": "managerId"
+    }
+  },
+  "acls": [],
+  "methods": {}
 }

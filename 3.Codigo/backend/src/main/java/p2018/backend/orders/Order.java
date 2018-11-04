@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
+import p2018.backend.exceptions.DomainException;
 
 @Entity
 @Table(name = "orders")
@@ -37,7 +38,7 @@ public class Order {
 	private String code;
 	private String carrier;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = {}, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "order_id", referencedColumnName = "id")
 	@Singular
 	private Set<Unit> units = new HashSet<>();
@@ -48,6 +49,13 @@ public class Order {
 
 	public int unitCount() {
 		return this.units.size();
+	}
+
+	public void addUnit(Unit unit) {
+
+		if (!this.units.add(unit))
+			throw new DomainException("No se permite más de una unidad con mismo tipo y código");
+
 	}
 
 }

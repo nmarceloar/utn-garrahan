@@ -72,5 +72,9 @@
   "Irradiation": {
     "dataSource": "db",
     "public": false
+  },
+  "ConfigElement": {
+    "dataSource": "db",
+    "public": true
   }
 }

@@ -5,6 +5,7 @@ export const environment = {
 
     production: false,
     api: {
+        config: `${api}/config`,
         passwordReset: `${api}/password-reset`,
         passwordResetRequests: `${api}/password-reset-requests`,
         accountConfirm: `${api}/xusers/account-confirm`,

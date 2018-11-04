@@ -1,63 +1,62 @@
 {
-    "name": "Institution",
-    "plural": "institutions",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "Institution",
+  "plural": "institutions",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
     },
-    "properties": {
-        "name": {
-            "type": "string"
-        },
-        "cuit": {
-            "type": "string",
-            "required": true,
-            "default": "20204567891"
-        },
-        "address": {
-            "type": "string",
-            "required": true
-        },
-        "email": {
-            "type": "string",
-            "required": true
-        },
-        "creation_date": {
-            "type": "date",
-            "required": true,
-            "defaultFn": "now"
-        },
-        "userCount": {
-            "type": "number",
-            "required": false,
-            "default": 0
-        },
-        "orderCount": {
-            "type": "number",
-            "required": false,
-            "default": 0
-        }
+    "cuit": {
+      "type": "string",
+      "required": true,
+      "default": "20204567891"
     },
-    "validations": [],
-    "relations": {
-        "type": {
-            "type": "belongsTo",
-            "model": "InstitutionType",
-            "foreignKey": "typeId"
-        },
-        "users": {
-            "type": "hasMany",
-            "model": "XUser",
-            "foreignKey": "institutionId"
-        },
-        "orders": {
-            "type": "hasMany",
-            "model": "Order",
-            "foreignKey": "institutionId"
-        }
+    "address": {
+      "type": "string",
+      "required": true
     },
-    "acls": [
-    ],
-    "methods": {}
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "creation_date": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
+    },
+    "userCount": {
+      "type": "number",
+      "required": false,
+      "default": 0
+    },
+    "orderCount": {
+      "type": "number",
+      "required": false,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "type": {
+      "type": "belongsTo",
+      "model": "InstitutionType",
+      "foreignKey": "typeId"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "XUser",
+      "foreignKey": "institutionId"
+    },
+    "orders": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "institutionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
 }

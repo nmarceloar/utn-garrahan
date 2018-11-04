@@ -103,6 +103,7 @@ module.exports = (app, cb) => {
                     throw new Error("Error. Ya existe otro usuario con los datos ingresados")
 
                 u = await XUser.create({ ...user, password: `${Math.random()}` })
+
                 let clientRole = await XRole.findOne({ where: { name: "client" } })
 
                 await u.roles.add(clientRole)
@@ -114,7 +115,6 @@ module.exports = (app, cb) => {
                     config.secretPassword,
                     { expiresIn: `${config.confirmExpirationInHours}h` }
                 )
-
 
                 await mailingService.send({
                     from: config.mail.sender,

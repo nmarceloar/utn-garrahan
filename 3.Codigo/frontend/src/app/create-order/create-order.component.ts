@@ -73,6 +73,8 @@ export class CreateOrderComponent implements OnInit {
 
     addUnit() {
 
+        this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(2), { emitEvent: false })
+
         if (this.unitForm.invalid) {
             this.submited = true;
             return

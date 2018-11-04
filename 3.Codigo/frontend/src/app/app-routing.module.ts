@@ -22,6 +22,8 @@ import { InstitutionDetailsComponent } from './institution-details/institution-d
 import { AccountActivationComponent } from './account-activation/account-activation.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { PasswordChangeComponent } from './password-change/password-change.component';
+import { HemocomponentsComponent } from './hemocomponents/hemocomponents.component';
+import { ConfigManagementComponent } from './config-management/config-management.component';
 
 
 const routes: Routes = [
@@ -161,6 +163,21 @@ const routes: Routes = [
                     breadcrumb: "Home"
                 }
             },
+            {
+                path: "configuración",
+                component: ConfigManagementComponent,
+                data: {
+                    breadcrumb: "Configuración del sistema"
+                }
+            },
+            {
+                path: "hemocomponentes",
+                component: HemocomponentsComponent,
+                data: {
+                    breadcrumb: "Hemocomponentes"
+                }
+            },
+
             {
                 path: "instituciones",
                 component: InstitutionsComponent,
