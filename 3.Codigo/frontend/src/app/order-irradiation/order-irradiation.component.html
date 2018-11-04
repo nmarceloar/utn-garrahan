@@ -69,6 +69,7 @@
                 <h6 class="text-primary  mt-4">Unidades</h6>
                 <hr />
 
+
                 <div class="row mb-3 ">
 
                     <div class="col-sm-2">
@@ -87,9 +88,15 @@
 
                     <h6 class="text-primary mb-3">Irradiación</h6>
 
-                    <div class="row">
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" [formControl]="usbReaderEnabled">
+                        <label class="custom-control-label" for="customCheck1">Uso de Lector USB</label>
+                    </div>
 
-                        <div class="col">
+
+                    <div class="form-row">
+
+                        <div class="col-5">
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -108,7 +115,7 @@
 
                         </div>
 
-                        <div class="col">
+                        <div class="col-5">
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -128,6 +135,12 @@
                                 <span>No existen unidades pendientes con el código {{lastErrorCode}}</span>
                             </div>
 
+
+                        </div>
+
+                        <div class="col-2">
+
+                            <button class="btn btn-block btn-primary rounded-0">Agregar</button>
 
                         </div>
 

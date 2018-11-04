@@ -20,6 +20,8 @@ export class CreateOrderComponent implements OnInit {
     submited = false;
     orderSubmitted = false;
 
+    usbReaderEnabled: FormControl = new FormControl(true)
+
     started = { should: true }
 
     currentUser
@@ -71,9 +73,14 @@ export class CreateOrderComponent implements OnInit {
 
     }
 
+    private usbEnabled(): boolean {
+        return this.usbReaderEnabled.value as boolean
+    }
+
     addUnit() {
 
-        this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(2), { emitEvent: false })
+        if (this.usbEnabled())
+            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(2), { emitEvent: false })
 
         if (this.unitForm.invalid) {
             this.submited = true;
@@ -89,9 +96,12 @@ export class CreateOrderComponent implements OnInit {
                 ttlInSeconds: 3
             })
 
+            this.unitForm.controls.unitCode.reset();
+
             this.isWaitingForUnit = { should: true }
 
             return;
+
         }
 
         this.units.unshift({

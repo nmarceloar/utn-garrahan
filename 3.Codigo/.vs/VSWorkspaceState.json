@@ -1,10 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend-test",
     "\\backend-test\\server",
-    "\\backend-test\\server\\boot"
+    "\\backend-test\\server\\boot",
+    "\\backend-test\\server\\data",
+    "\\backend-test\\server\\models",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\config-management",
+    "\\frontend\\src\\app\\nav"
   ],
-  "SelectedNode": "\\backend-test\\server\\boot\\a-order-customization.js",
+  "SelectedNode": "\\frontend\\src\\app\\nav\\nav.component.html",
   "PreviewInSolutionExplorer": false
 }

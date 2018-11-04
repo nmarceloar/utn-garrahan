@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from "./../environments/environment";
+import { map } from 'rxjs/operators';
 
 
 
@@ -12,15 +13,10 @@ export class ConfigService {
 
     public load() {
 
-        return this.http.get<{}[]>(`${environment.api.config}`);
+        return this.http.get<{}[]>(`${environment.api.config}`)
 
     }
 
-    public update(config: {}[]) {
-
-        return this.http.put<{}[]>(`${environment.api.config}`, config);
-
-    }
 
 }
 

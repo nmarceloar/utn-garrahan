@@ -28,6 +28,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     unitCodeDoesNotExist: boolean = false;
     order: Order
 
+    usbReaderEnabled: FormControl = new FormControl(true);
+
     lastErrorCode: string
 
     isLoading = false;
@@ -161,7 +163,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     onTagConfirmed() {
 
-        this.selectedTag.setValue(this.selectedTag.value.substr(2), { emitEvent: false })
+        if (this.usbEnabled())
+            this.selectedTag.setValue(this.selectedTag.value.substr(2), { emitEvent: false })
 
         if (this.selectedTag.invalid) {
             this.hasTagError = true;
@@ -190,9 +193,16 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     }
 
+    private usbEnabled(): boolean {
+
+        return this.usbReaderEnabled.value;
+
+    }
+
     selectUnit() {
 
-        this.selectedUnitCode.setValue(this.selectedUnitCode.value.substr(2), { emitEvent: false })
+        if (this.usbEnabled())
+            this.selectedUnitCode.setValue(this.selectedUnitCode.value.substr(2), { emitEvent: false })
 
         if (this.selectedUnitCode.invalid) {
 
