@@ -191,6 +191,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.hasUnitCodeError = false;
 
+        this.sortSelectedUnits()
+
+    }
+
+    private sortSelectedUnits() {
+
+        this.selectedUnits = this.selectedUnits.sort((u1, u2) => u1.type.code < u2.type.code ? -1 : 1);
+
+
     }
 
     private usbEnabled(): boolean {
@@ -238,6 +247,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
             this.isWaitingForUnit = { should: true }
 
+            this.sortSelectedUnits()
+
 
         } else {
 
@@ -262,6 +273,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
                     this.selectedUnitCode.reset();
 
                     this.isWaitingForUnit = { should: true }
+
+                    this.sortSelectedUnits()
 
                 }, () => { })
 
