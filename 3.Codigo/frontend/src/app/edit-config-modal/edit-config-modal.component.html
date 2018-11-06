@@ -1,0 +1,40 @@
+
+<div class="container p-5">
+
+    <div class="row">
+
+        <div class="col-10 mx-auto">
+
+            <h5>Modificar configuración: </h5>
+            <hr />
+
+            <form [formGroup]="configElem" (submit)="update()">
+
+                <div class="form-group">
+                    <label>Nombre: </label>
+                    <input type="text" class="form-control" formControlName="name" />
+                </div>
+
+                <div class="form-group">
+                    <label>Valor: </label>
+                    <input type="text" class="form-control" formControlName="value" [focused]="{should: true}" />
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción: </label>
+                    <textarea type="text" class="form-control" formControlName="description"></textarea>
+                </div>
+
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary rounded-0 mr-3" [disabled]="configElem.invalid">Guardar</button>
+                    <button class="btn btn-secondary rounded-0" (click)="cancel()">Cancelar</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+

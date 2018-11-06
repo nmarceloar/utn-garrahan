@@ -1,37 +1,37 @@
 {
-  "name": "UnitType",
-  "plural": "unit-types",
-  "base": "PersistedModel",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "properties": {
-    "code": {
-      "type": "string",
-      "required": true
+    "name": "UnitType",
+    "plural": "unit-types",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
     },
-    "name": {
-      "type": "string",
-      "required": true
+    "properties": {
+        "code": {
+            "type": "string",
+            "required": true
+        },
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "creation_date": {
+            "type": "date",
+            "required": true,
+            "defaultFn": "now"
+        },
+        "billingDivider": {
+            "type": "number",
+            "required": true
+        },
+        "enabled": {
+            "type": "boolean",
+            "required": false,
+            "default": true
+        }
     },
-    "creation_date": {
-      "type": "date",
-      "required": true,
-      "defaultFn": "now"
-    },
-    "billingDivider": {
-      "type": "number",
-      "required": true
-    },
-    "enabled": {
-      "type": "boolean",
-      "required": false,
-      "default": true
-    }
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {}
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
 }

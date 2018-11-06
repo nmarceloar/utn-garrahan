@@ -25,8 +25,8 @@
                             <td>{{configelem.name}}</td>
                             <td>{{configelem.value}}</td>
                             <td>{{configelem.description}}</td>
-                            <td>{{configelem.lastUpdated | date: "dd/MM/yyyy"}}</td>
-                            <td><button class="btn btn-link m-0 p-0">Editar</button></td>
+                            <td>{{configelem.lastUpdated | date: "dd/MM/yyyy hh:mm"}}</td>
+                            <td><button class="btn btn-link m-0 p-0" (click)="openModal(configelem)">Editar</button></td>
                         </tr>
                     </tbody>
                 </table>

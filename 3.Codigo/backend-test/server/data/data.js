@@ -14,9 +14,9 @@ module.exports.roles = [
 
 
 module.exports.config = [
-    { name: "tagCodeCharDiscard", value: "2", description: "Cantidad de caracteres a descartar en la lectura de una etiqueta" },
-    { name: "unitCodeCharDiscard", value: "2", description: "Cantidad de caracteres a descartar en la lectura de un código de unidad" },
-    { name: "minTimeOfIrradiationInMinutes", value: "0.25", description: "Duración mínima obligatoria del proceso de irradiación en minutos." }
+    { name: "tagCodeInvalidCharCount", value: "1", isInteger: true, min: "0", max: "5", description: "Cantidad de caracteres a descartar en la lectura de una etiqueta" },
+    { name: "unitCodeInvalidCharCount", value: "1", isInteger: true, min: "0", max: "5", description: "Cantidad de caracteres a descartar en la lectura de un código de unidad" },
+    { name: "minTimeOfIrradiationInMinutes", value: "0.25", isInteger: false, min: "0.1", max: "60", description: "Duración mínima obligatoria del proceso de irradiación en minutos." }
 ]
 
 

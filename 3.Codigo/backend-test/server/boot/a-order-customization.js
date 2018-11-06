@@ -255,6 +255,19 @@ module.exports = (app, cb) => {
 
     })
 
+
+    app.put("/api/unit-types/:id", async function (req, res) {
+
+        let ut = await app.models.UnitType.findById(req.params.id)
+
+        ut = await ut.updateAttributes({
+            name: req.body.name
+        })
+
+        res.json(ut)
+
+    })
+
     cb()
 
 };

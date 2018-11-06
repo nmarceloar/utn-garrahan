@@ -25,6 +25,7 @@
 		"jsonwebtoken": "^8.3.0",
 		"jwt-decode": "^2.2.0",
 		"moment": "^2.22.2",
+		"moment-es6": "^1.0.0",
 		"ngx-breadcrumbs": "0.0.3",
 		"rxjs": "^6.2.0",
 		"zone.js": "^0.8.26"

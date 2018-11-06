@@ -9,12 +9,9 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class CancelConfirmationModalComponent implements OnInit {
 
-    isWaitingForComments = false;
-    isConfirmed = false;
-
     submitted = false;
 
-    comments: FormControl = new FormControl("", Validators.required);
+    comments: FormControl = new FormControl("Todo ok", Validators.required);
 
     constructor(private activeModal: NgbActiveModal) { }
 
@@ -36,13 +33,6 @@ export class CancelConfirmationModalComponent implements OnInit {
     dismiss() {
 
         this.activeModal.dismiss()
-
-    }
-
-    confirm() {
-
-        this.isWaitingForComments = true;
-        this.isConfirmed = true;
 
     }
 

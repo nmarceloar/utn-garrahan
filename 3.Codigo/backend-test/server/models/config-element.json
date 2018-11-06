@@ -2,7 +2,7 @@
     "name": "ConfigElement",
     "plural": "config",
     "base": "PersistedModel",
-    "idInjection": false,
+    "idInjection": true,
     "options": {
         "validateUpsert": true
     },
@@ -17,6 +17,18 @@
             "required": true
         },
         "description": {
+            "type": "string",
+            "required": true
+        },
+        "isInteger": {
+            "type": "boolean",
+            "required": true
+        },
+        "min": {
+            "type": "string",
+            "required": true
+        },
+        "max": {
             "type": "string",
             "required": true
         },

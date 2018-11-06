@@ -60,6 +60,9 @@ import { EditHemocomponentModalComponent } from './edit-hemocomponent-modal/edit
 import { ConfigManagementComponent } from './config-management/config-management.component'
 import { ConfigService } from './config.service';
 import { SelectUnitModalComponent } from './select-unit-modal/select-unit-modal.component';
+import { EditConfigModalComponent } from './edit-config-modal/edit-config-modal.component';
+import { UnittypeEditModalComponent } from './unittype-edit-modal/unittype-edit-modal.component';
+import { UnitTypeService } from './unit-type.service';
 
 
 const httpInterceptorProviders = [
@@ -109,7 +112,9 @@ const httpInterceptorProviders = [
         HemocomponentsComponent,
         EditHemocomponentModalComponent,
         ConfigManagementComponent,
-        SelectUnitModalComponent
+        SelectUnitModalComponent,
+        EditConfigModalComponent,
+        UnittypeEditModalComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -121,6 +126,7 @@ const httpInterceptorProviders = [
     ],
     providers: [
         OrderService,
+        UnitTypeService,
         UserService,
         SessionService,
         MessageService,
@@ -141,7 +147,9 @@ const httpInterceptorProviders = [
         CancelConfirmationModalComponent,
         UnitEditModalComponent,
         ModalReloginComponent,
-        ConfirmActionModalComponent
+        ConfirmActionModalComponent,
+        EditConfigModalComponent,
+        UnittypeEditModalComponent
     ],
     bootstrap: [
         AppComponent

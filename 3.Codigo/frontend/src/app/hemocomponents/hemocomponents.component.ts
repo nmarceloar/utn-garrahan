@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService, UnitType } from '../order.service';
 import { MessageService } from '../message.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EditHemocomponentModalComponent } from '../edit-hemocomponent-modal/edit-hemocomponent-modal.component';
 import { from } from 'rxjs';
+import { UnittypeEditModalComponent } from '../unittype-edit-modal/unittype-edit-modal.component';
 
 @Component({
     selector: 'app-hemocomponents',
@@ -28,17 +29,22 @@ export class HemocomponentsComponent implements OnInit {
 
     enable(unitType) { }
 
-    disable(unitType) {
+    disable(unitType) { }
 
-        this.showConfirmationModal().subscribe();
+    openModal(unitType) {
+
+        let d: NgbModalRef = this.modalService.open(UnittypeEditModalComponent, {size: "lg"});
+        d.componentInstance.setUnitType(unitType);
+
+        from(d.result).subscribe(() => this.ngOnInit(), () => { })
+
 
     }
 
-    private showConfirmationModal() {
+    toggle() {
 
-        let m = this.modalService.open(EditHemocomponentModalComponent);
-        return from(m.result);
-
+        this.messageService.success("Próximamente... ")
     }
+
 
 }

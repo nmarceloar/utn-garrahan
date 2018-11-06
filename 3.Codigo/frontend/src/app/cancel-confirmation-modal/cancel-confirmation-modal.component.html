@@ -1,25 +1,15 @@
 <div class="modal-content p-2">
     <div class="modal-header">
         <h5 class="modal-title">Irradiación de Hemocomponentes</h5>
-        <button type="button" class="close" (click)="dismiss()">
-            <span aria-hidden="true">&times;</span>
-        </button>
     </div>
     <div class="modal-body">
-        <p *ngIf="!isConfirmed">Está seguro que desea finalizar el proceso de irradiación ?</p>
-        <div class="form-group" *ngIf="isWaitingForComments">
-            <label>Comentarios: </label>
-            <textarea class="form-control" rows="5" [formControl]="comments" [focused]="isWaitingForComments"></textarea>
-        </div>
-        <div *ngIf="submitted">
-            <p class="text-danger" *ngIf="comments.errors?.required">Ingrese comentarios sobre el proceso</p>
-        </div>
+        <label>Comentarios sobre el proceso: </label>
+        <textarea class="form-control" rows="5" [formControl]="comments" [focused]="{should: true}"></textarea>
     </div>
-    <div class="modal-footer">
-        <div *ngIf="!isConfirmed">
-            <button type="button" class="btn btn-primary rounded-0 mr-2 px-5" (click)="confirm()">Sí</button>
-            <button type="button" class="btn btn-info rounded-0 px-5" (click)="dismiss()">No</button>
-        </div>
-        <button *ngIf="isConfirmed" type="button" class="btn btn-primary rounded-0 px-5" (click)="close()">Confirmar</button>
+    <div *ngIf="submitted">
+        <p class="text-danger" *ngIf="comments.errors?.required">Ingrese comentarios sobre el proceso</p>
     </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary rounded-0 px-5" (click)="close()">Guardar</button>
 </div>

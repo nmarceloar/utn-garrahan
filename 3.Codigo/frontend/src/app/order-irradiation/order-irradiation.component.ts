@@ -8,13 +8,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { SessionService } from '../session.service';
 
-import * as moment from "moment"
+import moment from "moment-es6"
+
 import { MessageService, MessageType } from '../message.service';
 import { CancelConfirmationModalComponent } from '../cancel-confirmation-modal/cancel-confirmation-modal.component';
 import { ModalReloginComponent } from '../modal-relogin/modal-relogin.component';
 import { SelectUnitModalComponent } from '../select-unit-modal/select-unit-modal.component';
 import { ConfigService } from '../config.service';
 import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { ConfirmActionModalComponent } from '../confirm-action-modal/confirm-action-modal.component';
 
 @Component({
     selector: 'app-order-irradiation',
@@ -28,6 +30,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     unitCodeDoesNotExist: boolean = false;
     order: Order
 
+    intervalSubscription
+
     usbReaderEnabled: FormControl = new FormControl(true);
 
     lastErrorCode: string
@@ -36,6 +40,11 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     startTime: Date
     stopTime: Date
+
+    elapsedTime: string
+
+    tagCodeInvalidCharCount: number
+    unitCodeInvalidCharCount: number
 
     canStop: boolean = false;
 
@@ -104,12 +113,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
             )
 
 
-        this.configService.load()
+        this.configService.findAll()
             .subscribe((config) => {
 
-                let minTime = +((config.filter(d => (d as any).name === "minTimeOfIrradiationInMinutes")[0] as any).value)
-                this.minTimeOfIrradiation = (minTime) * 60 * 1000
+                this.tagCodeInvalidCharCount = +((config.filter(d => (d as any).name === "tagCodeInvalidCharCount")[0] as any).value)
+                this.unitCodeInvalidCharCount = +((config.filter(d => (d as any).name === "unitCodeInvalidCharCount")[0] as any).value)
+                this.minTimeOfIrradiation =
+                    +((config.filter(d => (d as any).name === "minTimeOfIrradiationInMinutes")[0] as any).value) * 60 * 1000;
 
+                console.log(this.minTimeOfIrradiation, this.tagCodeInvalidCharCount, this.unitCodeInvalidCharCount)
 
             }, (err) => {
                 this.handleErr(err)
@@ -164,7 +176,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     onTagConfirmed() {
 
         if (this.usbEnabled())
-            this.selectedTag.setValue(this.selectedTag.value.substr(2), { emitEvent: false })
+            this.selectedTag.setValue(this.selectedTag.value.substr(this.tagCodeInvalidCharCount), { emitEvent: false })
 
         if (this.selectedTag.invalid) {
             this.hasTagError = true;
@@ -210,8 +222,13 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     selectUnit() {
 
+        if (!this.selectedTag.value) {
+            this.hasTagError = true;
+            return
+        }
+
         if (this.usbEnabled())
-            this.selectedUnitCode.setValue(this.selectedUnitCode.value.substr(2), { emitEvent: false })
+            this.selectedUnitCode.setValue(this.selectedUnitCode.value.substr(this.unitCodeInvalidCharCount), { emitEvent: false })
 
         if (this.selectedUnitCode.invalid) {
 
@@ -291,13 +308,28 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
         this.canStop = false;
         timer(this.minTimeOfIrradiation)
-            .subscribe(() => this.canStop = true)
+            .subscribe(() => {
+                this.canStop = true
+            })
+
+        this.elapsedTime = "00:00:00"
+        this.intervalSubscription = interval(1000)
+            .pipe(map(d => {
+                let s = moment(this.startTime.toISOString())
+                let e = moment(new Date().toISOString())
+
+                let diff = e.diff(s);
+
+                this.elapsedTime = moment.utc(diff).format("HH:mm:ss");
+
+            }))
+            .subscribe();
+
 
         this.selectedTag.disable();
         this.selectedUnitCode.disable();
 
         this.isIrradiationInProcess = true;
-
 
     }
 
@@ -306,44 +338,52 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         this.stopTime = new Date();
 
         this.showConfirmationModal()
-            .subscribe((comments) => {
+            .subscribe(() => {
 
-                this.showReloginModal()
-                    .subscribe(() => {
+                this.intervalSubscription.unsubscribe();
 
-                        this.selectedTag.enable();
-                        this.selectedUnitCode.enable();
+                this.showCommentModal().subscribe((comments) => {
 
-                        this.isIrradiationInProcess = false;
+                    this.showReloginModal()
+                        .subscribe(() => {
 
-                        let irradiation = {
-                            units: this.selectedUnits.map(u => u.id),
-                            irradiationStart: this.startTime,
-                            irradiationEnd: this.stopTime,
-                            irradiationTag: this.selectedTag.value,
-                            irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
-                            irradiatorId: this.currentUser.id,
-                            comments: comments
-                        }
+                            this.selectedTag.enable();
+                            this.selectedUnitCode.enable();
 
-                        this.orderService.addIrradiation(this.order.id, irradiation)
-                            .pipe(
-                                catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
-                                flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
-                                catchError(err => throwError(new Error(`Error. ${err.message}`))),
-                        )
-                            .subscribe(
-                                (d) => this.handleEndOfIrradiation(d),
-                                (err) => this.handleFailingEndOfIrradiation(err)
-                            );
+                            this.isIrradiationInProcess = false;
+
+                            let irradiation = {
+                                units: this.selectedUnits.map(u => u.id),
+                                irradiationStart: this.startTime,
+                                irradiationEnd: this.stopTime,
+                                irradiationTag: this.selectedTag.value,
+                                irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                                irradiatorId: this.currentUser.id,
+                                comments: comments
+                            }
+
+                            this.orderService.addIrradiation(this.order.id, irradiation)
+                                .pipe(
+                                    catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
+                                    flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
+                                    catchError(err => throwError(new Error(`Error. ${err.message}`))),
+                            )
+                                .subscribe(
+                                    (d) => this.handleEndOfIrradiation(d),
+                                    (err) => this.handleFailingEndOfIrradiation(err)
+                                );
 
 
 
-                    }, () => {
+                        }, () => {
 
-                        console.log(`Login modal closed or dismissed`)
+                            console.log(`Login modal closed or dismissed`)
 
-                    })
+                        })
+
+
+                }, () => { })
+
 
             }, () => {
 
@@ -357,8 +397,25 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     }
 
     private showConfirmationModal() {
-        return fromPromise(
-            this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" }).result);
+
+        let d: NgbModalRef =
+            this.modalService.open(ConfirmActionModalComponent, { backdrop: "static", keyboard: true, size: "lg" })
+
+        d.componentInstance.title = "Confirmar fin de irradiación"
+        d.componentInstance.message = "Está seguro de que desea terminar el proceso de irradiación ?"
+
+        return fromPromise(d.result);
+
+    }
+
+    private showCommentModal() {
+
+        let d: NgbModalRef =
+            this.modalService.open(CancelConfirmationModalComponent, { backdrop: "static", keyboard: false, size: "lg" })
+
+        return fromPromise(d.result);
+
+
     }
 
     private showReloginModal() {

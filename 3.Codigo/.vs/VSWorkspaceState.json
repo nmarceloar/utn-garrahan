@@ -1,16 +1,19 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend-test",
     "\\backend-test\\server",
     "\\backend-test\\server\\boot",
-    "\\backend-test\\server\\data",
     "\\backend-test\\server\\models",
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
     "\\frontend\\src\\app\\config-management",
-    "\\frontend\\src\\app\\nav"
+    "\\frontend\\src\\app\\confirm-action-modal",
+    "\\frontend\\src\\app\\edit-config-modal",
+    "\\frontend\\src\\app\\hemocomponents",
+    "\\frontend\\src\\app\\unittype-edit-modal"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\nav\\nav.component.html",
+  "SelectedNode": "\\frontend\\src\\app\\edit-config-modal\\edit-config-modal.component.ts",
   "PreviewInSolutionExplorer": false
 }

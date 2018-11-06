@@ -2,6 +2,7 @@
 
 module.exports = function (Order) {
 
+
     Order.markIfCompleted = function (orderId) {
 
         const OrderStatus = Order.app.models.OrderStatus
