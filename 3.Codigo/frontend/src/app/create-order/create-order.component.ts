@@ -7,6 +7,7 @@ import { SessionService } from '../session.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnitEditModalComponent } from '../unit-edit-modal/unit-edit-modal.component';
 import { MessageService, MessageType } from '../message.service';
+import { ConfigService } from '../config.service';
 
 @Component({
     selector: 'app-create-order',
@@ -16,6 +17,9 @@ import { MessageService, MessageType } from '../message.service';
 export class CreateOrderComponent implements OnInit {
 
     isWaitingForUnit = { should: false }
+
+    tagCodeInvalidCharCount: number
+    unitCodeInvalidCharCount: number
 
     submited = false;
     orderSubmitted = false;
@@ -50,6 +54,7 @@ export class CreateOrderComponent implements OnInit {
     constructor(
         private orderService: OrderService,
         private messageService: MessageService,
+        private configService: ConfigService,
         private modalService: NgbModal,
         private sessionService: SessionService,
         private locationService: Location) {
@@ -68,8 +73,26 @@ export class CreateOrderComponent implements OnInit {
             .subscribe(([unitTypes, orderPriorities]) => {
                 this.unitTypes = unitTypes
                 this.orderPriorities = orderPriorities
+            }, (err) => this.handleErr(err))
+
+
+        this.configService.findAll()
+            .subscribe((config) => {
+
+                this.tagCodeInvalidCharCount = +((config.filter(d => (d as any).name === "tagCodeInvalidCharCount")[0] as any).value)
+                this.unitCodeInvalidCharCount = +((config.filter(d => (d as any).name === "unitCodeInvalidCharCount")[0] as any).value)
+
+            }, (err) => {
+                this.handleErr(err)
             })
 
+
+
+    }
+
+    private handleErr(err) {
+
+        this.messageService.error(err.message)
 
     }
 
@@ -80,7 +103,7 @@ export class CreateOrderComponent implements OnInit {
     addUnit() {
 
         if (this.usbEnabled())
-            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(2), { emitEvent: false })
+            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(this.unitCodeInvalidCharCount), { emitEvent: false })
 
         if (this.unitForm.invalid) {
             this.submited = true;

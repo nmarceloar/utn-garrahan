@@ -2365,6 +2365,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
 /* harmony import */ var _unit_edit_modal_unit_edit_modal_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../unit-edit-modal/unit-edit-modal.component */ "./src/app/unit-edit-modal/unit-edit-modal.component.ts");
 /* harmony import */ var _message_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../message.service */ "./src/app/message.service.ts");
+/* harmony import */ var _config_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config.service */ "./src/app/config.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2383,11 +2384,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var CreateOrderComponent = /** @class */ (function () {
-    function CreateOrderComponent(orderService, messageService, modalService, sessionService, locationService) {
+    function CreateOrderComponent(orderService, messageService, configService, modalService, sessionService, locationService) {
         var _this = this;
         this.orderService = orderService;
         this.messageService = messageService;
+        this.configService = configService;
         this.modalService = modalService;
         this.sessionService = sessionService;
         this.locationService = locationService;
@@ -2418,14 +2421,24 @@ var CreateOrderComponent = /** @class */ (function () {
             var unitTypes = _a[0], orderPriorities = _a[1];
             _this.unitTypes = unitTypes;
             _this.orderPriorities = orderPriorities;
+        }, function (err) { return _this.handleErr(err); });
+        this.configService.findAll()
+            .subscribe(function (config) {
+            _this.tagCodeInvalidCharCount = +(config.filter(function (d) { return d.name === "tagCodeInvalidCharCount"; })[0].value);
+            _this.unitCodeInvalidCharCount = +(config.filter(function (d) { return d.name === "unitCodeInvalidCharCount"; })[0].value);
+        }, function (err) {
+            _this.handleErr(err);
         });
+    };
+    CreateOrderComponent.prototype.handleErr = function (err) {
+        this.messageService.error(err.message);
     };
     CreateOrderComponent.prototype.usbEnabled = function () {
         return this.usbReaderEnabled.value;
     };
     CreateOrderComponent.prototype.addUnit = function () {
         if (this.usbEnabled())
-            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(2), { emitEvent: false });
+            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(this.unitCodeInvalidCharCount), { emitEvent: false });
         if (this.unitForm.invalid) {
             this.submited = true;
             return;
@@ -2547,6 +2560,7 @@ var CreateOrderComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_order_service__WEBPACK_IMPORTED_MODULE_2__["OrderService"],
             _message_service__WEBPACK_IMPORTED_MODULE_8__["MessageService"],
+            _config_service__WEBPACK_IMPORTED_MODULE_9__["ConfigService"],
             _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModal"],
             _session_service__WEBPACK_IMPORTED_MODULE_5__["SessionService"],
             _angular_common__WEBPACK_IMPORTED_MODULE_4__["Location"]])
