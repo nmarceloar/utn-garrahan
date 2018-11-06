@@ -2,18 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\backend-test",
-    "\\backend-test\\server",
-    "\\backend-test\\server\\boot",
-    "\\backend-test\\server\\models",
+    "\\backend-test\\server\\middleware",
+    "\\backend\\.mvn",
+    "\\backend\\src",
+    "\\backend\\src\\main",
+    "\\backend\\src\\main\\java",
     "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\config-management",
-    "\\frontend\\src\\app\\confirm-action-modal",
-    "\\frontend\\src\\app\\edit-config-modal",
-    "\\frontend\\src\\app\\hemocomponents",
-    "\\frontend\\src\\app\\unittype-edit-modal"
+    "\\frontend\\src\\environments"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\edit-config-modal\\edit-config-modal.component.ts",
+  "SelectedNode": "\\frontend\\src\\environments\\environment.ts",
   "PreviewInSolutionExplorer": false
 }
