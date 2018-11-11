@@ -1,5 +1,5 @@
 
-const api = '/api'
+const api = `/api`
 
 export const environment = {
 

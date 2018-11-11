@@ -1,16 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend-test",
-    "\\backend-test\\server\\middleware",
-    "\\backend\\.mvn",
-    "\\backend\\src",
-    "\\backend\\src\\main",
-    "\\backend\\src\\main\\java",
     "\\frontend",
     "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\breadcrumb",
+    "\\frontend\\src\\app\\order-conciliation",
+    "\\frontend\\src\\assets",
     "\\frontend\\src\\environments"
   ],
-  "SelectedNode": "\\frontend\\src\\environments\\environment.ts",
+  "SelectedNode": "\\frontend\\src\\app\\order-conciliation\\order-conciliation.component.ts",
   "PreviewInSolutionExplorer": false
 }

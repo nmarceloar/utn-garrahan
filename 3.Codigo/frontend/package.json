@@ -23,6 +23,7 @@
 		"@ng-bootstrap/ng-bootstrap": "^2.1.1",
 		"core-js": "^2.5.4",
 		"jsonwebtoken": "^8.3.0",
+		"jspdf": "^1.4.1",
 		"jwt-decode": "^2.2.0",
 		"moment": "^2.22.2",
 		"moment-es6": "^1.0.0",

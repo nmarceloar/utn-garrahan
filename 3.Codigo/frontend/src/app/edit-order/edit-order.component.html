@@ -10,140 +10,176 @@
 
             <div *ngIf="hasOrder" class="mt-2">
 
-                <h5 class="text-primary ">Órden</h5>
-                <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
-                <hr />
+                <div *ngIf="!isPrinting">
 
-                <div class="row mb-3">
+                    <h5 class="text-primary ">Órden</h5>
+                    <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
+                    <hr />
 
-                    <div class="col-sm-2 col-md-3 mb-2">
-                        <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
+                    <div class="row mb-3">
+
+                        <div class="col-sm-2 col-md-3 mb-2">
+                            <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3 mb-2">
+                            <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm"}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3 mb-2">
+                            <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm"}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3">
+                            <span class="h6">Estado:</span><br />
+                            <span ngbTooltip="{{order.status.description}}"
+                                  [class.text-muted]="order.status.name === 'CANCELADA'"
+                                  [class.text-success]="order.status.name === 'EN_PROCESO'"
+                                  [class.text-primary]="order.status.name === 'IRRADIADA'"
+                                  [class.text-warning]="order.status.name === 'PENDIENTE'"
+                                  [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</span>
+                            <span *ngIf="order.status.name === 'PENDIENTE'"> / </span>
+                            <span *ngIf="order.status.name === 'PENDIENTE'" class="text-primary" style="cursor: pointer;" (click)="onPrint()">Imprimir</span>
+                        </div>
+
+
                     </div>
 
-                    <div class="col-sm-2 col-md-3 mb-2">
-                        <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm:ss"}}</span>
+                    <div class="row mb-3">
+
+                        <div class="col-sm-2 col-md-3">
+                            <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3">
+                            <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3">
+                            <span class="h6">Prioridad:</span><br /> <span ngbTooltip="{{order.priority.description}}">{{order.priority.name}}</span>
+                        </div>
+
+                        <div class="col-sm-2 col-md-3">
+                            <span class="h6">Transportista:</span>
+                            <input *ngIf="order.status.name === 'RECHAZADA'" type="text" class="form-control" [formControl]="selectedCarrier" />
+                            <span *ngIf="order.status.name !== 'RECHAZADA'"> <br />{{order.carrier}}</span>
+                        </div>
+
                     </div>
 
-                    <div class="col-sm-2 col-md-3 mb-2">
-                        <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm:ss"}}</span>
-                    </div>
+                    <h6 class="text-primary my-4">Unidades</h6>
+                    <hr />
 
-                    <div class="col-sm-2 col-md-3">
-                        <span class="h6">Estado:</span><br />
-                        <span ngbTooltip="{{order.status.description}}"
-                              [class.text-muted]="order.status.name === 'CANCELADA'"
-                              [class.text-success]="order.status.name === 'EN_PROCESO'"
-                              [class.text-primary]="order.status.name === 'IRRADIADA'"
-                              [class.text-warning]="order.status.name === 'PENDIENTE'"
-                              [class.text-danger]="order.status.name === 'RECHAZADA'">{{order.status.name}}</span>
-                    </div>
+                    <form [formGroup]="unitForm" (submit)="addUnit()" *ngIf="order.status.name === 'RECHAZADA'">
 
+                        <div class="form-row align-items-end">
 
-                </div>
+                            <div class="col-5">
 
-                <div class="row mb-3">
+                                <div class="form-group">
+                                    <label class="my-1 mr-2">Código: </label>
+                                    <input type="text" class="form-control flex-grow-1" formControlName="code" [focused]="isWaitingForUnit" />
+                                </div>
 
-                    <div class="col-sm-2 col-md-3">
-                        <span class="h6">Ingresada por:</span><br /> <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
-                    </div>
+                            </div>
 
-                    <div class="col-sm-2 col-md-3">
-                        <span class="h6">Institución:</span><br /> <span>{{order.owner.institution.name}}</span>
-                    </div>
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tipo de unidad: </label>
+                                    <select class="custom-select flex-grow-1" formControlName="type">
+                                        <option [ngValue]="null">Seleccionar</option>
+                                        <option *ngFor="let unitType of unitTypes" [ngValue]="unitType">{{unitType.code}} - {{unitType.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div class="col-sm-2 col-md-3">
-                        <span class="h6">Prioridad:</span><br /> <span ngbTooltip="{{order.priority.description}}">{{order.priority.name}}</span>
-                    </div>
-
-                    <div class="col-sm-2 col-md-3">
-                        <span class="h6">Transportista:</span>
-                        <input *ngIf="order.status.name === 'RECHAZADA'" type="text" class="form-control" [formControl]="selectedCarrier" />
-                        <span *ngIf="order.status.name !== 'RECHAZADA'"> <br />{{order.carrier}}</span>
-                    </div>
-
-                </div>
-
-                <h6 class="text-primary my-4">Unidades</h6>
-                <hr />
-
-                <form [formGroup]="unitForm" (submit)="addUnit()" *ngIf="order.status.name === 'RECHAZADA'">
-
-                    <div class="form-row align-items-end">
-
-                        <div class="col-5">
-
-                            <div class="form-group">
-                                <label class="my-1 mr-2">Código: </label>
-                                <input type="text" class="form-control flex-grow-1" formControlName="code" [focused]="isWaitingForUnit" />
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-primary btn-block rounded-0 mb-3">Agregar</button>
                             </div>
 
                         </div>
 
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tipo de unidad: </label>
-                                <select class="custom-select flex-grow-1" formControlName="type">
-                                    <option [ngValue]="null">Seleccionar</option>
-                                    <option *ngFor="let unitType of unitTypes" [ngValue]="unitType">{{unitType.code}} - {{unitType.name}}</option>
-                                </select>
+                        <div class="form-row" *ngIf="submited">
+                            <div class="col-5 text-danger">
+                                <p *ngIf="unitForm.controls.unitCode.errors?.required">Ingrese código</p>
+                            </div>
+                            <div class="col-5 text-danger">
+                                <p *ngIf="unitForm.controls.unitType.errors?.required">Ingrese tipo de unidad</p>
                             </div>
                         </div>
 
-                        <div class="col-2">
-                            <button type="submit" class="btn btn-primary btn-block rounded-0 mb-3">Agregar</button>
+
+                    </form>
+
+                    <!--<hr *ngIf="order.status.name !== 'EN_PROCESO'" />-->
+
+                    <div class="row mb-3 px-2">
+
+                        <div class="col-sm-2">
+                            <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
+                        </div>
+
+                        <div *ngFor="let mapping of order.unitTypeMappings" class="col-sm-2">
+                            <span class="h6 mr-1">{{mapping.unitType.code}}: </span> <span>{{mapping.count}}</span>
                         </div>
 
                     </div>
 
-                    <div class="form-row" *ngIf="submited">
-                        <div class="col-5 text-danger">
-                            <p *ngIf="unitForm.controls.unitCode.errors?.required">Ingrese código</p>
-                        </div>
-                        <div class="col-5 text-danger">
-                            <p *ngIf="unitForm.controls.unitType.errors?.required">Ingrese tipo de unidad</p>
-                        </div>
+                    <div class="table-responsive mt-4">
+
+                        <table *ngIf="order" class="table table-bordered table-hover table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Código</th>
+                                    <th>Fecha</th>
+                                    <th *ngIf="canModify">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let unit of order.units">
+                                    <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                    <td>{{unit.code}}</td>
+                                    <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
+                                    <td *ngIf="canModify">
+                                        <div class="action-list">
+                                            <button class="btn btn-link p-0 m-0" (click)="removeUnit(unit)">Eliminar</button>
+                                            <button class="btn btn-link p-0 m-0" (click)="edit(unit)">Editar</button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
                     </div>
 
-
-                </form>
-
-                <hr *ngIf="order.status.name !== 'EN_PROCESO'" />
-
-                <div class="row mb-3 px-2">
-
-                    <div class="col-sm-2">
-                        <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
+                    <div *ngIf="!order.units?.length">
+                        <p class="text-danger">La orden debe tener por lo menos una unidad a irradiar</p>
                     </div>
 
-                    <div *ngFor="let mapping of order.unitTypeMappings" class="col-sm-2">
-                        <span class="h6 mr-1">{{mapping.unitType.code}}: </span> <span>{{mapping.count}}</span>
+                    <div class="d-flex flex-wrap justify-content-end" *ngIf="canModify">
+                        <button class="btn btn-primary rounded-0 px-5 ml-2" (click)="confirmChanges()" [disabled]="!order.units.length">Confirmar cambios</button>
+                        <button class="btn btn-danger rounded-0 px-5 ml-2" (click)="cancelOrder()">Cancelar orden</button>
                     </div>
 
-                </div>
-
-                <div class="table-responsive mt-4">
+                    <h6 class="text-primary  mt-3">Historial de revisiones</h6>
+                    <hr />
 
                     <table *ngIf="order" class="table table-bordered table-hover table-stripped">
                         <thead>
                             <tr>
-                                <th>Tipo</th>
-                                <th>Código</th>
                                 <th>Fecha</th>
-                                <th *ngIf="canModify">Acciones</th>
+                                <th>Comentario</th>
+                                <th>Operador</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let unit of order.units">
-                                <td>{{unit.type.code}} - {{unit.type.name}}</td>
-                                <td>{{unit.code}}</td>
-                                <td>{{unit.creationDate | date: "dd/MM/yyyy"}}</td>
-                                <td *ngIf="canModify">
-                                    <div class="action-list">
-                                        <button class="btn btn-link p-0 m-0" (click)="removeUnit(unit)">Eliminar</button>
-                                        <button class="btn btn-link p-0 m-0" (click)="edit(unit)">Editar</button>
-                                    </div>
-                                </td>
-
+                            <tr *ngFor="let comment of order.conciliationComments">
+                                <td>{{comment.date | date: "dd/MM/yyyy hh:mm"}}</td>
+                                <td>{{comment.comment}}</td>
+                                <td>{{comment.operator.firstname}} {{comment.operator.lastname}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -151,36 +187,186 @@
 
                 </div>
 
-                <div *ngIf="!order.units?.length">
-                    <p class="text-danger">La orden debe tener por lo menos una unidad a irradiar</p>
+                <div *ngIf="isPrinting">
+
+                    <div id="header" class="d-flex flex-row mb-3">
+                        <div class="d-inline-flex flex-column justify-content-center align-items-center">
+                            <img src="data:image/png;base64,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" height="50" />
+                        </div>
+                        <div class="d-inline-flex flex-column flex-grow-1 justify-content-end align-items-end">
+                            <span>Hospital de Pediatría S.A.M.I.C. "Prof Dr. J. P. Garrahan"</span>
+                            <span>Centro Regional de Hemoterapia</span>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div id="order">
+
+                        <h5>Órden</h5>
+                        <h6 class="text-muted flex-grow-1">{{order.id | leftzeroes}}</h6>
+                        <hr />
+
+                        <div class="row mb-3">
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Código:</span><br /> <span>{{order.code}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Fecha de alta:</span><br /> <span>{{order.creationDate | date: "dd/MM/yyyy hh:mm"}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Última modificación:</span><br /> <span>{{order.lastModified | date: "dd/MM/yyyy hh:mm"}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Estado:</span><br />
+                                <span>{{order.status.name}}</span>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row mb-3">
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Ingresada por:</span>
+                                <br />
+                                <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Aceptada por:</span><br />
+                                <span *ngIf="!order.orderAcceptor">-</span>
+                                <span *ngIf="order.orderAcceptor">{{order.orderAcceptor.firstname}} {{order.orderAcceptor.lastname}} <br /> {{order.acceptedOn | date: "dd/MM/yyyy hh:mm"}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Prioridad:</span><br /> <span ngbTooltip="{{order.priority.description}}">{{order.priority.name}}</span>
+                            </div>
+
+                            <div class="col-3 mb-2">
+                                <span class="h6">Transportista:</span><br /> <span>{{order.carrier}}</span>
+                            </div>
+
+                        </div>
+
+                        <h6 class="mt-4">Unidades</h6>
+                        <hr />
+
+                        <div class="row mb-4">
+
+                            <div class="col-2">
+                                <span class="h6 mr-1">Total: </span> <span>{{order.unitCount}}</span>
+                            </div>
+
+                            <div *ngFor="let mapping of order.unitTypeMappings" class="col-2">
+                                <span class="h6 mr-1">{{mapping.unitType.code}}: </span> <span>{{mapping.count}}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="table-responsive mt-3">
+                            <table *ngIf="order" class="table table-bordered table-hover table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Código</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let unit of order.units">
+                                        <td>{{unit.type.code}} - {{unit.type.name}}</td>
+                                        <td>{{unit.code}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="signatures" class="row mt-5">
+
+                        <div class="col-6">
+
+                            <h6>Institución solicitante: </h6>
+                            <span class="mt-4">{{order.owner.institution.name}}</span>
+
+                            <h6 class="mt-3">Responsable Servicio Hemoterapia</h6>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Firma y/o Sello</span>
+                            </div>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Aclaración</span>
+                            </div>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Legajo/DNI</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <h6>Hospital de Pediatría S.A.M.I.C. "Prof Dr. J. P. Garrahan"</h6>
+                            <span class="mt-4">Centro Regional de Hemoterapia</span>
+
+                            <h6 class="mt-3">Recibido por: </h6>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Firma</span>
+                            </div>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Aclaración</span>
+                            </div>
+
+                            <div class="mt-5 text-center w-75" style="border-top: 1px solid gray;">
+                                <span>Legajo/DNI</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div id="footer" class="d-flex flex-column justify-content-center align-items-center mt-5" style="padding-top: 15px;  border-top: 1px solid lightgray;">
+
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <span>Combate de los Pozos 1881 (C1245AAM)</span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span>Ciudad Autónoma de Buenos Aires</span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span>República Argentina</span>
+                            </li>
+                        </ul>
+
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <span>Acceso pacientes: Pichincha 1890</span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span>Teléfono: (54-11) 4122-6000</span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span>www.garrahan.gov.ar</span>
+                            </li>
+                        </ul>
+
+
+                    </div>
+
                 </div>
-
-                <div class="d-flex flex-wrap justify-content-end" *ngIf="canModify">
-                    <button class="btn btn-primary rounded-0 px-5 ml-2" (click)="confirmChanges()" [disabled]="!order.units.length">Confirmar cambios</button>
-                    <button class="btn btn-danger rounded-0 px-5 ml-2" (click)="cancelOrder()">Cancelar orden</button>
-                </div>
-
-                <h6 class="text-primary  mt-3">Historial de revisiones</h6>
-                <hr />
-
-                <table *ngIf="order" class="table table-bordered table-hover table-stripped">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Comentario</th>
-                            <th>Operador</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let comment of order.conciliationComments">
-                            <td>{{comment.date | date: "dd/MM/yyyy hh:mm"}}</td>
-                            <td>{{comment.comment}}</td>
-                            <td>{{comment.operator.firstname}} {{comment.operator.lastname}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
 
 
 

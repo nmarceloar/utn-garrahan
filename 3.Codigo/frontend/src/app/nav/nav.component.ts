@@ -8,6 +8,7 @@ import { MessageService } from "./../message.service"
 
 import { filter, tap } from "rxjs/operators"
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppMessagesService } from '../app-messages.service';
 
 @Component({
     selector: 'app-nav',
@@ -18,13 +19,13 @@ export class NavComponent implements OnInit, OnDestroy {
 
     currentUser: any = null;
 
+    isPrinting: boolean = false;
+
     constructor(
         private router: Router,
+        private appMessages: AppMessagesService,
         private messageService: MessageService,
-        private sessionService: SessionService) {
-
-
-    }
+        private sessionService: SessionService) { }
 
     ngOnInit() {
 
@@ -32,15 +33,17 @@ export class NavComponent implements OnInit, OnDestroy {
         this.sessionService.events.subscribe((sessionEvent) => {
 
             if (sessionEvent.status === SessionStatus.LOGGED_OUT || sessionEvent.status === SessionStatus.EXPIRED) {
-                this.currentUser = null; 
+                this.currentUser = null;
                 this.router.navigateByUrl("login");
-                return; 
+                return;
             }
 
             this.currentUser = sessionEvent.user
 
 
         })
+
+        this.appMessages.isPrinting.subscribe(is => this.isPrinting = is);
 
     }
 

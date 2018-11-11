@@ -63,6 +63,8 @@ import { SelectUnitModalComponent } from './select-unit-modal/select-unit-modal.
 import { EditConfigModalComponent } from './edit-config-modal/edit-config-modal.component';
 import { UnittypeEditModalComponent } from './unittype-edit-modal/unittype-edit-modal.component';
 import { UnitTypeService } from './unit-type.service';
+import { OrderPrintModalComponent } from './order-print-modal/order-print-modal.component';
+import { AppMessagesService } from './app-messages.service';
 
 
 const httpInterceptorProviders = [
@@ -114,7 +116,8 @@ const httpInterceptorProviders = [
         ConfigManagementComponent,
         SelectUnitModalComponent,
         EditConfigModalComponent,
-        UnittypeEditModalComponent
+        UnittypeEditModalComponent,
+        OrderPrintModalComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -130,6 +133,7 @@ const httpInterceptorProviders = [
         UserService,
         SessionService,
         MessageService,
+        AppMessagesService,
         ConfigService,
         PendingChangesGuard,
         AuthenticationGuard,
@@ -140,6 +144,7 @@ const httpInterceptorProviders = [
         httpInterceptorProviders
     ],
     entryComponents: [
+        OrderPrintModalComponent,
         SelectUnitModalComponent,
         ConfirmModalComponent,
         ModalLoginComponent,

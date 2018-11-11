@@ -1,13 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order, OrderStatus } from '../order.service';
 import { MessageService, MessageType } from '../message.service';
-import { interval, from as fromPromise, zip, throwError } from 'rxjs';
+import { interval, from as fromPromise, zip, throwError, timer } from 'rxjs';
 import { take, switchMap, map, tap, finalize, flatMap, catchError } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { User, SessionService } from '../session.service';
 import { Location } from '@angular/common';
+import { OrderPrintModalComponent } from '../order-print-modal/order-print-modal.component';
+
+
+import * as jsPDF from "jspdf"
+import { AppMessagesService } from '../app-messages.service';
+
 
 @Component({
     selector: 'app-order-conciliation',
@@ -21,6 +27,9 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
 
     order: Order
     user: User
+
+    isPreparing: boolean = false;
+    isPrinting: boolean = false;
 
     isLoading: boolean = false;
 
@@ -36,6 +45,8 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
     ];
 
     constructor(
+        private el: ElementRef,
+        private appMessages: AppMessagesService,
         private orderService: OrderService,
         private messageService: MessageService,
         private sessionService: SessionService,
@@ -183,12 +194,49 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
 
     }
 
-
     get canModify() {
 
         return this.order.status.name === "PENDIENTE" // isPending 
 
     }
+
+
+    onPrint() {
+
+        this.appMessages.printStarted()
+        this.isPrinting = true;
+
+        this.isPreparing = true;
+        timer(500)
+            .subscribe(() => {
+
+                this.isPreparing = false;
+                timer(250).subscribe(() => {
+                    window.print()
+                })
+
+
+            })
+
+    }
+
+    @HostListener("window:afterprint")
+    afterPrint() {
+
+        this.isPrinting = false;
+        this.appMessages.printEnded()
+
+    }
+
+    @HostListener("document:keydown.control.p", ["$event"])
+    onPrintTry(event: any) {
+
+        event.preventDefault()
+
+    }
+
+
+
 
 
 }

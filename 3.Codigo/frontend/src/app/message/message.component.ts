@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, OnDestroy, SimpleChanges, Output, 
 import { interval, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Message } from '../message.service';
+import { AppMessagesService } from '../app-messages.service';
 
 @Component({
     selector: 'app-message',
@@ -23,7 +24,16 @@ export class MessageComponent implements OnInit, OnChanges, OnDestroy {
 
     percent: number = 100;
 
-    constructor() { }
+    constructor(private appMessages: AppMessagesService) {
+
+        this.appMessages.isPrinting.subscribe(isPrinting => {
+
+            if (isPrinting)
+                this.onClose();
+
+        })
+
+    }
 
     ngOnInit() {
 
@@ -46,7 +56,7 @@ export class MessageComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    ngOnChanges(changes: SimpleChanges): void {}
+    ngOnChanges(changes: SimpleChanges): void { }
 
     onClose() {
 

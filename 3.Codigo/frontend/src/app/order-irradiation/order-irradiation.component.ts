@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order } from '../order.service';
 import { FormControl, Validators } from '@angular/forms';
 import { interval, GroupedObservable, Observable, from as fromPromise, timer, throwError, from } from 'rxjs';
@@ -82,6 +82,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private messageService: MessageService,
         private sessionService: SessionService,
         private configService: ConfigService,
@@ -447,7 +448,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
             text: m
         })
 
-        this.prepare(order);
+        this.router.navigateByUrl(`/operadores/ordenes/${this.order.id}/revisión`)
 
     }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from "@angular/router";
 import { filter, map } from "rxjs/operators";
+import { AppMessagesService } from '../app-messages.service';
 
 
 
@@ -13,9 +14,11 @@ export class BreadcrumbComponent implements OnInit {
 
     public breadcrumbs = [];
 
+    isPrinting: boolean = false;
+
     private navigationEndStream;
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private appMessages: AppMessagesService) { }
 
     ngOnInit() {
 
@@ -27,6 +30,11 @@ export class BreadcrumbComponent implements OnInit {
             .subscribe(breadcrumbs => {
                 this.breadcrumbs = breadcrumbs;
             });
+
+        this.appMessages.isPrinting.subscribe(isPrinting => {
+            this.isPrinting = isPrinting
+
+        })
 
     }
 

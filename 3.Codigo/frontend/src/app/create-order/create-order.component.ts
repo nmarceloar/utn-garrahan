@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnitEditModalComponent } from '../unit-edit-modal/unit-edit-modal.component';
 import { MessageService, MessageType } from '../message.service';
 import { ConfigService } from '../config.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-create-order',
@@ -52,6 +53,7 @@ export class CreateOrderComponent implements OnInit {
     })
 
     constructor(
+        private router: Router,
         private orderService: OrderService,
         private messageService: MessageService,
         private configService: ConfigService,
@@ -252,10 +254,10 @@ export class CreateOrderComponent implements OnInit {
                         persist: true,
                         type: MessageType.SUCCESS,
                         text: "La orden se ha registrado correctamente. La misma permanecerá pendiente hasta ser revisada por los operadores del banco.",
-                        ttlInSeconds: 8
+                        ttlInSeconds: 5
                     })
 
-                    this.locationService.back();
+                    this.router.navigateByUrl(`/clientes/ordenes/${order.id}`);
 
                 },
                 err => {

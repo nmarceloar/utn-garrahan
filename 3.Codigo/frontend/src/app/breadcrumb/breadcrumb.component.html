@@ -1,13 +1,13 @@
 
-<nav>
+<nav *ngIf="!isPrinting">
 
-	<ol class="pl-4 breadcrumb border-bottom bg-light bg-faded">
-		<!-- <li class="breadcrumb-item">
-			<a [routerLink]="['/']">Home</a>
-		</li> -->
-		<li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs">
-			<a [routerLink]="breadcrumb.url">{{breadcrumb.title}}</a>
-		</li>
-	</ol>
-	
+    <ol class="pl-4 breadcrumb border-bottom bg-light bg-faded">
+        <!-- <li class="breadcrumb-item">
+            <a [routerLink]="['/']">Home</a>
+        </li> -->
+        <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs">
+            <a [routerLink]="breadcrumb.url">{{breadcrumb.title}}</a>
+        </li>
+    </ol>
+
 </nav>

@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { OrderStatus, Order, OrderService } from '../order.service';
 import { User, SessionService } from '../session.service';
 import { MessageService, MessageType } from '../message.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap, flatMap, catchError } from 'rxjs/operators';
-import { from as fromPromise, throwError, zip, from } from "rxjs"
+import { from as fromPromise, throwError, zip, from, timer } from "rxjs"
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UnitEditModalComponent } from '../unit-edit-modal/unit-edit-modal.component';
+import { AppMessagesService } from '../app-messages.service';
 
 @Component({
     selector: 'app-edit-order',
@@ -23,6 +24,8 @@ export class EditOrderComponent implements OnInit {
 
     order: Order
     nextStatus: OrderStatus;
+
+    isPrinting: boolean = false;
 
     selectedCarrier: FormControl = new FormControl("", Validators.required);
 
@@ -53,6 +56,7 @@ export class EditOrderComponent implements OnInit {
     ];
 
     constructor(
+        private appMessages: AppMessagesService,
         private orderService: OrderService,
         private messageService: MessageService,
         private sessionService: SessionService,
@@ -325,5 +329,34 @@ export class EditOrderComponent implements OnInit {
         return this.order.status.name === "RECHAZADA"  // isRejected ??
 
     }
+
+    onPrint() {
+
+        this.appMessages.printStarted()
+        this.isPrinting = true;
+
+        timer(500)
+            .subscribe(() => {
+                window.print()
+
+            })
+
+    }
+
+    @HostListener("window:afterprint")
+    afterPrint() {
+
+        this.isPrinting = false;
+        this.appMessages.printEnded()
+
+    }
+
+    @HostListener("document:keydown.control.p", ["$event"])
+    onPrintTry(event: any) {
+
+        event.preventDefault()
+
+    }
+
 
 }

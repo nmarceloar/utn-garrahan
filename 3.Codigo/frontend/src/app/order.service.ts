@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from "./../environments/environment";
 import { Query } from './operator/operator.component';
@@ -65,6 +65,15 @@ export class OrderService {
     find(q: Query) {
 
         return this.http.get<Page<Order>>(`${environment.api.orders}/page?filter=${JSON.stringify(q)}`)
+
+    }
+
+    asPdf(orderId: number) {
+
+        let headers = new HttpHeaders();
+        headers = headers.set('Accept', 'application/pdf');
+
+        return this.http.get(`${environment.api.orders}/${orderId}/pdf`, { headers: headers, responseType: 'blob' })
 
     }
 

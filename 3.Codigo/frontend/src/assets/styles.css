@@ -79,6 +79,12 @@ td button {
     content: "|"
 }
 
+.list-inline-item:not(:last-child)::after {
+    padding-left: .5rem; 
+    color: gray;
+    content: "|"
+}
+
 
 .floating-button {
     display: inline-block;
@@ -217,7 +223,5 @@ td button {
 }
 
 .custom-checkbox .custom-control-label::before {
-
-    border-radius: 0px; 
-
+    border-radius: 0px;
 }
