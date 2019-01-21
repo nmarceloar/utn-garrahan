@@ -1,4 +1,4 @@
-package p2018.backend.orders;
+package p2018.backend.entities;
 
 public enum Priority {
 	NORMAL, URGENT
