@@ -1,25 +1,24 @@
 package p2018.backend.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
-public class UnitType {
+public class UnitType extends AuditableEntity implements Serializable {
 
-	@Id
-	@GeneratedValue
-	private Long id;
-
+	private static final long serialVersionUID = -4379121002074571796L;
+	
 	private String code;
 	private String name;
-
 	private boolean enabled;
+	private Integer billingDivider;
 
-	public UnitType(String code, String description) {
+	public UnitType(String code, String description, Integer billingDivider) {
 		this.code = code;
 		this.name = description;
 		this.enabled = true;
+		this.billingDivider = billingDivider;
 	}
 
 	public String getCode() {
@@ -47,4 +46,22 @@ public class UnitType {
 		this.name = name;
 	}
 
+	public Integer getBillingDivider() {
+		return billingDivider;
+	}
+
+	public void setBillingDivider(Integer billingDivider) {
+		this.billingDivider = billingDivider;
+	}
+
+	public UnitType() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "UnitType [code=" + code + ", name=" + name + ", enabled=" + enabled + ", billingDivider="
+				+ billingDivider + "]";
+	}
+	
 }

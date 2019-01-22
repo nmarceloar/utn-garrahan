@@ -2,8 +2,8 @@ package p2018.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import p2018.backend.entities.Order;
+import p2018.backend.entities.OrderInfo;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<OrderInfo, Long> {
 
 }
