@@ -15,6 +15,9 @@ import javax.persistence.PrePersist;
  * This abstract class defines the audit fields in the table.
  * Every time an entity is persisted this class provide the current date data
  * in the @onCrate method
+ * 
+ * @author gmolina
+ * 
  */
 @MappedSuperclass
 public abstract class AuditableEntity implements Serializable{

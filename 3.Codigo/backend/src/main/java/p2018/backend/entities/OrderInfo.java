@@ -1,12 +1,13 @@
 package p2018.backend.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 
 
 @Entity
@@ -18,6 +19,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	private String carrier;
 	private Date acceptedOn;
 	private Date completionDate;
+	private Integer unitCount;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusId")
@@ -111,13 +113,27 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
+	
+	public Integer getUnitCount() {
+		return unitCount;
+	}
 
-	public OrderInfo(String code, String carrier, Date acceptedOn, OrderStatus status, Priority priority) {
+	public void setUnitCount(Integer unitCount) {
+		this.unitCount = unitCount;
+	}
+
+	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,
+			OrderStatus status, Priority priority, Institution institution, User operator, User owner) {
 		this.code = code;
 		this.carrier = carrier;
 		this.acceptedOn = acceptedOn;
+		this.completionDate = completionDate;
+		this.unitCount = unitCount;
 		this.status = status;
 		this.priority = priority;
+		this.institution = institution;
+		this.operator = operator;
+		this.owner = owner;
 	}
 
 	public OrderInfo() {
@@ -130,6 +146,11 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 				+ completionDate + ", status=" + status + ", priority=" + priority + "]";
 	}
 	
-	
+	@Override
+	@PrePersist
+	protected void onCreate() {
+		this.setCreation_date(new Timestamp((new Date()).getTime()));
+		this.getInstitution().addOrderCount();
+	}
 	
 }

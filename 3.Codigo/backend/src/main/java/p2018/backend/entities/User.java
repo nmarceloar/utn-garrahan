@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 @Entity
 @Table(name = "XUser")
 public class User extends AuditableEntity implements Serializable {
@@ -32,12 +34,13 @@ public class User extends AuditableEntity implements Serializable {
 	private String password;
 	private Boolean emailVerified;
 	private String verificationToken;
+	private String email;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institutionId")
 	private Institution institution;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
         name = "XRoleMapping", 
         joinColumns = { @JoinColumn(name = "principalId") }, 
@@ -122,7 +125,7 @@ public class User extends AuditableEntity implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 
 	public Boolean getEmailVerified() {
@@ -139,6 +142,14 @@ public class User extends AuditableEntity implements Serializable {
 
 	public void setVerificationToken(String verificationToken) {
 		this.verificationToken = verificationToken;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Institution getInstitution() {
@@ -166,7 +177,7 @@ public class User extends AuditableEntity implements Serializable {
 
 	public User(String firstname, String lastname, String avatarUrl, String dni, Boolean isInternal,
 			Boolean accountConfirmed, Boolean active, Integer orderCount, String username, String password,
-			Boolean emailVerified, String verificationToken, Institution institution) {
+			Boolean emailVerified, String verificationToken, Institution institution, String email) {
 		
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -181,11 +192,11 @@ public class User extends AuditableEntity implements Serializable {
 		this.emailVerified = emailVerified;
 		this.verificationToken = verificationToken;
 		this.institution = institution;
+		this.email = email;
 	}
 
 	public User() {
 	
 	}
 	
-
 }

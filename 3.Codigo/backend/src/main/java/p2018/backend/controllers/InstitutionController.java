@@ -2,6 +2,8 @@ package p2018.backend.controllers;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ public class InstitutionController {
 		return institutionRepository.findAll();
 	}
 	
+	@RolesAllowed({ "ROLE_ADMIN"})
 	@GetMapping("/institution/{id}")
 	public Institution getInstitution(@PathVariable Long id){
 		return institutionRepository.getOne(id);
