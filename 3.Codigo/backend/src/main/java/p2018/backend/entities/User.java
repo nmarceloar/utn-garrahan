@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -12,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -35,6 +37,12 @@ public class User extends AuditableEntity implements Serializable {
 	private Boolean emailVerified;
 	private String verificationToken;
 	private String email;
+	
+	@Version
+	private Integer version;
+	
+	@Column(name = "institutionId", insertable = false, updatable = false)
+	private Long institutionId;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institutionId")
@@ -102,6 +110,14 @@ public class User extends AuditableEntity implements Serializable {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	
+	public Long getInstitutionId() {
+		return institutionId;
+	}
+
+	public void setInstitutionId(Long institutionId) {
+		this.institutionId = institutionId;
 	}
 
 	public Integer getOrderCount() {
@@ -197,6 +213,14 @@ public class User extends AuditableEntity implements Serializable {
 
 	public User() {
 	
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 	
 }

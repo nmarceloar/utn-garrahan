@@ -2,11 +2,13 @@ package p2018.backend.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "Unit")
@@ -17,6 +19,12 @@ public class Unit extends AuditableEntity implements Serializable {
 	
 	private String code;
 	private Boolean irradiated;
+	
+	@Version
+	private Integer version;
+	
+	@Column(name = "orderId", insertable = false, updatable = false)
+	private Long orderId;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unitTypeId")
@@ -29,6 +37,10 @@ public class Unit extends AuditableEntity implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "irradiationid")
 	private Irradiation irradiation;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderId")
+	private OrderInfo order;
 
 	public String getCode() {
 		return code;
@@ -70,6 +82,22 @@ public class Unit extends AuditableEntity implements Serializable {
 		this.irradiation = irradiation;
 	}
 
+	public OrderInfo getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderInfo order) {
+		this.order = order;
+	}
+	
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
 	public Unit(String code, UnitType unitType, User irradiatorUser) {
 		super();
 		this.code = code;
@@ -85,6 +113,13 @@ public class Unit extends AuditableEntity implements Serializable {
 	public String toString() {
 		return "Unit [code=" + code + ", irradiated=" + irradiated + "]";
 	}
-	
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
 }

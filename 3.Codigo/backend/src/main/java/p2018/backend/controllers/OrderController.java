@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import p2018.backend.entities.OrderInfo;
 import p2018.backend.repository.OrderRepository;
+import p2018.backend.repository.UnitRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +22,9 @@ public class OrderController {
 
 	@Autowired
 	private OrderRepository orderrepository;
+	
+	@Autowired
+	private UnitRepository unitRepository;
 	
 	@GetMapping("/orders")
 	public List<OrderInfo> getOrders(){
@@ -46,6 +50,11 @@ public class OrderController {
 	@PutMapping("/order")
 	public OrderInfo updateUnit(@RequestBody OrderInfo order){
 		return orderrepository.save(order);
+	}
+	
+	@GetMapping("/order/{id}/units/count")
+	public  Integer getOrderUnitsCount(@PathVariable Long orderId){
+		return unitRepository.findUnitsCountByOrderId(orderId).intValue();
 	}
 	
 }

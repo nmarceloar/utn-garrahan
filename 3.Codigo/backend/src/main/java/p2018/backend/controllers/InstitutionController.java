@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import p2018.backend.entities.Institution;
 import p2018.backend.repository.InstitutionRepository;
+import p2018.backend.repository.OrderRepository;
+import p2018.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -24,6 +26,12 @@ public class InstitutionController {
 	
 	@Autowired
 	private InstitutionRepository institutionRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	@GetMapping("/institutions")
 	public List<Institution> getInstitutions(){
@@ -49,7 +57,19 @@ public class InstitutionController {
 	
 	@PutMapping("/institution")
 	public Institution updateInstitution(@RequestBody Institution institution){
+		Long userCount = userRepository.findUserCountByInstitytionId(institution.getId());
+		institution.setUserCount(userCount.intValue());
 		return institutionRepository.save(institution);
+	}
+	
+	@GetMapping("/institution/{id}/users/count")
+	public  Integer getInstitutionUsersCount(@PathVariable Long institutionId){
+		return userRepository.findUserCountByInstitytionId(institutionId).intValue();
+	}
+	
+	@GetMapping("/institution/{id}/orders/count")
+	public  Integer getInstitutionOrdersCount(@PathVariable Long institutionId){
+		return orderRepository.findOrderCountByInstitytionId(institutionId).intValue();
 	}
 
 }

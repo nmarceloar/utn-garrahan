@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Version;
 
 @Entity
 public class Institution extends AuditableEntity implements Serializable{
@@ -18,6 +19,9 @@ public class Institution extends AuditableEntity implements Serializable{
 	private String email;
 	private Integer userCount;
 	private Integer orderCount;
+	
+	@Version
+	private Integer version;
 	
 	@Enumerated(EnumType.STRING)
 	private InstitutionType type;
@@ -101,5 +105,13 @@ public class Institution extends AuditableEntity implements Serializable{
 	
 	public void addOrderCount() {
 		this.setOrderCount(this.getOrderCount() + 1);
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 }

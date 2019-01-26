@@ -3,11 +3,14 @@ package p2018.backend.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.Version;
 
 
 @Entity
@@ -20,6 +23,15 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	private Date acceptedOn;
 	private Date completionDate;
 	private Integer unitCount;
+	
+	@Version
+	private Integer version;
+	
+	@Column(name = "institutionId", insertable = false, updatable = false)
+	private Long institutionId;
+	
+	@Column(name = "ownerId", insertable = false, updatable = false)
+	private Long ownerId;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusId")
@@ -40,7 +52,6 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ownerId")
 	private User owner;
-	
 
 	public String getCode() {
 		return code;
@@ -121,6 +132,22 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	public void setUnitCount(Integer unitCount) {
 		this.unitCount = unitCount;
 	}
+	
+	public Long getInstitutionId() {
+		return institutionId;
+	}
+
+	public void setInstitutionId(Long institutionId) {
+		this.institutionId = institutionId;
+	}
+
+	public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,
 			OrderStatus status, Priority priority, Institution institution, User operator, User owner) {
@@ -152,5 +179,13 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 		this.setCreation_date(new Timestamp((new Date()).getTime()));
 		this.getInstitution().addOrderCount();
 	}
-	
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 }

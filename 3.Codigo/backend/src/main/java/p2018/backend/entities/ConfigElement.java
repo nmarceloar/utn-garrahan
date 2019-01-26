@@ -1,9 +1,17 @@
 package p2018.backend.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 
 @Entity
 public class ConfigElement implements Serializable {
@@ -12,6 +20,9 @@ public class ConfigElement implements Serializable {
 	private static final long serialVersionUID = 7418998033905047367L;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 	private String name;
 	private String value;
 	private String description;
@@ -19,6 +30,9 @@ public class ConfigElement implements Serializable {
 	private String min;
 	private Boolean isInteger;
 	private Date lastUpdated;
+	
+	@Version
+	private Integer version;
 	
 	public String getName() {
 		return name;
@@ -59,8 +73,14 @@ public class ConfigElement implements Serializable {
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdated = lastUpdate;
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public ConfigElement(String name, String value, String description, String max, String min, Boolean isInteger) {
 		
@@ -70,19 +90,36 @@ public class ConfigElement implements Serializable {
 		this.max = max;
 		this.min = min;
 		this.isInteger = isInteger;
-		
 	}
 	
 	public ConfigElement() {
 		
 	}
+	
 	@Override
 	public String toString() {
 		return "ConfigElement [name=" + name + ", value=" + value + ", description=" + description + ", max=" + max
 				+ ", min=" + min + ", isInteger=" + isInteger + "]";
 	}
 	
+	public Integer getVersion() {
+		return version;
+	}
 	
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	
+	@PreUpdate
+	protected void onUpdate() {
+		this.setLastUpdated(new Timestamp((new Date()).getTime()));
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		this.setLastUpdated(new Timestamp((new Date()).getTime()));
+	}
 
 }
 

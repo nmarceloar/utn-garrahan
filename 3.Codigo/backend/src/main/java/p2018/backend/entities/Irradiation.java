@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "Irradiation")
@@ -27,6 +28,9 @@ public class Irradiation implements Serializable {
 	private Date irradiationEnd;
 	private String irradiationTag;
 	private Integer irradiationTime;
+	
+	@Version
+	private Integer version;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "irradiatorId")
@@ -99,6 +103,14 @@ public class Irradiation implements Serializable {
 		return "Irradiation [id=" + id + ", irradiationStart=" + irradiationStart + ", irradiationEnd=" + irradiationEnd
 				+ ", irradiationTag=" + irradiationTag + ", irradiationTime=" + irradiationTime + ", irradiator="
 				+ irradiator + "]";
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 	
 }

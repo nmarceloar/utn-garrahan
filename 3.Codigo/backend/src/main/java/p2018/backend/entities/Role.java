@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "XRole")
@@ -14,6 +15,9 @@ public class Role extends AuditableEntity implements Serializable {
 	
 	private String description;
 	private String name;
+	
+	@Version
+	private Integer version;
 	
 	public String getDescription() {
 		return description;
@@ -40,4 +44,11 @@ public class Role extends AuditableEntity implements Serializable {
 	public String toString() {
 		return "Role [description=" + description + ", name=" + name + ", getId()=" + getId() + "]";
 	}
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	
 }

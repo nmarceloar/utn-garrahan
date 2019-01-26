@@ -3,6 +3,7 @@ package p2018.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import p2018.backend.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -12,5 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	                                 @Param("password") String password);
 	
 	User findByUsername(String username);
+	
+	@Query("select count(u) from User u where u.institutionId = :institutionId")
+	Long findUserCountByInstitytionId(@Param("institutionId") Long institutionId);
 	
 }

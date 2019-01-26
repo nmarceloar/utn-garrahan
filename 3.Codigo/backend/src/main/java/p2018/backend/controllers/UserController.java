@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import p2018.backend.entities.User;
+import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.UserRepository;
 
 @RestController
@@ -21,6 +22,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	@GetMapping("/xusers")
 	public List<User> getUsers(){
@@ -46,5 +50,10 @@ public class UserController {
 	@PutMapping("/xuser")
 	public User updateUser(@RequestBody User user){
 		return userRepository.save(user);
+	}
+	
+	@GetMapping("/xuser/{id}/orders/count")
+	public Integer getUserOrdersCount(@PathVariable Long id){
+		return orderRepository.findOrderCountByUserId(id).intValue();
 	}
 }
