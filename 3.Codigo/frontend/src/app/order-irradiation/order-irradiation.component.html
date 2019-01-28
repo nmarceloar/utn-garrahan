@@ -91,7 +91,11 @@
                     <div class="custom-control custom-checkbox mb-3">
                         <input type="checkbox" class="custom-control-input" id="customCheck1" [formControl]="usbReaderEnabled">
                         <label class="custom-control-label" for="customCheck1">Uso de Lector USB</label>
+                        <span> | </span>
+                        <span class="btn-link m-0 p-0" (click)="configUsb()">Configurar</span>
+
                     </div>
+
 
 
                     <div class="form-row">
@@ -119,7 +123,7 @@
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Etiqueta</span>
+                                    <span class="input-group-text">Unidad</span>
                                 </div>
                                 <input class="form-control" type="text"
                                        [formControl]="selectedUnitCode"

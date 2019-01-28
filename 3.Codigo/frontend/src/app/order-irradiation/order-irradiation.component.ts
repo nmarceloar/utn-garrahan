@@ -17,13 +17,16 @@ import { SelectUnitModalComponent } from '../select-unit-modal/select-unit-modal
 import { ConfigService } from '../config.service';
 import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { ConfirmActionModalComponent } from '../confirm-action-modal/confirm-action-modal.component';
+import { CanComponentDeactivate } from '../can-component-deactivate';
+import { AppMessagesService } from '../app-messages.service';
+import { OperatorUsbConfigComponent } from '../operator-usb-config/operator-usb-config.component';
 
 @Component({
     selector: 'app-order-irradiation',
     templateUrl: './order-irradiation.component.html',
     styleUrls: ['./order-irradiation.component.css']
 })
-export class OrderIrradiationComponent implements OnInit, OnDestroy {
+export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponentDeactivate {
 
     irradiations: any[];
 
@@ -43,8 +46,10 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
 
     elapsedTime: string
 
-    tagCodeInvalidCharCount: number
-    unitCodeInvalidCharCount: number
+    tagCodeInvalidCharCount: number = 0
+    unitCodeInvalidCharCount: number = 0
+
+    invalidCharCount: number
 
     canStop: boolean = false;
 
@@ -83,6 +88,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private appMessagesService: AppMessagesService,
         private messageService: MessageService,
         private sessionService: SessionService,
         private configService: ConfigService,
@@ -118,11 +124,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
             .subscribe((config) => {
 
                 this.tagCodeInvalidCharCount = +((config.filter(d => (d as any).name === "tagCodeInvalidCharCount")[0] as any).value)
-                this.unitCodeInvalidCharCount = +((config.filter(d => (d as any).name === "unitCodeInvalidCharCount")[0] as any).value)
                 this.minTimeOfIrradiation =
                     +((config.filter(d => (d as any).name === "minTimeOfIrradiationInMinutes")[0] as any).value) * 60 * 1000;
-
-                console.log(this.minTimeOfIrradiation, this.tagCodeInvalidCharCount, this.unitCodeInvalidCharCount)
 
             }, (err) => {
                 this.handleErr(err)
@@ -138,6 +141,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         [this.selectedTag, this.selectedUnitCode].forEach(d => d.reset())
 
         this.order = order;
+
+        this.unitCodeInvalidCharCount = +order.owner.institution.invalidCharCount
 
         this.irradiations = order.irradiations.sort((a, b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
 
@@ -331,6 +336,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
         this.selectedUnitCode.disable();
 
         this.isIrradiationInProcess = true;
+        this.appMessagesService.irradiationStarted();
 
     }
 
@@ -448,6 +454,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
             text: m
         })
 
+        this.appMessagesService.irradiationEnded()
+
         this.router.navigateByUrl(`/operadores/ordenes/${this.order.id}/revisión`)
 
     }
@@ -455,6 +463,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     handleFailingEndOfIrradiation(err: any) {
 
         this.messageService.error(err.message)
+
+        this.appMessagesService.irradiationEnded()
 
     }
 
@@ -480,8 +490,32 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy {
     }
 
 
+    canDeactivate() {
+
+        return !this.isIrradiationInProcess
+
+    }
+
+    configUsb() {
+
+        let m = this.modalService.open(OperatorUsbConfigComponent, { size: "lg", centered: true, backdrop: "static" });
+
+        (m.componentInstance as any).form.setValue({
+            tagInvalidCharCount: +this.tagCodeInvalidCharCount,
+            unitInvalidCharCount: +this.unitCodeInvalidCharCount
+        })
+
+        from(m.result)
+            .subscribe((invalidChars: any) => {
+
+                console.log(invalidChars)
+
+                this.tagCodeInvalidCharCount = +invalidChars.tagInvalidCharCount
+                this.unitCodeInvalidCharCount = +invalidChars.unitInvalidCharCount
+
+            }, () => { })
 
 
-
+    }
 
 }

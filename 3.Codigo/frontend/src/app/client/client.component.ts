@@ -7,6 +7,7 @@ import { OrderService, Order, Page, OrderStatus, OrderPriority } from '../order.
 import { InstitutionsService, Institution } from '../institutions.service';
 import { Paging, Sorting, TableColumn, Query } from '../operator/operator.component';
 import { SessionService } from '../session.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-client',
@@ -65,6 +66,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     constructor(
         private institutionService: InstitutionsService,
         private sessionService: SessionService,
+        private router: Router,
         private orderService: OrderService,
         private messageService: MessageService) {
 
@@ -262,6 +264,12 @@ export class ClientComponent implements OnInit, OnDestroy {
         }
 
         this.queryOrders(query);
+
+    }
+
+    createOrder() {
+
+        this.router.navigate(["clientes", "ordenes", "alta"])
 
     }
 

@@ -7,9 +7,10 @@
             <h5 class="text-primary mt-3">Alta de instituciones</h5>
             <hr />
 
-            <h6 class="mb-4 text-primary font-weight-normal">Datos generales</h6>
 
             <form [formGroup]="form" (submit)="create()" autocomplete="off">
+
+                <h6 class="mb-3 text-primary font-weight-normal">Datos generales</h6>
 
                 <div class="form-row">
 
@@ -66,10 +67,22 @@
                         </div>
                     </div>
 
+                    <h6 class="mb-3 text-primary font-weight-normal">Identificación de unidades</h6>
+                    <hr />
+
+                    <div class="form-group col-12">
+                        <label>Cantidad de caracteres no válidos: </label>
+                        <input type="text" class="form-control" formControlName="invalidCharCount"
+                               placeholder="Cantidad de caracteres a descartar en la lectura de una unidad">
+                        <div class="d-flex flex-column" *ngIf="submitted && form.controls.invalidCharCount.errors">
+                            <span class="text-danger" *ngIf="form.controls.invalidCharCount.errors.required">Ingrese la cantidad de caracteres a descartar</span>
+                            <span class="text-danger" *ngIf="form.controls.invalidCharCount.errors.pattern">Cantidad debe ser un número</span>
+                        </div>
+                    </div>
 
                 </div>
 
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end mb-5">
                     <button type="submit" class="btn btn-primary rounded-0 px-5">Aceptar</button>
                     <button (click)="cancel()" class="btn btn-secondary ml-2 rounded-0 px-5">Cancelar</button>
                 </div>

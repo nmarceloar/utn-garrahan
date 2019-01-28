@@ -9,6 +9,7 @@ import { UnitEditModalComponent } from '../unit-edit-modal/unit-edit-modal.compo
 import { MessageService, MessageType } from '../message.service';
 import { ConfigService } from '../config.service';
 import { Router } from '@angular/router';
+import { ClientUsbConfigComponent } from '../client-usb-config/client-usb-config.component';
 
 @Component({
     selector: 'app-create-order',
@@ -19,8 +20,7 @@ export class CreateOrderComponent implements OnInit {
 
     isWaitingForUnit = { should: false }
 
-    tagCodeInvalidCharCount: number
-    unitCodeInvalidCharCount: number
+    invalidCharCount: number = 0
 
     submited = false;
     orderSubmitted = false;
@@ -44,8 +44,8 @@ export class CreateOrderComponent implements OnInit {
     editing: any;
 
     selectedPriority: FormControl = new FormControl(null, Validators.required);
-    selectedCarrier: FormControl = new FormControl(null, Validators.required);
-    selectedOrderCode: FormControl = new FormControl(null, Validators.required);
+    selectedCarrier: FormControl = new FormControl("");
+    selectedOrderCode: FormControl = new FormControl("");
 
     unitForm: FormGroup = new FormGroup({
         unitCode: new FormControl("", Validators.required),
@@ -78,18 +78,6 @@ export class CreateOrderComponent implements OnInit {
             }, (err) => this.handleErr(err))
 
 
-        this.configService.findAll()
-            .subscribe((config) => {
-
-                this.tagCodeInvalidCharCount = +((config.filter(d => (d as any).name === "tagCodeInvalidCharCount")[0] as any).value)
-                this.unitCodeInvalidCharCount = +((config.filter(d => (d as any).name === "unitCodeInvalidCharCount")[0] as any).value)
-
-            }, (err) => {
-                this.handleErr(err)
-            })
-
-
-
     }
 
     private handleErr(err) {
@@ -105,7 +93,7 @@ export class CreateOrderComponent implements OnInit {
     addUnit() {
 
         if (this.usbEnabled())
-            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(this.unitCodeInvalidCharCount), { emitEvent: false })
+            this.unitForm.controls.unitCode.setValue(this.unitForm.controls.unitCode.value.substr(this.invalidCharCount), { emitEvent: false })
 
         if (this.unitForm.invalid) {
             this.submited = true;
@@ -272,6 +260,18 @@ export class CreateOrderComponent implements OnInit {
 
                 }
             )
+
+
+    }
+
+    configUsb() {
+
+        let m = this.modalService.open(ClientUsbConfigComponent, { centered: true, size: "lg", backdrop: "static" })
+
+        from(m.result)
+            .subscribe(invalidCharCount => this.invalidCharCount = invalidCharCount, () => { })
+
+
 
 
     }

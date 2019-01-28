@@ -1,5 +1,7 @@
+import { Observable } from "rxjs";
+
 export interface CanComponentDeactivate {
 
-	canDeactivate(): boolean; 
+    canDeactivate(): Observable<boolean> | Promise<boolean> | boolean;
 
 }

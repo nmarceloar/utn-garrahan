@@ -24,6 +24,8 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { HemocomponentsComponent } from './hemocomponents/hemocomponents.component';
 import { ConfigManagementComponent } from './config-management/config-management.component';
+import { PendingChangesGuard } from './pending-changes.guard';
+import { IrradiationInProcessGuard } from './irradiation-in-process.guard';
 
 
 const routes: Routes = [
@@ -91,6 +93,7 @@ const routes: Routes = [
             {
                 path: "ordenes/:id/irradiación",
                 component: OrderIrradiationComponent,
+                canDeactivate: [IrradiationInProcessGuard],
                 data: {
                     breadcrumb: "Irradiación de órdenes"
                 }

@@ -6,8 +6,8 @@
 
             <div class="d-flex justify-content-start align-items-center flex-wrap border-bottom pb-1 mb-3">
                 <h5 class="m-0 p-0 mr-3  text-primary flex-grow-1 font-weight-normal">Órdenes</h5>
-                <a routerLink="ordenes/alta">Nueva orden</a>
             </div>
+
 
             <form [formGroup]="searchForm" (submit)="search()">
 
@@ -157,4 +157,10 @@
     </div>
 
 </div>
+
+<button (click)="createOrder()" class="position-fixed btn-primary rounded-circle shadow" style="bottom: 20px; right: 20px; height: 56px; width: 56px; border: 0px; cursor: pointer">
+    +
+</button>
+
+
 

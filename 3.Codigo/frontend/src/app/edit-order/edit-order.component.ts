@@ -27,7 +27,7 @@ export class EditOrderComponent implements OnInit {
 
     isPrinting: boolean = false;
 
-    selectedCarrier: FormControl = new FormControl("", Validators.required);
+    selectedCarrier: FormControl = new FormControl("");
 
     submited: boolean = false;
 
