@@ -21,7 +21,8 @@ module.exports = async (app, cb) => {
             data.institutions.map(i => ({
                 ...i,
                 cuit: `30${random.string({ length: 8, pool: pool })}${random.string({ length: 1, pool: pool })}`,
-                typeId: institutionTypes[randomBetween(0, institutionTypes.length - 1)].id
+                typeId: institutionTypes[randomBetween(0, institutionTypes.length - 1)].id,
+                invalidCharCount: randomBetween(0,3)
             }))
         )
         var unitTypes = await app.models.UnitType.create(data.unitTypes)

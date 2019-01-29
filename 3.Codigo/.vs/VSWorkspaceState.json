@@ -4,11 +4,9 @@
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\breadcrumb",
-    "\\frontend\\src\\app\\order-conciliation",
-    "\\frontend\\src\\assets",
-    "\\frontend\\src\\environments"
+    "\\frontend\\src\\app\\operator-usb-config",
+    "\\frontend\\src\\app\\order-irradiation"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\order-conciliation\\order-conciliation.component.ts",
+  "SelectedNode": "\\frontend\\src\\app\\operator-usb-config\\operator-usb-config.component.html",
   "PreviewInSolutionExplorer": false
 }

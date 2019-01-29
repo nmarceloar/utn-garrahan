@@ -17,10 +17,14 @@
             </div>
             <div class="text-lg-right">
                 <a *ngIf="canAdmin" [routerLink]="['/administradores']">Administrar Banco<span class="text-muted"> | </span></a>
+                <a *ngIf="canAdmin" [routerLink]="['/operadores']">Órdenes<span class="text-muted"> | </span></a>
                 <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/diario']">Informe diario<span class="text-muted"> | </span></a>
-                <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/mensual']">Informe mensual<span class="text-muted"> | </span></a>
-                <span class="btn-link" (click)="logout()">Cerrar sesión</span>
+                <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/mensual']">Informe mensual</a>
+                <span class="text-muted"> | </span>
+                <span class="btn-link" (click)="logout()"
+                      *ngIf="(!currentUser.isInternal) || (currentUser.isInternal && !isIrradiationInProcess)">Cerrar sesión</span>
             </div>
+
         </div>
 
         <div class="order-1 order-lg-2">

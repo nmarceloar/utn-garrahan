@@ -25,7 +25,9 @@ export class CreateInstitutionComponent implements OnInit {
             cuitValidator()
         ]),
         email: new FormControl("", [Validators.required, Validators.email]),
-        type: new FormControl(null, Validators.required)
+        type: new FormControl(null, Validators.required),
+        invalidCharCount: new FormControl(0, [Validators.required, Validators.pattern(/^[0-9]{1}$/)])
+
     })
 
     submitted: boolean = false;

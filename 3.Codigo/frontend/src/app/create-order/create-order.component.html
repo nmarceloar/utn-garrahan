@@ -42,12 +42,16 @@
             <span class="text-muted">Ingreso de unidades de la orden</span>
             <hr />
 
-            <div class="custom-control custom-checkbox mb-3">
+            <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="customCheck1" [formControl]="usbReaderEnabled">
                 <label class="custom-control-label" for="customCheck1">Uso de Lector USB</label>
+                <span> | </span>
+                <span class="btn-link p-0 m-0" (click)="configUsb()">Configurar</span>
             </div>
 
-            <form [formGroup]="unitForm" (submit)="addUnit()">
+            <hr />
+
+            <form [formGroup]="unitForm" (submit)="addUnit()" class="mt-3">
 
                 <div class="form-row">
 

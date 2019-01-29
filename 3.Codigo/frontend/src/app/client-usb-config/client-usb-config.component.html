@@ -1,0 +1,20 @@
+<div class="modal-content p-4">
+    <div class="modal-header">
+        <h5 class="modal-title">Configuración de Lector USB</h5>
+        <img height="40" width="40" src="https://images-na.ssl-images-amazon.com/images/I/41WPsig83OL.png"/>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Caracteres a descartar: </label>
+            <input type="text" [formControl]="invalidCharCount" class="form-control" [focused]="{should: true}" />
+            <span class="text-muted">Cantidad de caracteres a descartar en la lectura de una unidad</span>
+        </div>
+        <div *ngIf="submitted">
+            <span *ngIf="invalidCharCount.errors.required">Ingrese una cantidad</span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary rounded-0 px-5" (click)="confirm()">Confirmar</button>
+    <button type="button" class="btn btn-secondary rounded-0 px-5" (click)="cancel()">Cancelar</button>
+</div>

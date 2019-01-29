@@ -21,6 +21,8 @@ export class NavComponent implements OnInit, OnDestroy {
 
     isPrinting: boolean = false;
 
+    isIrradiationInProcess: boolean = false;
+
     constructor(
         private router: Router,
         private appMessages: AppMessagesService,
@@ -44,6 +46,10 @@ export class NavComponent implements OnInit, OnDestroy {
         })
 
         this.appMessages.isPrinting.subscribe(is => this.isPrinting = is);
+
+        this.appMessages.isIrradiationInProcess.subscribe(irradiation => this.isIrradiationInProcess = irradiation)
+
+
 
     }
 
@@ -70,6 +76,7 @@ export class NavComponent implements OnInit, OnDestroy {
     logout() {
 
         this.sessionService.logout();
+        this.router.navigateByUrl("login");
 
     }
 
