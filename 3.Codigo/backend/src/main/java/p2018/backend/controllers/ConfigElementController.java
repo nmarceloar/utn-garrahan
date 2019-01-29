@@ -22,28 +22,28 @@ public class ConfigElementController {
 	@Autowired
 	private ConfigElementRepository configElementRepository;
 	
-	@GetMapping("/config-elements")
+	@GetMapping("/config")
 	public List<ConfigElement> getConfigElements(){
 		return configElementRepository.findAll();
 	}
 	
-	@GetMapping("/config-element/{name}")
+	@GetMapping("/config/{name}")
 	public ConfigElement getConfigElement(@PathVariable String name){
 		return configElementRepository.getOne(name);
 	}
 	
-	@DeleteMapping("/config-element/{name}")
+	@DeleteMapping("/config/{name}")
 	public boolean deleteConfigElement(@PathVariable String name){
 		configElementRepository.deleteById(name);
 		return true;
 	}
 	
-	@PostMapping("/config-element")
+	@PostMapping("/config")
 	public ConfigElement createConfigElement(@RequestBody ConfigElement configElemen){
 		return configElementRepository.save(configElemen);
 	}
 	
-	@PutMapping("/config-element")
+	@PutMapping("/config")
 	public ConfigElement updateConfigElement(@RequestBody ConfigElement configElemen){
 		return configElementRepository.save(configElemen);
 	}

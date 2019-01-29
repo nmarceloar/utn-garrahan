@@ -30,16 +30,16 @@ public abstract class AuditableEntity implements Serializable{
 	@Column(name = "id")
 	private Long id;
 	@Column(name="creationDate")
-	private Date creation_date;
+	private Date creationDate;
 	
-	public Date getCreation_date() {
-		return creation_date;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -50,6 +50,6 @@ public abstract class AuditableEntity implements Serializable{
 	
 	@PrePersist
 	protected void onCreate() {
-		this.setCreation_date(new Timestamp((new Date()).getTime()));
+		this.setCreationDate(new Timestamp((new Date()).getTime()));
 	}
 }

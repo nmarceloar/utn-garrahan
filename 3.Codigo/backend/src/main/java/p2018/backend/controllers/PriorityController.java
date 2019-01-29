@@ -3,6 +3,7 @@ package p2018.backend.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,33 +18,34 @@ import p2018.backend.repository.PriorityRepository;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
 public class PriorityController {
 	
 	@Autowired
 	private PriorityRepository priorityReposotory;
 	
-	@GetMapping("/priorities")
+	@GetMapping("/order-priorities")
 	public List<Priority> getPriorities(){
 		return priorityReposotory.findAll();
 	}
 	
-	@GetMapping("/priority/{id}")
+	@GetMapping("/order-priority/{id}")
 	public Priority getPriority(@PathVariable Long id){
 		return priorityReposotory.getOne(id);
 	}
 	
-	@DeleteMapping("/priority/{id}")
+	@DeleteMapping("/order-priority/{id}")
 	public boolean deletePriority(@PathVariable Long id){
 		priorityReposotory.deleteById(id);
 		return true;
 	}
 	
-	@PostMapping("/priority")
+	@PostMapping("/order-priority")
 	public Priority createUnit(@RequestBody Priority priority){
 		return priorityReposotory.save(priority);
 	}
 	
-	@PutMapping("/priority")
+	@PutMapping("/order-priority")
 	public Priority updateUnit(@RequestBody Priority priority){
 		return priorityReposotory.save(priority);
 	}

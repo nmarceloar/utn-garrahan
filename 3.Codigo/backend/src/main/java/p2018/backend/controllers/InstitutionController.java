@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import p2018.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api")
-// @CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
 public class InstitutionController {
 	
 	@Autowired
@@ -39,35 +40,35 @@ public class InstitutionController {
 	}
 	
 	@RolesAllowed({ "ROLE_ADMIN"})
-	@GetMapping("/institution/{id}")
+	@GetMapping("/institutions/{id}")
 	public Institution getInstitution(@PathVariable Long id){
 		return institutionRepository.getOne(id);
 	}
 	
-	@DeleteMapping("/institution/{id}")
+	@DeleteMapping("/institutions/{id}")
 	public boolean deleteInstitution(@PathVariable Long id){
 		institutionRepository.deleteById(id);
 		return true;
 	}
 	
-	@PostMapping("/institution")
+	@PostMapping("/institutions")
 	public Institution createInstitution(@RequestBody Institution institution){
 		return institutionRepository.save(institution);
 	}
 	
-	@PutMapping("/institution")
+	@PutMapping("/institutions")
 	public Institution updateInstitution(@RequestBody Institution institution){
 		Long userCount = userRepository.findUserCountByInstitytionId(institution.getId());
 		institution.setUserCount(userCount.intValue());
 		return institutionRepository.save(institution);
 	}
 	
-	@GetMapping("/institution/{id}/users/count")
+	@GetMapping("/institutions/{id}/users/count")
 	public  Integer getInstitutionUsersCount(@PathVariable Long institutionId){
 		return userRepository.findUserCountByInstitytionId(institutionId).intValue();
 	}
 	
-	@GetMapping("/institution/{id}/orders/count")
+	@GetMapping("/institutions/{id}/orders/count")
 	public  Integer getInstitutionOrdersCount(@PathVariable Long institutionId){
 		return orderRepository.findOrderCountByInstitytionId(institutionId).intValue();
 	}

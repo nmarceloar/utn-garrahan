@@ -28,7 +28,7 @@ public class Unit extends AuditableEntity implements Serializable {
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unitTypeId")
-	private UnitType unitType;
+	private UnitType type;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "irradiatorUserId")
@@ -37,10 +37,6 @@ public class Unit extends AuditableEntity implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "irradiationid")
 	private Irradiation irradiation;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderId")
-	private OrderInfo order;
 
 	public String getCode() {
 		return code;
@@ -58,12 +54,12 @@ public class Unit extends AuditableEntity implements Serializable {
 		this.irradiated = irradiated;
 	}
 
-	public UnitType getUnitType() {
-		return unitType;
+	public UnitType getType() {
+		return type;
 	}
 
-	public void setUnitType(UnitType unitType) {
-		this.unitType = unitType;
+	public void setType(UnitType type) {
+		this.type = type;
 	}
 
 	public User getIrradiatorUser() {
@@ -81,14 +77,6 @@ public class Unit extends AuditableEntity implements Serializable {
 	public void setIrradiation(Irradiation irradiation) {
 		this.irradiation = irradiation;
 	}
-
-	public OrderInfo getOrder() {
-		return order;
-	}
-
-	public void setOrder(OrderInfo order) {
-		this.order = order;
-	}
 	
 	public Long getOrderId() {
 		return orderId;
@@ -98,10 +86,10 @@ public class Unit extends AuditableEntity implements Serializable {
 		this.orderId = orderId;
 	}
 
-	public Unit(String code, UnitType unitType, User irradiatorUser) {
+	public Unit(String code, UnitType type, User irradiatorUser) {
 		super();
 		this.code = code;
-		this.unitType = unitType;
+		this.type = type;
 		this.irradiatorUser = irradiatorUser;
 	}
 

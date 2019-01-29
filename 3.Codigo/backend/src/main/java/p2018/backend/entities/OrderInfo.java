@@ -3,11 +3,16 @@ package p2018.backend.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Version;
@@ -52,6 +57,14 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ownerId")
 	private User owner;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "UnitTypeMapping", 
+        joinColumns = { @JoinColumn(name = "orderId") }, 
+        inverseJoinColumns = { @JoinColumn(name = "unitTypeId")}
+    )
+	private Set<Unit> units = new HashSet<>();
 
 	public String getCode() {
 		return code;
@@ -148,6 +161,14 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
+	
+	public Set<Unit> getUnits() {
+		return units;
+	}
+
+	public void setUnits(Set<Unit> units) {
+		this.units = units;
+	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,
 			OrderStatus status, Priority priority, Institution institution, User operator, User owner) {
@@ -176,7 +197,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	@Override
 	@PrePersist
 	protected void onCreate() {
-		this.setCreation_date(new Timestamp((new Date()).getTime()));
+		this.setCreationDate(new Timestamp((new Date()).getTime()));
 		this.getInstitution().addOrderCount();
 	}
 

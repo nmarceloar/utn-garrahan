@@ -21,28 +21,28 @@ public class ConcilliationCommentController {
 	@Autowired
 	private ConcilliationCommentRepository concilliationCommentRepository;
 	
-	@GetMapping("/comments")
+	@GetMapping("/ConcilliationComments")
 	public List<ConcilliationComment> getComments(){
 		return concilliationCommentRepository.findAll();
 	}
 	
-	@GetMapping("/comments/{id}")
+	@GetMapping("/ConcilliationComments/{id}")
 	public ConcilliationComment getComment(@PathVariable Long id){
 		return concilliationCommentRepository.getOne(id);
 	}
 	
-	@DeleteMapping("/comments/{id}")
+	@DeleteMapping("/ConcilliationComments/{id}")
 	public boolean deleteComment(@PathVariable Long id){
 		concilliationCommentRepository.deleteById(id);
 		return true;
 	}
 	
-	@PostMapping("/comment")
+	@PostMapping("/ConcilliationComments")
 	public ConcilliationComment createComment(@RequestBody ConcilliationComment comment){
 		return concilliationCommentRepository.save(comment);
 	}
 	
-	@PutMapping("/comment")
+	@PutMapping("/ConcilliationComments")
 	public ConcilliationComment updateComment(@RequestBody ConcilliationComment comment){
 		return concilliationCommentRepository.save(comment);
 	}
