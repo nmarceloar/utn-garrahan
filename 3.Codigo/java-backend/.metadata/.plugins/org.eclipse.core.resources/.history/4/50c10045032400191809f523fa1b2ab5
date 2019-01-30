@@ -1,7 +1,0 @@
-package p2018.backend.entities;
-
-import java.io.Serializable;
-
-public class OrderTransition extends AuditableEntity implements Serializable {
-
-}

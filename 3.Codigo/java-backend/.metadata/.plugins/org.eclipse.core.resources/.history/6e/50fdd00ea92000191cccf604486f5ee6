@@ -1,8 +1,0 @@
-package p2018.test;
-
-public class InstitutionConreollerTest {
-
-	public void getInstitutions() throws Exception {
-		
-	}
-}

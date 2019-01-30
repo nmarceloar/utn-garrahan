@@ -1,7 +1,0 @@
-package p2018.backend.service;
-
-import java.io.Serializable;
-
-public class LoginServiceImpl implements LoginService, Serializable {
-
-}

@@ -1,9 +1,0 @@
-package p2018.backend.entities;
-
-import java.io.Serializable;
-
-public class OrderStatus implements Serializable {
-	
-	
-	
-}

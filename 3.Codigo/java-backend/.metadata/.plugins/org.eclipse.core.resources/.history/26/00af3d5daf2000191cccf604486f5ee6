@@ -1,7 +1,0 @@
-package p2018.backend.service;
-
-import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
-
-public class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
-
-}

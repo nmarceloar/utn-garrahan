@@ -1,5 +1,0 @@
-package p2018.backend.entities;
-
-public abstract class AuditableEntity {
-
-}
