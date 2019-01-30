@@ -10,7 +10,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ClientUsbConfigComponent implements OnInit {
 
     invalidCharCount: FormControl = new FormControl(0, [Validators.required, Validators.pattern(/^[0-9]{1}$/)]);
-    sumbitted: boolean = false;
+    submitted: boolean = false;
 
     constructor(private activeModal: NgbActiveModal) { }
 

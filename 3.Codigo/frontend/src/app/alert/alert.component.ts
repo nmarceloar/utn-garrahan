@@ -16,7 +16,7 @@ import { MessageService } from "./../message.service";
 })
 export class MessageStackComponent implements OnInit, OnDestroy {
 
-    private messages: any[] = [];
+    public messages: any[] = [];
 
     constructor(
         private router: Router,

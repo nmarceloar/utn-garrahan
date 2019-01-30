@@ -1,5 +1,5 @@
 
-const api = `http://localhost:8080/api`
+const api = `http://127.0.0.1:3000/api`
 
 export const environment = {
 
