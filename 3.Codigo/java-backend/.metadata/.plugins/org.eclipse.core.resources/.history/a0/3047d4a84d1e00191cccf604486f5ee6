@@ -1,0 +1,26 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+public class Irradiation implements Serializable {
+
+	private static final long serialVersionUID = 2083148371987532538L;
+	
+	private Long id;
+	private Date irradiationStart;
+	private Date irradiationEnd;
+	private String irradiationTag;
+	private Integer irradiationTime;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "irradiatorId")
+	private User irradiator;
+	
+	
+	
+}

@@ -1,0 +1,35 @@
+package p2018.backend.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import p2018.backend.entities.OrderStatus;
+import p2018.backend.repository.OrderStatusRepository;
+
+public class OrderStatusController {
+
+	@Autowired
+	private OrderStatusRepository orderStatusRepository;
+	
+	@GetMapping("/order-statuses")
+	public List<OrderStatus> getOrderStatuses(){
+		return orderStatusRepository.findAll();
+	}
+	
+	@GetMapping("/order-status/{id}")
+	public OrderStatus getOrderStatus(@PathVariable String name){
+		return orderStatusRepository.getOne(name);
+	}
+	
+	@DeleteMapping("/order-status/{id}")
+	public boolean deleteOrderStatus(@PathVariable String name){
+		orderStatusRepository.deleteById(name);
+		return true;
+	}
+	
+	
+}

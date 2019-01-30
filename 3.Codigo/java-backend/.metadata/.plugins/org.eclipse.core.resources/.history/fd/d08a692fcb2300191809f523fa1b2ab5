@@ -1,0 +1,7 @@
+package p2018.backend.utils;
+
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+
+public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<T> {
+
+}

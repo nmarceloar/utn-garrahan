@@ -1,8 +1,11 @@
 package p2018.backend.controllers;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,23 +14,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import p2018.backend.entities.ConcilliationComment;
+import p2018.backend.entities.ConciliationComment;
 import p2018.backend.repository.ConcilliationCommentRepository;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
 public class ConcilliationCommentController {
 
 	@Autowired
 	private ConcilliationCommentRepository concilliationCommentRepository;
 	
 	@GetMapping("/ConcilliationComments")
-	public List<ConcilliationComment> getComments(){
+	public List<ConciliationComment> getComments(){
 		return concilliationCommentRepository.findAll();
 	}
 	
 	@GetMapping("/ConcilliationComments/{id}")
-	public ConcilliationComment getComment(@PathVariable Long id){
+	public ConciliationComment getComment(@PathVariable Long id){
 		return concilliationCommentRepository.getOne(id);
 	}
 	
@@ -37,13 +41,15 @@ public class ConcilliationCommentController {
 		return true;
 	}
 	
-	@PostMapping("/ConcilliationComments")
-	public ConcilliationComment createComment(@RequestBody ConcilliationComment comment){
+	@PostMapping("orders/{id}/conciliationComments")
+	public ConciliationComment createComment(@RequestBody ConciliationComment comment, @PathVariable Long id){
+		comment.setOrderId(id);
+		comment.setDate(new Timestamp((new Date()).getTime()));
 		return concilliationCommentRepository.save(comment);
 	}
 	
 	@PutMapping("/ConcilliationComments")
-	public ConcilliationComment updateComment(@RequestBody ConcilliationComment comment){
+	public ConciliationComment updateComment(@RequestBody ConciliationComment comment){
 		return concilliationCommentRepository.save(comment);
 	}
 }

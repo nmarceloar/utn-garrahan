@@ -1,0 +1,10 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+
+public class AuthenticationRequest implements Serializable {
+	
+	private static final long serialVersionUID = -5259263883106335897L;
+	private String username;
+    private String password;
+}

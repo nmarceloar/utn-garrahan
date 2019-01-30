@@ -1,0 +1,46 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "Orders")
+public class Order extends AuditableEntity implements Serializable {
+
+
+	private static final long serialVersionUID = -1822331454767706045L;
+
+	private String code;
+	private String carrier;
+	private Date aceptedOn;
+	private Date completionDate;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institutionId")
+	private Institution institution;
+	
+	
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getCarrier() {
+		return carrier;
+	}
+
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
+	}
+
+}

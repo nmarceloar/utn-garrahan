@@ -1,0 +1,102 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+
+@Entity
+public class Institution implements Serializable{
+	
+
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue
+	private Long id;
+	private String name;
+	private String cuit;
+	private String address;
+	private String email;
+	private Date creation_date;
+	
+	
+	private InstitutionType type;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCuit() {
+		return cuit;
+	}
+
+	public void setCuit(String cuit) {
+		this.cuit = cuit;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	@Enumerated(EnumType.STRING)
+	public InstitutionType geType() {
+		return type;
+	}
+
+	public void setInstitutionType(InstitutionType type) {
+		this.type = type;
+	}
+	
+	public Institution() {
+	}
+
+	public Institution(String name, String cuit, String address, String email, InstitutionType institutionType) {
+		this.name = name;
+		this.cuit = cuit;
+		this.address = address;
+		this.email = email;
+		this.type = institutionType;
+	}
+
+	@Override
+	public String toString() {
+		return "Institution [id=" + id + ", name=" + name + ", cuit=" + cuit + ", address=" + address + ", email="
+				+ email + ", institutionType=" + type + "]";
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		creation_date = new Date();
+	}
+
+	public Date getCreation_date() {
+		return creation_date;
+	}
+
+	public void setCreation_date(Date creation_date) {
+		this.creation_date = creation_date;
+	}
+
+}

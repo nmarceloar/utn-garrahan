@@ -1,0 +1,25 @@
+package p2018.backend.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import p2018.backend.entities.User;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+	
+	@Query("select u from User u where u.username = :username or u.password = :password")
+	User findByUserNameAndPass(@Param("username") String username,
+	                                 @Param("password") String password);
+	
+	User findByUsername(String username);
+	
+	@Query("select count(u) from User u where u.institution = :institutionId")
+	Long findUserCountByInstitytionId(@Param("institutionId") Long institutionId);
+	
+	@Query("select u from User u where u.institution = :institutionId")
+	List<User> findUsersByInstitytionId(@Param("institutionId") Long institutionId);
+	
+}

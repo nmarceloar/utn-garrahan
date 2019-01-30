@@ -1,0 +1,73 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "OrderInfo")
+public class OrderTransition implements Serializable {
+
+
+	private static final long serialVersionUID = 7154948144917725443L;
+	
+	private Date acceptedOn;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statusId")
+	private OrderStatus status;
+	
+	private Long operatorId;
+
+	public Date getAcceptedOn() {
+		return acceptedOn;
+	}
+
+	public void setAcceptedOn(Date acceptedOn) {
+		this.acceptedOn = acceptedOn;
+	}
+
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+
+	public Long getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public OrderTransition(Long id, Date acceptedOn, OrderStatus status, Long operatorId) {
+		super();
+		this.id = id;
+		this.acceptedOn = acceptedOn;
+		this.status = status;
+		this.operatorId = operatorId;
+	}
+
+	public OrderTransition() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "OrderTransition [id=" + id + ", acceptedOn=" + acceptedOn + ", status=" + status + ", operatorId="
+				+ operatorId + "]";
+	}
+	
+}

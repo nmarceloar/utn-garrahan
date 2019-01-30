@@ -1,0 +1,13 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+
+public class Unit extends AuditableEntity implements Serializable {
+
+
+	private static final long serialVersionUID = 501355697639267150L;
+	
+	private String code;
+	
+
+}

@@ -1,0 +1,17 @@
+package p2018.backend.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import p2018.backend.repository.PriorityRepository;
+
+@RestController
+@RequestMapping("/api")
+public class PriorityController {
+	
+	@Autowired
+	private PriorityRepository priorityReposotory;
+	
+	
+}

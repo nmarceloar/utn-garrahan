@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=backend/src\/main\/java&lt;p2018.backend.entities{AuditableEntity.java[AuditableEntity" modifiers="1025" timestamp="1548431676786"/>
+<typeInfo handle="=backend/\/usr\/lib\/jvm\/java-8-openjdk-amd64\/jre\/lib\/rt.jar&lt;java.io(Serializable.class[Serializable" modifiers="1537" timestamp="1542729000000"/>
+<typeInfo handle="=backend/\/home\/gmolina\/.m2\/repository\/org\/springframework\/data\/spring-data-jpa\/2.1.2.RELEASE\/spring-data-jpa-2.1.2.RELEASE.jar&lt;org.springframework.data.jpa.repository(JpaRepository.class[JpaRepository" modifiers="1537" timestamp="1547905998299"/>
+<typeInfo handle="=backend/\/home\/gmolina\/.m2\/repository\/org\/springframework\/security\/spring-security-core\/5.1.1.RELEASE\/spring-security-core-5.1.1.RELEASE.jar&lt;org.springframework.security.core.userdetails(UserDetailsService.class[UserDetailsService" modifiers="1537" timestamp="1548362822259"/>
+<typeInfo handle="=backend/\/home\/gmolina\/.m2\/repository\/org\/springframework\/security\/spring-security-core\/5.1.1.RELEASE\/spring-security-core-5.1.1.RELEASE.jar&lt;org.springframework.security.provisioning(UserDetailsManager.class[UserDetailsManager" modifiers="1537" timestamp="1548362822259"/>
+<typeInfo handle="=backend/\/home\/gmolina\/.m2\/repository\/org\/springframework\/security\/spring-security-config\/5.1.1.RELEASE\/spring-security-config-5.1.1.RELEASE.jar&lt;org.springframework.security.config.annotation.authentication.configuration(GlobalAuthenticationConfigurerAdapter.class[GlobalAuthenticationConfigurerAdapter" modifiers="1057" timestamp="1548362821271"/>
+</typeInfoHistroy>

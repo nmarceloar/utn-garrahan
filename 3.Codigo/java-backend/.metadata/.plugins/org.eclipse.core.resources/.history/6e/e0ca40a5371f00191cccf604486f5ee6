@@ -1,0 +1,9 @@
+package p2018.backend.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sun.mail.imap.protocol.ID;
+
+public interface ConfigElementRepository extends JpaRepository<CongifElement, Long> {
+
+}

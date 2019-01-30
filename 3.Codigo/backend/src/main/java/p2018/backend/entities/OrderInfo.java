@@ -13,9 +13,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Version;
+
+import p2018.backend.controllers.ConcilliationCommentController;
 
 
 @Entity
@@ -52,7 +55,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operatorId")
-	private User operator;
+	private User orderAcceptor;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ownerId")
@@ -65,6 +68,9 @@ public class OrderInfo extends AuditableEntity implements Serializable {
         inverseJoinColumns = { @JoinColumn(name = "unitTypeId")}
     )
 	private Set<Unit> units = new HashSet<>();
+	
+	@OneToMany(mappedBy = "orderInfo")
+	private Set<ConciliationComment> conciliationComments;
 
 	public String getCode() {
 		return code;
@@ -114,12 +120,12 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 		this.institution = institution;
 	}
 
-	public User getOperator() {
-		return operator;
+	public User getOrderAcceptor() {
+		return orderAcceptor;
 	}
 
-	public void setOperator(User operator) {
-		this.operator = operator;
+	public void setOrderAcceptor(User orderAcceptor) {
+		this.orderAcceptor = orderAcceptor;
 	}
 
 	public User getOwner() {
@@ -169,9 +175,18 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	public void setUnits(Set<Unit> units) {
 		this.units = units;
 	}
+	
+	
+	public Set<ConciliationComment> getConciliationComments() {
+		return conciliationComments;
+	}
+
+	public void setConciliationComments(Set<ConciliationComment> conciliationComments) {
+		this.conciliationComments = conciliationComments;
+	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,
-			OrderStatus status, Priority priority, Institution institution, User operator, User owner) {
+			OrderStatus status, Priority priority, Institution institution, User orderAcceptor, User owner) {
 		this.code = code;
 		this.carrier = carrier;
 		this.acceptedOn = acceptedOn;
@@ -180,7 +195,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 		this.status = status;
 		this.priority = priority;
 		this.institution = institution;
-		this.operator = operator;
+		this.orderAcceptor = orderAcceptor;
 		this.owner = owner;
 	}
 

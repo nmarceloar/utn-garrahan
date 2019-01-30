@@ -1,0 +1,5 @@
+package p2018.backend.service;
+
+public class Constants {
+
+}

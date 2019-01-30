@@ -1,0 +1,10 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+
+public class Role extends AuditableEntity implements Serializable {
+
+
+	private static final long serialVersionUID = -258009969500297081L;
+
+}

@@ -1,0 +1,29 @@
+package p2018.backend.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "OrderInfo")
+public class OrderTransition implements Serializable {
+
+
+	private static final long serialVersionUID = 7154948144917725443L;
+	
+	private Date acceptedOn;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statusId")
+	private OrderStatus status;
+	
+	private Long operatorId;
+
+	
+	
+}

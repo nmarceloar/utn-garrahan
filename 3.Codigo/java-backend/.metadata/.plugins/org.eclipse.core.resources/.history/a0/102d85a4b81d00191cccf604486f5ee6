@@ -1,0 +1,27 @@
+package p2018.backend.entities;
+
+import java.util.Date;
+
+import javax.persistence.PrePersist;
+/**
+ * 
+ * This abstract class defines the audit fields in the table
+ * 
+ */
+public abstract class AuditableEntity {
+
+	private Date creation_date;
+	
+	public Date getCreation_date() {
+		return creation_date;
+	}
+
+	public void setCreation_date(Date creation_date) {
+		this.creation_date = creation_date;
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		creation_date = new Date();
+	}
+}
