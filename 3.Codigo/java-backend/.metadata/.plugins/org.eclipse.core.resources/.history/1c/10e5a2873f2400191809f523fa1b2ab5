@@ -43,9 +43,9 @@ public class IrradiationController {
 	}
 	
 	@PostMapping("/orders/{id}/irradiation")
-	public Irradiation createIrradiation(@RequestBody Irradiation irradiation, @PathVariable long id){
-		irradiation.setOrderId(id);
-		return irradiationRepository.save(irradiation);
+	public Irradiation createIrradiation(@RequestBody Irradiation rradiation, @PathVariable long id){
+		
+		return irradiationRepository.save(rradiation);
 	}
 
 }

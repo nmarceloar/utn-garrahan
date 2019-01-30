@@ -37,15 +37,14 @@ public class IrradiationController {
 		return true;
 	}
 	
-	@PutMapping("/irradiation")
-	public Irradiation updateIrradiation(@RequestBody Irradiation rradiation){
+	@PostMapping("/irradiation")
+	public Irradiation createIrradiation(@RequestBody Irradiation rradiation){
 		return irradiationRepository.save(rradiation);
 	}
 	
-	@PostMapping("/orders/{id}/irradiation")
-	public Irradiation createIrradiation(@RequestBody Irradiation irradiation, @PathVariable long id){
-		irradiation.setOrderId(id);
-		return irradiationRepository.save(irradiation);
+	@PutMapping("/irradiation")
+	public Irradiation updateIrradiation(@RequestBody Irradiation rradiation){
+		return irradiationRepository.save(rradiation);
 	}
 
 }

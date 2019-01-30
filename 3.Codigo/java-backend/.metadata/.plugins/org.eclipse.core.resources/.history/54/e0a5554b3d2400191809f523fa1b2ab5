@@ -71,9 +71,6 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	
 	@OneToMany(mappedBy = "orderInfo")
 	private Set<ConciliationComment> conciliationComments;
-	
-	@OneToMany(mappedBy = "orderInfo")
-	private Set<Irradiation> irradiations;
 
 	public String getCode() {
 		return code;
@@ -186,14 +183,6 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 
 	public void setConciliationComments(Set<ConciliationComment> conciliationComments) {
 		this.conciliationComments = conciliationComments;
-	}
-	
-	public Set<Irradiation> getIrradiations() {
-		return irradiations;
-	}
-
-	public void setIrradiations(Set<Irradiation> irradiations) {
-		this.irradiations = irradiations;
 	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,

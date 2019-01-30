@@ -10,12 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Irradiation")
@@ -31,7 +28,6 @@ public class Irradiation implements Serializable {
 	private Date irradiationEnd;
 	private String irradiationTag;
 	private Integer irradiationTime;
-	private Long orderId;
 	
 	@Version
 	private Integer version;
@@ -40,9 +36,6 @@ public class Irradiation implements Serializable {
     @JoinColumn(name = "irradiatorId")
 	private User irradiator;
 	
-	@ManyToOne
-    @JoinColumn(name="orderId", insertable = false, updatable = false)
-	@JsonIgnore
 	private OrderInfo orderInfo;
 
 	public Long getId() {
@@ -91,22 +84,6 @@ public class Irradiation implements Serializable {
 
 	public void setIrradiator(User irradiator) {
 		this.irradiator = irradiator;
-	}
-	
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
-	public OrderInfo getOrderInfo() {
-		return orderInfo;
-	}
-
-	public void setOrderInfo(OrderInfo orderInfo) {
-		this.orderInfo = orderInfo;
 	}
 
 	public Irradiation(Long id, Date irradiationStart, Date irradiationEnd, String irradiationTag,
