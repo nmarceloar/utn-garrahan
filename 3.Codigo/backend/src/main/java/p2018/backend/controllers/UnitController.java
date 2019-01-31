@@ -18,7 +18,7 @@ import p2018.backend.repository.UnitRepository;
 
 @RestController
 @RequestMapping("/api")
-//@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
 public class UnitController {
 	
 	@Autowired

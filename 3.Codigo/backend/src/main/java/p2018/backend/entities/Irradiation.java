@@ -2,6 +2,7 @@ package p2018.backend.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,18 +34,23 @@ public class Irradiation implements Serializable {
 	private String irradiationTag;
 	private Integer irradiationTime;
 	private Long orderId;
+	private String comments;
+	private Long irradiatorId;
 	
 	@Version
 	private Integer version;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "irradiatorId")
+    @JoinColumn(name = "irradiatorId", insertable = false, updatable = false)
 	private User irradiator;
 	
 	@ManyToOne
     @JoinColumn(name="orderId", insertable = false, updatable = false)
 	@JsonIgnore
 	private OrderInfo orderInfo;
+	
+	@Transient
+	private Set<Long> units;
 
 	public Long getId() {
 		return id;
@@ -107,6 +114,30 @@ public class Irradiation implements Serializable {
 
 	public void setOrderInfo(OrderInfo orderInfo) {
 		this.orderInfo = orderInfo;
+	}
+	
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public Long getIrradiatorId() {
+		return irradiatorId;
+	}
+
+	public void setIrradiatorId(Long irradiatorId) {
+		this.irradiatorId = irradiatorId;
+	}
+	
+	public Set<Long> getUnits() {
+		return units;
+	}
+
+	public void setUnits(Set<Long> units) {
+		this.units = units;
 	}
 
 	public Irradiation(Long id, Date irradiationStart, Date irradiationEnd, String irradiationTag,

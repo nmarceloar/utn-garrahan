@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Version;
 
-import p2018.backend.controllers.ConcilliationCommentController;
-
 
 @Entity
 public class OrderInfo extends AuditableEntity implements Serializable {
@@ -30,6 +27,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	private String carrier;
 	private Date acceptedOn;
 	private Date completionDate;
+	private Date lastModified;
 	private Integer unitCount;
 	
 	@Version
@@ -195,6 +193,14 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	public void setIrradiations(Set<Irradiation> irradiations) {
 		this.irradiations = irradiations;
 	}
+	
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
+	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,
 			OrderStatus status, Priority priority, Institution institution, User orderAcceptor, User owner) {
@@ -224,7 +230,6 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	@PrePersist
 	protected void onCreate() {
 		this.setCreationDate(new Timestamp((new Date()).getTime()));
-		this.getInstitution().addOrderCount();
 	}
 
 	public Integer getVersion() {

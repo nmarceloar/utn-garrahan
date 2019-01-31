@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,4 +102,14 @@ public class UserController {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
 	}	
+	
+	@PostMapping("/xusers/verifyCredentials")
+	public User verifyCredentials(@RequestBody AuthenticationRequest data) {
+		
+		String encryptPassword = BCrypt.hashpw(data.getPassword(), BCrypt.gensalt());
+		return userRepository.findByUserNameAndPass(data.getUsername(), encryptPassword);
+		
+	}
+	
+	
 }
