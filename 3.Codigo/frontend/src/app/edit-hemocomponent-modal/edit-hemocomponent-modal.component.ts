@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-hemocomponent-modal.component.css']
 })
 export class EditHemocomponentModalComponent implements OnInit {
-
+  public title="Un titulo";
+  public message="Un Mensaje";
   constructor() { }
 
   ngOnInit() {
   }
-
+  dismiss(){}
+  confirm(){}
 }

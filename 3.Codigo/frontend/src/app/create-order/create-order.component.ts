@@ -33,9 +33,9 @@ export class CreateOrderComponent implements OnInit {
 
     currentDate
 
-    private units: any[] = []
+    public units: any[] = []
 
-    private unitTypeMappings: any[] = [];
+    public unitTypeMappings: any[] = [];
 
     unitTypes: any[]
     orderPriorities: any[]
