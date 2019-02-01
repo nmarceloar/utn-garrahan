@@ -7,14 +7,14 @@
                 <label>Usuario</label>
                 <input type="text" class="form-control" formControlName="username" readonly>
             </div>
-            <div *ngIf="hasError" class="text-danger">
+            <div *ngIf="submitted" class="text-danger">
                 <p *ngIf="loginForm.controls.username.errors?.required">Ingrese nombre de usuario</p>
             </div>
             <div class="form-group">
                 <label>Contraseña</label>
                 <input type="password" class="form-control" [focused]="{should: true}" formControlName="password">
             </div>
-            <div *ngIf="hasError" class="text-danger">
+            <div *ngIf="submitted" class="text-danger">
                 <p *ngIf="loginForm.controls.password.errors?.required">Ingrese contraseña</p>
             </div>
             <button type="submit" class="btn btn-primary btn-block mb-2">Ingresar</button>
