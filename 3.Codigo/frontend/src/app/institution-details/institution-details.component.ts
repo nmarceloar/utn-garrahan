@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { InstitutionsService, Institution } from '../institutions.service';
+import { InstitutionsService, Institution, InstitutionType } from '../institutions.service';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from '../message.service';
 import { OrderService, Order } from '../order.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
+
+import { cuitValidator } from "../create-institution/create-institution.component"
+import { tap } from 'rxjs/operators';
+import { Observable, from, zip } from 'rxjs';
+
+import { delay } from "rxjs/operators"
 
 @Component({
     selector: 'app-institution-details',
@@ -14,9 +20,23 @@ import { UserService } from '../user.service';
 export class InstitutionDetailsComponent implements OnInit {
 
     institution: Institution
+
     orders: Order[] = []
 
+    it: InstitutionType[] = []
+
     newUserInProcess: boolean = false;
+
+    institutionForm: FormGroup = new FormGroup({
+        cuit: new FormControl("", [Validators.required, Validators.pattern(/^(30|33|34)(\-)?[0-9]{8}(\-)?[0-9]{1}$/)]),
+        name: new FormControl("", Validators.required),
+        email: new FormControl("", [Validators.required, Validators.email]),
+        type: new FormControl(null, Validators.required),
+        address: new FormControl("", Validators.required),
+        userCount: new FormControl({ value: 0, disabled: true }),
+        orderCount: new FormControl({ value: 0, disabled: true }),
+        invalidCharCount: new FormControl(0, [Validators.required, Validators.pattern(/[0-9]{1}$/)])
+    })
 
     userForm: FormGroup = new FormGroup({
         firstname: new FormControl("", Validators.required),
@@ -37,25 +57,53 @@ export class InstitutionDetailsComponent implements OnInit {
 
     ngOnInit() {
 
-        this.institutionService.findById(this.activatedRoute.snapshot.params.id, { include: ["users", "type"] })
-            .subscribe(
-                i => this.setInstitution(i),
-                err => this.handleError(err)
-            )
 
-        this.orderService.find({
+        zip(
+            this.institutionService.findTypes(),
+            this.institutionService.findById(this.activatedRoute.snapshot.params.id, { include: ["users", "type"] }),
+            this.orderService.find({
+                where: { institutionId: this.activatedRoute.snapshot.params.id },
+                limit: 5,
+                order: ["creationDate DESC"]
+            })
+        ).subscribe(([types, institution, institutionOrders]) => {
+
+            this.it = types
+            this.setInstitution(institution)
+            this.orders = (institutionOrders as any).items
+
+
+        }, err => this.handleError(err))
+
+        this.newUserInProcess = false
+
+    }
+
+    private fetchTypes() {
+        return this.institutionService.findTypes()
+    }
+
+    private fetchInstitution() {
+        return this.institutionService.findById(this.activatedRoute.snapshot.params.id, { include: ["users", "type"] })
+    }
+
+    private fetchOrders() {
+
+        return this.orderService.find({
             where: { institutionId: this.activatedRoute.snapshot.params.id },
             limit: 5,
             order: ["creationDate DESC"]
-        }).subscribe(o => this.orders = o.items, err => this.handleError(err))
-
-        this.newUserInProcess = false;
+        })
 
     }
 
     private setInstitution(i) {
 
         this.institution = i;
+        this.institutionForm
+            .patchValue({ ...i, type: this.it.filter(_it => _it.name === i.type.name)[0] });
+        this.institutionForm.controls.orderCount.disable()
+        this.institutionForm.controls.userCount.disable()
 
     }
 
@@ -114,5 +162,28 @@ export class InstitutionDetailsComponent implements OnInit {
         this.newUserInProcess = false;
 
     }
+
+    saveInstitution() {
+
+        this.institutionForm.disable()
+        this.institutionService.update(this.institution.id, {
+            address: this.institutionForm.controls.address.value,
+            cuit: this.institutionForm.controls.cuit.value,
+            email: this.institutionForm.controls.email.value,
+            invalidCharCount: this.institutionForm.controls.invalidCharCount.value,
+            name: this.institutionForm.controls.name.value,
+            typeId: this.institutionForm.controls.type.value.name,
+        })
+            .pipe(
+                delay(1000),
+                tap(() => this.institutionForm.enable()),
+                tap(i => this.messageService.success("Los datos se actualizaron correctamente"))
+            )
+            .subscribe(i => this.ngOnInit(), err => this.handleError(err))
+
+
+    }
+
+
 
 }

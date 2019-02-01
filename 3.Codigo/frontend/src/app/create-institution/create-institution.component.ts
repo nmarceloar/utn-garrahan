@@ -115,7 +115,7 @@ export class CreateInstitutionComponent implements OnInit {
 
 }
 
-function cuitValidator(): ValidatorFn {
+export function cuitValidator(): ValidatorFn {
 
     return (cuitControl: AbstractControl): { [key: string]: any } | null => {
 

@@ -8,53 +8,63 @@
             <h6 class="text-muted">{{institution.id | leftzeroes}}</h6>
             <hr />
 
-            <div class="row mb-3">
+            <form [formGroup]="institutionForm">
 
-                <div class=" col-md-3 mb-2">
-                    <span class="h6">CUIT: </span><br /> <span>{{institution.cuit | cuit}}</span>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">CUIT</label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="cuit">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">Nombre</label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="name">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="email">
+                    </div>
                 </div>
 
-                <div class=" col-md-6 mb-2">
-                    <span class="h6">Nombre: </span><br /> <span>{{institution.name}}</span>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="inputEmail4">Dirección</label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="address">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="exampleFormControlSelect2">Tipo</label>
+                        <select class="form-control" formControlName="type">
+                            <option [ngValue]="null">Seleccionar ...</option>
+                            <option *ngFor="let type of it" [ngValue]="type">{{type.name}} - {{type.description}}</option>
+                        </select>
+                    </div>
+
                 </div>
 
-                <div class=" col-md-3 mb-2">
-                    <span class="h6">Tipo: </span><br /> <span>{{institution.type.name}}</span>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">Órdenes</label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="orderCount">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">Usuarios: </label>
+                        <input type="email" class="form-control" id="inputEmail4" formControlName="userCount">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputEmail4">Caracteres a descartar: </label>
+                        <input type="text" class="form-control" id="inputEmail4" formControlName="invalidCharCount">
+                    </div>
+
                 </div>
 
-            </div>
 
-            <div class="row mb-3">
-
-                <div class=" col-md-3 mb-2">
-                    <span class="h6">Email: </span><br /> <span>{{institution.email}}</span>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary rounded-0 shadow-sm" [disabled]="institutionForm.invalid" (click)="saveInstitution()">Guardar</button>
                 </div>
+            </form>
 
-                <div class="col-md-6 mb-2">
-                    <span class="h6">Dirección:</span><br /> <span>{{institution.address}}</span>
-                </div>
 
-                <div class="col-md-3 mb-2">
-                    <span class="h6">Alta:</span><br /> <span>{{institution.creation_date | date: "dd/MM/yyyy"}}</span>
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class=" col-md-3 mb-2">
-                    <span class="h6">Usuarios: </span><br /> <span>{{institution.userCount}}</span>
-                </div>
-
-                <div class=" col-md-6 mb-2">
-                    <span class="h6">Órdenes: </span><br /> <span>{{institution.orderCount}}</span>
-                </div>
-
-                <div class=" col-md-3 mb-2">
-                    <span class="h6">Caracteres a descartar: </span><br /> <span>{{institution.invalidCharCount}}</span>
-                </div>
-
-            </div>
 
             <div *ngIf="newUserInProcess">
 

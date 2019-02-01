@@ -15,7 +15,7 @@
                 <span *ngIf="isClient" class="text-muted"> | {{currentUser.institution?.name}}</span>
                 <span *ngIf="!isClient" class="text-muted"> | Banco de Sangre</span>
             </div>
-            <div class="text-lg-right">
+            <div class="text-lg-right" *ngIf="!isClient">
                 <a *ngIf="canAdmin" [routerLink]="['/administradores']">Administrar Banco<span class="text-muted"> | </span></a>
                 <a *ngIf="canAdmin" [routerLink]="['/operadores']">Órdenes<span class="text-muted"> | </span></a>
                 <a *ngIf="currentUser.isInternal" [routerLink]="['/operadores/informes/diario']">Informe diario<span class="text-muted"> | </span></a>
@@ -24,6 +24,11 @@
                 <span class="btn-link" (click)="logout()"
                       *ngIf="(!currentUser.isInternal) || (currentUser.isInternal && !isIrradiationInProcess)">Cerrar sesión</span>
             </div>
+
+            <div class="text-lg-right" *ngIf="isClient">
+                <span class="btn-link" (click)="logout()">Cerrar sesión</span>
+            </div>
+
 
         </div>
 
