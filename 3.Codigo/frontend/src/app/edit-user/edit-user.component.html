@@ -1,0 +1,69 @@
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-10 mx-auto">
+
+            <h5 class="h5 text-primary font-weight-normal mt-3">Edición de usuarios</h5>
+            <hr />
+
+            <form [formGroup]="userForm">
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Apellido</label>
+                        <input type="text" class="form-control" id="inputPassword4" placeholder="Apellido" formControlName="lastname" [focused]="{should: true}">
+                        <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.firstname.errors">
+                            <span class="text-danger" *ngIf="userForm.controls.firstname.errors.required">Ingrese el apellido del usuario</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Nombre</label>
+                        <input type="text" class="form-control" id="inputPassword4" placeholder="Nombre" formControlName="firstname">
+                        <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.lastname.errors">
+                            <span class="text-danger" *ngIf="userForm.controls.lastname.errors.required">Ingrese el nombre del usuario</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">DNI</label>
+                        <input type="text" class="form-control" id="inputPassword4" placeholder="DNI" formControlName="dni">
+                        <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.dni.errors">
+                            <span class="text-danger" *ngIf="userForm.controls.dni.errors.required">Ingrese el dni</span>
+                            <span class="text-danger" *ngIf="userForm.controls.dni.errors.pattern">DNI no válido</span>
+                            <span class="text-danger" *ngIf="userForm.controls.dni.errors.minLength">DNI no válido</span>
+                            <span class="text-danger" *ngIf="userForm.controls.dni.errors.maxLength">DNI no válido</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-md-6">
+                        <label for="inputCity">Email</label>
+                        <input type="text" class="form-control" formControlName="email" placeholder="Email">
+                        <div class="d-flex flex-column" *ngIf="submitted && userForm.controls.email.errors">
+                            <span class="text-danger" *ngIf="userForm.controls.email.errors.required">Ingrese el email del usuario</span>
+                            <span class="text-danger" *ngIf="userForm.controls.email.errors.email">Email no válido</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary rounded-0 px-3" (click)="editUser()">Editar</button>
+                    <button class="btn btn-secondary rounded-0 px-3 ml-2" (click)="cancelUser()">Cancelar</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+</div>

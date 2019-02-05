@@ -1,12 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend-test",
+    "\\backend-test\\server",
+    "\\backend-test\\server\\boot",
+    "\\backend-test\\server\\data",
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\app",
-    "\\frontend\\src\\app\\operator-usb-config",
-    "\\frontend\\src\\app\\order-irradiation"
+    "\\frontend\\src\\app\\create-user",
+    "\\frontend\\src\\app\\users"
   ],
-  "SelectedNode": "\\frontend\\src\\app\\operator-usb-config\\operator-usb-config.component.html",
+  "SelectedNode": "\\backend-test\\server\\data\\data.js",
   "PreviewInSolutionExplorer": false
 }

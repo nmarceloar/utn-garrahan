@@ -60,7 +60,7 @@ export class InstitutionsService {
 
     update(id, i): Observable<Institution> {
 
-        return this.http.patch<Institution>(`${environment.api.institutions}/${id}`, i)
+        return this.http.put<Institution>(`${environment.api.institutions}/${id}`, i)
 
     }
 

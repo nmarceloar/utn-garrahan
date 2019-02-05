@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h5 class="text-primary ">Usuarios</h5>
+            <hr />
+
+            <table class="table table-bordered table-hover table-stripped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Iniciales</th>
+                        <th>Administrador</th>
+                        <th>Alta</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td>{{user.id}}</td>
+                        <td>{{user.firstname}} {{user.lastname}}</td>
+                        <td>{{user.username}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.initials}}</td>
+                        <td>
+                            {{user.roles.length === 2 ? 'Si' : 'No'}} /
+                            <span *ngIf="user.roles.length === 2" class="text-primary" style="cursor: pointer" (click)="demote(user.id)">Desactivar</span>
+                            <span *ngIf="user.roles.length !== 2" class="text-primary" style="cursor: pointer" (click)="promote(user.id)">Activar</span>
+                        </td>
+                        <td>{{user.creationDate | date: "dd/MM/yyyy"}}</td>
+                        <td>
+                            {{user.accountConfirmed ? (user.active ? 'ACTIVO' : 'INACTIVO') : 'PENDIENTE'}} <span *ngIf="user.accountConfirmed"> / </span>
+                            <span *ngIf="user.accountConfirmed && user.active" class="text-primary" style="cursor: pointer" (click)="disableUser(user.id)">Desactivar</span> <span *ngIf="user.accountConfirmed && !user.active" class="text-primary" style="cursor: pointer" (click)="enableUser(user.id)">Activar</span>
+                        </td>
+                        <td>
+                            <span class="text-primary" style="cursor: pointer" (click)="edit(user.id)">Editar</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<button (click)="newUser()" class="position-fixed btn-primary rounded-circle shadow" style="bottom: 20px; right: 20px; height: 56px; width: 56px; border: 0px; cursor: pointer">
+    +
+</button>
+
+
+

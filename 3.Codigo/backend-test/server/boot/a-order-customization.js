@@ -189,12 +189,6 @@ module.exports = (app, cb) => {
 
     })
 
-    app.get("/api/orders/:id/pdf", function (req, res) {
-
-        res.download("./data.pdf")
-
-    })
-
     app.get("/api/orders/dailyReport", async function (req, res) {
 
         var startOfDay = new Date(req.query.date)

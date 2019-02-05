@@ -22,11 +22,36 @@ export class UserService {
 
     }
 
+    makeAdmin(userId, { isAdmin }) {
+
+        return this.http.put(`${environment.api.users}/operators/${userId}/admin`, { isAdmin })
+
+    }
+
+    findById(userId, q = {}) {
+
+        return this.http.get(`${environment.api.users}/${userId}?filter=${JSON.stringify(q)}`)
+
+    }
+
     createClient(user: any) {
 
         return this.http.post(`${environment.api.users}/clients`, user);
 
     }
+
+    createOperator(user: any) {
+
+        return this.http.post(`${environment.api.users}/operators`, user);
+
+    }
+
+    update(id: any, user: any) {
+
+        return this.http.put(`${environment.api.users}/${id}`, user);
+
+    }
+
 
     activate(data: any) {
 
@@ -57,6 +82,19 @@ export class UserService {
         return this.http.post(`${environment.api.passwordReset}`, resetInfo);
 
     }
+
+    clients() {
+
+        return this.http.get(`${environment.api.users}/clients`);
+
+    }
+
+    operators() {
+
+        return this.http.get(`${environment.api.users}/operators`);
+
+    }
+
 
 
 }

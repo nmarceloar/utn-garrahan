@@ -2,6 +2,8 @@
 
 var jwt = require("jsonwebtoken");
 
+var _ = require("lodash")
+
 var mailingService = require("./../mailer")
 
 const config = require("./../config.json")
@@ -73,10 +75,143 @@ module.exports = (app, cb) => {
 
     })
 
+    app.put("/api/xusers/:id", async function (req, res, next) {
+
+        var user
+
+        try {
+
+            await app.dataSources.db.transaction(async (models) => {
+
+                const { XUser } = models
+
+                let _user = await XUser.findById(req.params.id)
+
+                if (!_user)
+                    throw new Error(`No existen usuarios con id: ${req.params.id}`)
+
+                user = await _user.updateAttributes({ ...req.body })
+
+            }, { isolationLevel: 'REPEATABLE READ' })
+
+            res.json(user)
+
+        } catch (err) {
+
+            res.status(500).json({ message: err.message })
+
+        }
+
+
+
+    })
+
+    app.post("/api/xusers/operators", async function (req, res, next) {
+
+        let isAdmin = req.body.isAdmin
+
+        let user = { ...req.body, isInternal: true }
+        delete user.isAdmin
+
+        var u
+
+        try {
+
+            await app.dataSources.db.transaction(async (models) => {
+
+                const { XUser, XRole } = models
+
+                let count = await XUser.count({
+                    or: [
+                        { username: user.username },
+                        { email: user.email },
+                        { dni: user.dni },
+                        { initials: user.initials }
+                    ]
+                })
+
+                if (count > 0)
+                    throw new Error("Error. Ya existe otro usuario con los datos ingresados")
+
+                u = await XUser.create({ ...user, password: `${Math.random()}` })
+
+                let opRole = await XRole.findOne({ where: { name: "operator" } })
+                await u.roles.add(opRole)
+
+                if (isAdmin) {
+                    let adminRole = await XRole.findOne({ where: { name: "admin" } })
+                    await u.roles.add(adminRole)
+
+                }
+
+                let confirmationToken = jwt.sign(
+                    { id: u.id, username: u.username },
+                    config.secretPassword,
+                    { expiresIn: `${config.confirmExpirationInHours}h` }
+                )
+
+                await mailingService.send({
+                    from: config.mail.sender,
+                    to: u.email,
+                    subject: config.mail.activationMessage,
+                    html: templates.accountActivation({ user: u, token: confirmationToken })
+                })
+
+
+            }, { isolationLevel: 'REPEATABLE READ' })
+
+            res.json(u)
+
+        } catch (err) {
+
+            res.status(500).json({ message: err.message })
+
+        }
+
+    })
+
+    app.put("/api/xusers/operators/:id/admin", async function (req, res, next) {
+
+        let isAdmin = req.body.isAdmin
+
+        try {
+
+            await app.dataSources.db.transaction(async (models) => {
+
+                const { XUser, XRole } = models
+
+                let u = await XUser.findById(req.params.id)
+
+                if (!u)
+                    throw new Error(`No existen usuarios con id: ${req.params.id}`)
+
+                let adminRole = await XRole.findOne({ where: { name: "admin" } })
+
+                if (isAdmin) {
+
+                    await u.roles.add(adminRole)
+
+                } else {
+
+                    await u.roles.remove(adminRole)
+
+                }
+
+            }, { isolationLevel: 'REPEATABLE READ' })
+
+            res.status(200).json({})
+
+        } catch (err) {
+
+            res.status(500).json({ message: err.message })
+        }
+
+
+    })
 
     app.post("/api/xusers/clients", async function (req, res, next) {
 
-        let user = req.body
+        let user = { ...req.body, isInternal: false }
 
         var u
 
@@ -124,7 +259,7 @@ module.exports = (app, cb) => {
                 })
 
 
-            }, { isolationLevel: app.models.Order.Transaction.REPETEABLE_READ })
+            }, { isolationLevel: 'REPEATABLE READ' })
 
             res.json(u)
 
@@ -133,6 +268,38 @@ module.exports = (app, cb) => {
             res.status(500).json({ message: err.message })
 
         }
+
+    })
+
+    app.get("/api/xusers/clients", async function (req, res, next) {
+
+        try {
+
+            let users = await app.models.XUser.find({ where: { isInternal: false } })
+
+            res.status(200).json(users)
+
+        } catch (err) {
+
+            res.status(500).json({ message: err.message })
+        }
+
+
+    })
+
+    app.get("/api/xusers/operators", async function (req, res, next) {
+
+        try {
+
+            let users = await app.models.XUser.find({ where: { isInternal: true }, include: [{ roles: true }] })
+
+            res.status(200).json(users)
+
+        } catch (err) {
+
+            res.status(500).json({ message: err.message })
+        }
+
 
     })
 
@@ -237,7 +404,6 @@ module.exports = (app, cb) => {
 
     })
 
-
     app.post("/api/password-reset", async function (req, res, next) {
 
         let resetInfo = req.body
@@ -278,7 +444,6 @@ module.exports = (app, cb) => {
         }
 
     })
-
 
     app.put("/api/xusers/:id/enable", async function (req, res, next) {
 
@@ -329,7 +494,6 @@ module.exports = (app, cb) => {
 
 
     })
-
 
     cb();
 

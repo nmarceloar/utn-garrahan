@@ -1,12 +1,12 @@
 {
-    "db": {
-        "host": "localhost",
-        "port": 3306,
-        "url": "",
-        "database": "p2018",
-        "password": "localhost",
-        "name": "db",
-        "user": "root",
-        "connector": "mysql"
-    }
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "url": "",
+    "database": "p2018",
+    "password": "root",
+    "name": "db",
+    "user": "root",
+    "connector": "mysql"
+  }
 }

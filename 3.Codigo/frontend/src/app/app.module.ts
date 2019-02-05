@@ -67,6 +67,9 @@ import { OrderPrintModalComponent } from './order-print-modal/order-print-modal.
 import { AppMessagesService } from './app-messages.service';
 import { ClientUsbConfigComponent } from './client-usb-config/client-usb-config.component';
 import { OperatorUsbConfigComponent } from './operator-usb-config/operator-usb-config.component';
+import { StockSimulationComponent } from './stock-simulation/stock-simulation.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { InternalUsersComponent } from './internal-users/internal-users.component';
 
 
 const httpInterceptorProviders = [
@@ -121,7 +124,10 @@ const httpInterceptorProviders = [
         UnittypeEditModalComponent,
         OrderPrintModalComponent,
         ClientUsbConfigComponent,
-        OperatorUsbConfigComponent
+        OperatorUsbConfigComponent,
+        StockSimulationComponent,
+        EditUserComponent,
+        InternalUsersComponent
     ],
     imports: [
         NgbModule.forRoot(),
