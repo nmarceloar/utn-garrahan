@@ -275,13 +275,14 @@ module.exports = (app, cb) => {
 
         try {
 
-            let users = await app.models.XUser.find({ where: { isInternal: false } })
+            let users = await app.models.XUser.find({ where: { isInternal: false }, include: [{ institution: true }] })
 
             res.status(200).json(users)
 
         } catch (err) {
 
             res.status(500).json({ message: err.message })
+
         }
 
 
