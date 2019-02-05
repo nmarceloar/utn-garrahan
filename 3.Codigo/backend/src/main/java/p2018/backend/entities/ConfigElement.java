@@ -19,10 +19,11 @@ public class ConfigElement implements Serializable {
 
 	private static final long serialVersionUID = 7418998033905047367L;
 	
-	@Id
+	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+	@Id
 	private String name;
 	private String value;
 	private String description;

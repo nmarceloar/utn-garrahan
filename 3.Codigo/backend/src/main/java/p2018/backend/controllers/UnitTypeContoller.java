@@ -29,25 +29,27 @@ public class UnitTypeContoller {
 		return unitTypeRepository.findAll();
 	}
 	
-	@GetMapping("/unit-type/{id}")
+	@GetMapping("/unit-types/{id}")
 	public UnitType getUnitType(@PathVariable Long id){
 		return unitTypeRepository.getOne(id);
 	}
 	
-	@DeleteMapping("/unit-type/{id}")
+	@DeleteMapping("/unit-types/{id}")
 	public boolean deleteUnitType(@PathVariable Long id){
 		unitTypeRepository.deleteById(id);
 		return true;
 	}
 	
-	@PostMapping("/unit-type")
+	@PostMapping("/unit-types")
 	public UnitType createUnitType(@RequestBody UnitType unitType){
 		return unitTypeRepository.save(unitType);
 	}
 	
-	@PutMapping("/unit-type")
-	public UnitType updateUnitType(@RequestBody UnitType unitType){
-		return unitTypeRepository.save(unitType);
+	@PutMapping("/unit-types/{id}")
+	public UnitType updateUnitType(@RequestBody UnitType unitType, @PathVariable Long id){
+		UnitType unit = unitTypeRepository.getOne(id);
+		unit.setName(unitType.getName());
+		return unitTypeRepository.save(unit);
 	}
 	
 }

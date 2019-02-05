@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.CollectionUtils;
 
-import p2018.backend.BackendApplication;
 import p2018.backend.controllers.InstitutionController;
 import p2018.backend.entities.Institution;
 import p2018.backend.entities.InstitutionType;
@@ -31,7 +30,7 @@ public class InstitutionControllerTest {
 	private InstitutionController institutionController;
 	
 	
-	Institution intitutionMock = new Institution("Test","123456", "Catulo 1234", "test", new Integer(0), new Integer(0), InstitutionType.PRIVADA);
+	Institution intitutionMock = new Institution("Test","123456", "Catulo 1234", "test", new Integer(0), new Integer(0), new InstitutionType("PRIVADA", "Instituciones privadas de salud"));
 	
 	@Test
 	public void getInstitutions() throws Exception {

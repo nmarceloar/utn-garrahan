@@ -1,11 +1,16 @@
 package p2018.backend.entities;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Institution extends AuditableEntity implements Serializable{
@@ -23,8 +28,13 @@ public class Institution extends AuditableEntity implements Serializable{
 	@Version
 	private Integer version;
 	
-	@Enumerated(EnumType.STRING)
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type")
 	private InstitutionType type;
+	
+	@OneToMany(mappedBy = "institution")
+	@JsonManagedReference
+	private Set<User> users;
 
 	public String getName() {
 		return name;
@@ -80,6 +90,14 @@ public class Institution extends AuditableEntity implements Serializable{
 
 	public void setType(InstitutionType type) {
 		this.type = type;
+	}
+	
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	public Institution(String name, String cuit, String address, String email, Integer userCount, Integer orderCount,

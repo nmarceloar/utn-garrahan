@@ -7,8 +7,8 @@ import javax.persistence.Id;
 
 @Entity
 public class OrderStatus implements Serializable {
-
-	private static final long serialVersionUID = 5648722008119978089L;
+	
+	private static final long serialVersionUID = -352649161875836297L;
 	
 	@Id
 	private String name;
@@ -38,5 +38,4 @@ public class OrderStatus implements Serializable {
 	public String toString() {
 		return "OrderStatus [name=" + name + ", description=" + description + "]";
 	}
-	
 }

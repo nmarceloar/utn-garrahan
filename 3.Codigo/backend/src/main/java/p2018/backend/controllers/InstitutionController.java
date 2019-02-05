@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import p2018.backend.entities.Institution;
+import p2018.backend.entities.InstitutionType;
 import p2018.backend.repository.InstitutionRepository;
+import p2018.backend.repository.InstitutionTypeRepository;
 import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.UserRepository;
 
@@ -33,6 +35,9 @@ public class InstitutionController {
 	
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private InstitutionTypeRepository institutionTypeRepo;
 	
 	@GetMapping("/institutions")
 	public List<Institution> getInstitutions(){
@@ -72,5 +77,9 @@ public class InstitutionController {
 	public  Integer getInstitutionOrdersCount(@PathVariable Long institutionId){
 		return orderRepository.findOrderCountByInstitytionId(institutionId).intValue();
 	}
-
+	
+	@GetMapping("/institutionTypes")
+	public List<InstitutionType> getInstitutionTypes(){
+		return institutionTypeRepo.findAll();
+	}
 }

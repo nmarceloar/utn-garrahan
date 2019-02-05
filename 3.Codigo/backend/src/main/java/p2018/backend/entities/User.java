@@ -17,6 +17,8 @@ import javax.persistence.Version;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "XUser")
 public class User extends AuditableEntity implements Serializable {
@@ -46,6 +48,7 @@ public class User extends AuditableEntity implements Serializable {
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institutionId")
+	@JsonBackReference
 	private Institution institution;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })

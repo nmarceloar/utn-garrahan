@@ -1,4 +1,4 @@
-package p2018.backend.entities;
+package p2018.backend.utils;
 
 import java.io.Serializable;
 

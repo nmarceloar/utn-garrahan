@@ -45,9 +45,12 @@ public class ConfigElementController {
 		return configElementRepository.save(configElemen);
 	}
 	
-	@PutMapping("/config")
-	public ConfigElement updateConfigElement(@RequestBody ConfigElement configElemen){
-		return configElementRepository.save(configElemen);
+	@PutMapping("/config/{id}")
+	public ConfigElement updateConfigElement(@RequestBody ConfigElement configElemen, @PathVariable String id){
+		ConfigElement config = configElementRepository.getOne(id);
+		config.setValue(configElemen.getValue());
+		config.setDescription(configElemen.getDescription());
+		return configElementRepository.save(config);
 	}
 
 }

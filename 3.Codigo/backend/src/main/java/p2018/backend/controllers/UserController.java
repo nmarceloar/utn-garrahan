@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import p2018.backend.entities.AuthenticationRequest;
 import p2018.backend.entities.User;
 import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.UserRepository;
+import p2018.backend.utils.AuthenticationRequest;
 import p2018.backend.utils.Constants;
 
 
@@ -53,7 +53,7 @@ public class UserController {
 		return userRepository.findAll();
 	}
 	
-	@GetMapping("/xuser/{id}")
+	@GetMapping("/xusers/{id}")
 	public User getUser(@PathVariable Long id){
 		return userRepository.getOne(id);
 	}
@@ -64,19 +64,33 @@ public class UserController {
 		 return true;
 	}
 	
-	@PostMapping("/xuser")
+	@PostMapping("/xusers")
 	public User createUser(@RequestBody User user){
 		return userRepository.save(user);
 	}
 	
-	@PutMapping("/xuser")
+	@PutMapping("/xusers")
 	public User updateUser(@RequestBody User user){
 		return userRepository.save(user);
 	}
 	
-	@GetMapping("/xuser/{id}/orders/count")
+	@GetMapping("/xusers/{id}/orders/count")
 	public Integer getUserOrdersCount(@PathVariable Long id){
 		return orderRepository.findOrderCountByUserId(id).intValue();
+	}
+	
+	@PutMapping("/xusers/{id}/disable")
+	public void disableUser(@PathVariable Long id){
+		User user = userRepository.getOne(id);
+		user.setActive(false);
+		userRepository.save(user);
+	}
+	
+	@PutMapping("/xusers/{id}/enable")
+	public void enableUser(@PathVariable Long id){
+		User user = userRepository.getOne(id);
+		user.setActive(true);
+		userRepository.save(user);
 	}
 	
 	@SuppressWarnings("rawtypes")
