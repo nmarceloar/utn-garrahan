@@ -7,12 +7,12 @@
   },
   "properties": {
     "code": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
-    "units": {
-      "type": [
-        "object"
-      ]
+    "name": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],

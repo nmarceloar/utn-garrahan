@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { MessageService } from '../message.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-users',
@@ -12,12 +13,13 @@ export class UsersComponent implements OnInit {
     users
 
     constructor(
+        private router: Router,
         private messageService: MessageService,
         private userService: UserService) { }
 
     ngOnInit() {
 
-        this.userService.find({ order: ["orderCount DESC"] })
+        this.userService.clients()
             .subscribe((users) => { this.users = users }, err => this.handleError(err));
 
     }
@@ -39,6 +41,18 @@ export class UsersComponent implements OnInit {
     handleError(err) {
 
         this.messageService.error(err.message)
+
+    }
+
+    edit(userId) {
+
+        this.router.navigateByUrl(`/administradores/usuarios/${userId}`)
+
+    }
+
+    newUser() {
+
+        this.router.navigateByUrl("/administradores/usuarios/alta")
 
     }
 

@@ -26,6 +26,9 @@ import { HemocomponentsComponent } from './hemocomponents/hemocomponents.compone
 import { ConfigManagementComponent } from './config-management/config-management.component';
 import { PendingChangesGuard } from './pending-changes.guard';
 import { IrradiationInProcessGuard } from './irradiation-in-process.guard';
+import { StockSimulationComponent } from './stock-simulation/stock-simulation.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { InternalUsersComponent } from './internal-users/internal-users.component';
 
 
 const routes: Routes = [
@@ -167,6 +170,13 @@ const routes: Routes = [
                 }
             },
             {
+                path: "simulación",
+                component: StockSimulationComponent,
+                data: {
+                    breadcrumb: "Simulación de stock"
+                }
+            },
+            {
                 path: "configuración",
                 component: ConfigManagementComponent,
                 data: {
@@ -203,10 +213,17 @@ const routes: Routes = [
                 }
             },
             {
-                path: "usuarios",
+                path: "listado-clientes",
                 component: UsersComponent,
                 data: {
-                    breadcrumb: "Administracion de usuarios"
+                    breadcrumb: "Administracion de usuarios clientes"
+                }
+            },
+            {
+                path: "listado-operadores",
+                component: InternalUsersComponent,
+                data: {
+                    breadcrumb: "Administracion de operadores"
                 }
             },
             {
@@ -215,7 +232,15 @@ const routes: Routes = [
                 data: {
                     breadcrumb: "Alta de usuarios"
                 }
+            },
+            {
+                path: "usuarios/:id",
+                component: EditUserComponent,
+                data: {
+                    breadcrumb: "Edición de usuarios"
+                }
             }
+
 
         ]
 

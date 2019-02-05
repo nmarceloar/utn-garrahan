@@ -1,44 +1,44 @@
 {
-    "name": "ConfigElement",
-    "plural": "config",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "ConfigElement",
+  "plural": "config",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "id": true,
+      "required": true
     },
-    "properties": {
-        "name": {
-            "type": "string",
-            "required": true,
-            "id": true
-        },
-        "value": {
-            "type": "string",
-            "required": true
-        },
-        "description": {
-            "type": "string",
-            "required": true
-        },
-        "isInteger": {
-            "type": "boolean",
-            "required": true
-        },
-        "min": {
-            "type": "string",
-            "required": true
-        },
-        "max": {
-            "type": "string",
-            "required": true
-        },
-        "lastUpdated": {
-            "type": "date",
-            "required": false
-        }
+    "value": {
+      "type": "string",
+      "required": true
     },
-    "validations": [],
-    "relations": {},
-    "acls": [],
-    "methods": {}
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "isInteger": {
+      "type": "boolean",
+      "required": true
+    },
+    "min": {
+      "type": "string",
+      "required": true
+    },
+    "max": {
+      "type": "string",
+      "required": true
+    },
+    "lastUpdated": {
+      "type": "date",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

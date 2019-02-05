@@ -33,6 +33,10 @@
             "required": true,
             "default": false
         },
+        "initials": {
+            "type": "string",
+            "required": false
+        },
         "creationDate": {
             "type": "date",
             "required": false,

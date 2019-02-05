@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
-        <div class="col-12">
+        <div class="col">
 
-            <h5 class="text-primary ">Usuarios</h5>
+            <h5 class="text-primary">Clientes</h5>
             <hr />
 
             <table class="table table-bordered table-hover table-stripped">
@@ -10,8 +10,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Email</th>
                         <th>Usuario</th>
+                        <th>Institución</th>
+                        <th>Email</th>
                         <th>Alta</th>
                         <th>Estado</th>
                         <th>Órdenes</th>
@@ -22,16 +23,18 @@
                     <tr *ngFor="let user of users">
                         <td>{{user.id}}</td>
                         <td>{{user.firstname}} {{user.lastname}}</td>
-                        <td>{{user.email}}</td>
                         <td>{{user.username}}</td>
+                        <td>{{user.institution.name}}</td>
+                        <td>{{user.email}}</td>
                         <td>{{user.creationDate | date: "dd/MM/yyyy"}}</td>
-                        <td>{{user.accountConfirmed ? (user.active ? 'ACTIVO' : 'INACTIVO') : 'PENDIENTE'}}</td>
+                        <td>
+                            {{user.accountConfirmed ? (user.active ? 'ACTIVO' : 'INACTIVO') : 'PENDIENTE'}} <span *ngIf="user.accountConfirmed"> / </span>
+                            <span *ngIf="user.accountConfirmed && user.active" class="text-primary" style="cursor: pointer" (click)="disableUser(user.id)">Desactivar</span> <span *ngIf="user.accountConfirmed && !user.active" class="text-primary" style="cursor: pointer" (click)="enableUser(user.id)">Activar</span>
+
+                        </td>
                         <td>{{user.orderCount}}</td>
                         <td>
-                            <ul class="list-inline m-0">
-                                <li *ngIf="!user.active" class="list-item m-0"><span class="text-primary" (click)="enableUser(user.id)">Habilitar</span></li>
-                                <li *ngIf="user.active" class="list-item m-0"><span class="text-primary" (click)="disableUser(user.id)">Deshabilitar</span></li>
-                            </ul>
+                            <span class="text-primary" style="cursor: pointer" (click)="edit(user.id)">Editar</span>
                         </td>
                     </tr>
                 </tbody>
@@ -39,5 +42,6 @@
         </div>
     </div>
 </div>
+
 
 

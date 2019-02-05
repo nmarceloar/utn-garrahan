@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order } from '../order.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { interval, GroupedObservable, Observable, from as fromPromise, timer, throwError, from } from 'rxjs';
 import { map, flatMap, tap, take, catchError } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -30,8 +30,16 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
     irradiations: any[];
 
+    cargaManual: FormControl = new FormControl(false);
+
     unitCodeDoesNotExist: boolean = false;
     order: Order
+
+    irradiationForm: FormGroup = new FormGroup({
+        date: new FormControl(null, [Validators.required]),
+        start: new FormControl(null, [Validators.required]),
+        end: new FormControl(null, [Validators.required])
+    })
 
     intervalSubscription
 
@@ -99,6 +107,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
             .subscribe(s => {
                 this.currentUser = s.user
             })
+
+        this.irradiationForm.valueChanges.subscribe(data => console.log(data))
 
     }
 
@@ -403,6 +413,61 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
     }
 
+    createIrradiation() {
+
+        const [year, month, day] = this.irradiationForm.controls.date.value.split("-");
+
+        const [startHour, startMinute] = this.irradiationForm.controls.start.value.split(":")
+        const [endHour, endMinute] = this.irradiationForm.controls.end.value.split(":")
+
+        this.startTime = new Date(new Date(year, month - 1, day, startHour, startMinute).toISOString())
+        this.stopTime = new Date(new Date(year, month - 1, day, endHour, endMinute).toISOString())
+
+        this.showCommentModal().subscribe((comments) => {
+
+            this.showReloginModal()
+                .subscribe(() => {
+
+                    this.selectedTag.enable();
+                    this.selectedUnitCode.enable();
+
+                    this.isIrradiationInProcess = false;
+
+                    let irradiation = {
+                        units: this.selectedUnits.map(u => u.id),
+                        irradiationStart: this.startTime,
+                        irradiationEnd: this.stopTime,
+                        irradiationTag: this.selectedTag.value,
+                        irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                        irradiatorId: this.currentUser.id,
+                        comments: comments
+                    }
+
+                    this.orderService.addIrradiation(this.order.id, irradiation)
+                        .pipe(
+                            catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
+                            flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
+                            catchError(err => throwError(new Error(`Error. ${err.message}`))),
+                    )
+                        .subscribe(
+                            (d) => this.handleEndOfIrradiation(d),
+                            (err) => this.handleFailingEndOfIrradiation(err)
+                        );
+
+
+
+                }, () => {
+
+                    console.log(`Login modal closed or dismissed`)
+
+                })
+
+
+        }, () => { })
+
+
+    }
+
     private showConfirmationModal() {
 
         let d: NgbModalRef =
@@ -478,6 +543,12 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
     get canStart() {
 
         return this.selectedUnits.length > 0
+
+    }
+
+    get isCargaManual() {
+
+        return this.cargaManual.value
 
     }
 

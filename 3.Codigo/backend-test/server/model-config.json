@@ -76,5 +76,9 @@
   "ConfigElement": {
     "dataSource": "db",
     "public": true
+  },
+  "Item": {
+    "dataSource": null,
+    "public": false
   }
 }

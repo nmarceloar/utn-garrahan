@@ -1,7 +1,7 @@
 
 module.exports.users = [
-    { email: 'user1@dummy.com', dni: 30123323, username: "operador", password: 'garrahan', firstname: "Juan", lastname: "Perez", isInternal: true },
-    { email: 'user2@dummy.com', dni: 30123343, username: "administrador", password: 'garrahan', firstname: "Jimena", lastname: "Perez", isInternal: true },
+    { email: 'user1@dummy.com', dni: 30123323, username: "operador", password: 'garrahan', firstname: "Juan", lastname: "Perez", isInternal: true, initials: 'JUP' },
+    { email: 'user2@dummy.com', dni: 30123343, username: "administrador", password: 'garrahan', firstname: "Jimena", lastname: "Perez", isInternal: true, initials: 'JP' },
     { email: 'user3@dummy.com', dni: 30123325, username: "cliente1", password: 'garrahan', firstname: "Pedro", lastname: "Fernandez", isInternal: false },
     { email: 'user4@dummy.com', dni: 30123326, username: "cliente2", password: 'garrahan', firstname: "Juan", lastname: "Fernandez", isInternal: false },
 ];
