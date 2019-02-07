@@ -1,5 +1,8 @@
 package p2018.backend.repository;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +17,8 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Long>, JpaSpec
 	
 	@Query("select count(o) from OrderInfo o where o.ownerId = :ownerId")
 	Long findOrderCountByUserId(@Param("ownerId") Long ownerId);
+	
+	@Query("select o from OrderInfo o where o.creationDate >= :date")
+	List<OrderInfo> getMonthlyReport(@Param("date") Date date);
 
 }

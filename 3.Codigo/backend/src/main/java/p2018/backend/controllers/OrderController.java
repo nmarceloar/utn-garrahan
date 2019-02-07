@@ -2,17 +2,14 @@ package p2018.backend.controllers;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,19 +24,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import p2018.backend.entities.OrderInfo;
 import p2018.backend.entities.OrderInfoDTO;
 import p2018.backend.entities.OrderTransition;
-import p2018.backend.exceptions.GarrahanAPIException;
 import p2018.backend.repository.OrderInfoDTORepository;
 import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.OrderTransitionRepository;
 import p2018.backend.repository.UnitRepository;
-import p2018.backend.utils.OrderInfoSpecification;
-import p2018.backend.utils.SearchCriteria;
+import p2018.backend.utils.RequestFilterParser;
 
 @RestController
 @RequestMapping("/api")
@@ -58,6 +50,9 @@ public class OrderController {
 	@Autowired
 	private UnitRepository unitRepository;
 	
+	@Autowired
+	private RequestFilterParser requestFilterParser;
+	
 	@GetMapping("/orders")
 	public List<OrderInfo> getOrders(){
 		return orderrepository.findAll();
@@ -67,9 +62,9 @@ public class OrderController {
 	@GetMapping("/orders/page")
 	public ResponseEntity getPagedOrders(@RequestParam("filter") String query, Pageable pageable){
 		
-		Pageable pageRequest = createPageRequest(query);
+		Pageable pageRequest = requestFilterParser.createPageRequest(query);
 		
-		Specification orderSpec = crateOrderSpecification(query);
+		Specification orderSpec = requestFilterParser.crateOrderSpecification(query);
         
 		Page<OrderInfo> orders =  orderrepository.findAll(orderSpec, pageRequest);
 		Long listCount = orders.getTotalElements();
@@ -120,64 +115,15 @@ public class OrderController {
 	    return ResponseEntity.ok(order);
 	}
 	
-	private Pageable createPageRequest(String filter) {
+	@GetMapping("/orders/monthlyReport")
+	public ResponseEntity<?> getOrderMomthlyReport(@RequestParam("date") String date){
 		
-		Pageable page = null;
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-		    JsonNode actualTree = mapper.readTree(filter);
-		    Integer skip;
-		    if(actualTree.get("skip") == null) {
-		    	skip = 0;
-		    }else {
-		    	skip = actualTree.get("skip").asInt();
-		    }
-		    Integer limit = actualTree.get("limit").asInt();
-		    Integer pageNumber = skip / limit + (skip % limit == 0 ? 0 : 1);
-		    
-		    page = new PageRequest(pageNumber, limit, Sort.Direction.DESC, "lastModified");
-		    
-		} catch (Exception e) {
-			throw new GarrahanAPIException("Error parsing filter parameter from request", e);
-		}
-		return page;
+		Date reportDate = new Date(date);
+		List<OrderInfo> orders = orderrepository.getMonthlyReport(reportDate);
+		
+		Map<Object, Object> model = new HashMap<>();
+
+        return ok(model);
 	}
 	
-	private Specification crateOrderSpecification(String filter) {
-		
-		OrderInfoSpecification spec;
-		Specification value = null;
-		Long institutioId;
-		ObjectMapper mapper = new ObjectMapper();
-		Integer positionCheck = 0;
-		
-	    try {
-			JsonNode actualTree = mapper.readTree(filter);
-			JsonNode whereNode = actualTree.get("where");
-			
-			for (Iterator iterator = whereNode.elements(); iterator.hasNext();) {
-				
-				if(((JsonNode) iterator).has("and")) {
-					
-				}
-				
-				if(((JsonNode) iterator).has("institutionId")) {
-					institutioId = new Long(((JsonNode) iterator).get("institutionId").asInt());
-			    	spec = new OrderInfoSpecification(new SearchCriteria("institutionId", ":", institutioId));
-			    	if(positionCheck <= 1){
-			    		value = Specification.where(spec);
-			    	}else {
-			    		value = value.and(spec);
-			    	}
-				}
-				positionCheck++;
-			}
-	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();throw new GarrahanAPIException("Error parsing filter parameter from request", e);
-		}
-	    
-		return value;
-	}
 }
