@@ -4,6 +4,12 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.json.JSONException;
@@ -27,7 +33,7 @@ public class ParseFilterRequest {
 	
 	private String filter_2 = "{\"where\":{\"institutionId\":\"5\"},\"limit\":5,\"order\":[\"creationDate DESC\"]}";
 	
-	@Test
+	
 	public void ParseFilter(){
 		
 		ObjectMapper mapper = new ObjectMapper();
@@ -139,5 +145,23 @@ public class ParseFilterRequest {
 			throw new GarrahanAPIException("Error parsing filter parameter from request", e);
 		}
 		
+	}
+	
+	@Test
+	public void ParseDateTest() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
+		Date dateParsed = null;
+		Calendar cal = Calendar.getInstance();
+		try {
+			dateParsed = dateFormat.parse("2019-02-01T03:00:00.000Z");
+			cal.setTime(dateParsed);
+			cal.add(Calendar.MONTH, 1);
+			Date endDate = cal.getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertTrue(!dateParsed.equals(null));
 	}
 }

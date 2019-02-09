@@ -2,6 +2,11 @@ package p2018.backend.controllers;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,13 +29,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import p2018.backend.entities.Institution;
+import p2018.backend.entities.InstitutionType;
 import p2018.backend.entities.OrderInfo;
 import p2018.backend.entities.OrderInfoDTO;
 import p2018.backend.entities.OrderTransition;
+import p2018.backend.entities.UnitType;
+import p2018.backend.exceptions.GarrahanAPIException;
+import p2018.backend.repository.InstitutionRepository;
+import p2018.backend.repository.InstitutionTypeRepository;
 import p2018.backend.repository.OrderInfoDTORepository;
 import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.OrderTransitionRepository;
 import p2018.backend.repository.UnitRepository;
+import p2018.backend.repository.UnitTypeRepository;
 import p2018.backend.utils.RequestFilterParser;
 
 @RestController
@@ -52,6 +64,15 @@ public class OrderController {
 	
 	@Autowired
 	private RequestFilterParser requestFilterParser;
+	
+	@Autowired
+	private InstitutionTypeRepository institutionTypeRepository;
+	
+	@Autowired
+	private InstitutionRepository  institutionRepository;
+	
+	@Autowired
+	private UnitTypeRepository unitTypeRepository;
 	
 	@GetMapping("/orders")
 	public List<OrderInfo> getOrders(){
@@ -118,12 +139,70 @@ public class OrderController {
 	@GetMapping("/orders/monthlyReport")
 	public ResponseEntity<?> getOrderMomthlyReport(@RequestParam("date") String date){
 		
-		Date reportDate = new Date(date);
-		List<OrderInfo> orders = orderrepository.getMonthlyReport(reportDate);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
+		Date startDate;
+		Calendar cal = Calendar.getInstance();
+		
+		List<OrderInfo> orders = new ArrayList<OrderInfo>();
+		List<InstitutionType> institutionTypes = new ArrayList<InstitutionType>();
+		List<Institution> institutions = new ArrayList<Institution>();
+		List<UnitType> unitTypes = new ArrayList<UnitType>();
+		
+		try {
+			startDate = dateFormat.parse(date);
+			cal.setTime(startDate);
+			cal.add(Calendar.MONTH, 1);
+			Date endDate = cal.getTime();
+		
+			orders = orderrepository.getMonthlyReport(startDate, endDate);
+			institutionTypes = institutionTypeRepository.findAll();
+			institutions = institutionRepository.findAll();
+			unitTypes = unitTypeRepository.findAll();
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new GarrahanAPIException("Error parsing filter parameter from request", e);
+		}
 		
 		Map<Object, Object> model = new HashMap<>();
+		model.put("institutionTypes", institutionTypes);
+		model.put("institutions", institutions);
+		model.put("orders", orders);
+		model.put("startOfMonth", date);
+		model.put("unitTypes", unitTypes);
 
         return ok(model);
+	}
+	
+	@GetMapping("/orders/dailyReport")
+	public ResponseEntity<?> getOrderDaylyReport(@RequestParam("date") String date){
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
+		Date selectedDate;
+		
+		List<OrderInfo> orders = new ArrayList<OrderInfo>();
+		List<InstitutionType> institutionTypes = new ArrayList<InstitutionType>();
+		
+		try {
+			selectedDate = dateFormat.parse(date);
+			Date endDate = new Date(selectedDate.getTime() - 2);
+		
+			orders = orderrepository.getMonthlyReport(selectedDate, endDate);
+			institutionTypes = institutionTypeRepository.findAll();
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new GarrahanAPIException("Error parsing filter parameter from request", e);
+		}
+		
+		Map<Object, Object> model = new HashMap<>();
+		
+		model.put("date", selectedDate);
+		model.put("institutionTypes", institutionTypes);
+		model.put("orders", orders);
+		model.put("total", orders.size());
+		
+		return ok(model);
 	}
 	
 }

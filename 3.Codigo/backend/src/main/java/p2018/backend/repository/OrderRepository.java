@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Long>, JpaSpec
 	@Query("select count(o) from OrderInfo o where o.ownerId = :ownerId")
 	Long findOrderCountByUserId(@Param("ownerId") Long ownerId);
 	
-	@Query("select o from OrderInfo o where o.creationDate >= :date")
-	List<OrderInfo> getMonthlyReport(@Param("date") Date date);
+	@Query("select o from OrderInfo o where o.creationDate between :startDate and :endDate")
+	List<OrderInfo> getMonthlyReport(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }
