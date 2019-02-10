@@ -3,7 +3,7 @@
 module.exports = function (Order) {
 
 
-    Order.markIfCompleted = function (orderId) {
+    Order.markIfCompleted = async function (orderId) {
 
         const OrderStatus = Order.app.models.OrderStatus
 

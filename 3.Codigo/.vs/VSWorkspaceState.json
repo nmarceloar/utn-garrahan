@@ -1,13 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend-test\\server",
-    "\\backend-test\\server\\boot",
-    "\\backend-test\\server\\data",
     "\\frontend\\src",
-    "\\frontend\\src\\app\\internal-users",
-    "\\frontend\\src\\app\\users"
+    "\\frontend\\src\\app\\order-conciliation"
   ],
-  "SelectedNode": "\\frontend",
+  "SelectedNode": "\\backend",
   "PreviewInSolutionExplorer": false
 }

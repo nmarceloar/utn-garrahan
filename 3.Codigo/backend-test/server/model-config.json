@@ -15,47 +15,47 @@
   },
   "UnitType": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "OrderStatus": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Order": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Institution": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Unit": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "OrderPriority": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "InstitutionType": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "XUser": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "XAccessToken": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "XRoleMapping": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "XRole": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "XACL": {
     "dataSource": "db",
@@ -63,7 +63,7 @@
   },
   "ConciliationComment": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "UnitTypeMapping": {
     "dataSource": "db",
@@ -75,10 +75,22 @@
   },
   "ConfigElement": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Item": {
     "dataSource": null,
+    "public": false
+  },
+  "Test": {
+    "dataSource": null,
+    "public": false
+  },
+  "OrderAggregate": {
+    "dataSource": null,
+    "public": false
+  },
+  "Comment": {
+    "dataSource": "db",
     "public": false
   }
 }
