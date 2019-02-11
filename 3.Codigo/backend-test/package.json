@@ -1,13 +1,13 @@
 {
   "name": "p2018",
   "version": "1.0.0",
-  "main": "server/server.js",
+  "main": "server/app.js",
   "engines": {
     "node": ">=4"
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
+    "start": "node server/app.js",
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {

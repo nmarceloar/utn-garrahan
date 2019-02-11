@@ -29,6 +29,7 @@ import { IrradiationInProcessGuard } from './irradiation-in-process.guard';
 import { StockSimulationComponent } from './stock-simulation/stock-simulation.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { InternalUsersComponent } from './internal-users/internal-users.component';
+import { OperatorEditOrderComponent } from './operator-edit-order/operator-edit-order.component';
 
 
 const routes: Routes = [
@@ -99,6 +100,13 @@ const routes: Routes = [
                 canDeactivate: [IrradiationInProcessGuard],
                 data: {
                     breadcrumb: "Irradiación de órdenes"
+                }
+            },
+            {
+                path: "ordenes/:id/editar",
+                component: OperatorEditOrderComponent,
+                data: {
+                    breadcrumb: "Edición de órdenes"
                 }
             },
             {

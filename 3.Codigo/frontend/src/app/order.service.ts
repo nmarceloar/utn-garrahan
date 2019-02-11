@@ -77,6 +77,12 @@ export class OrderService {
 
     }
 
+    addComment(id, comment) {
+
+        return this.http.post(`${environment.api.orders}/${id}/comments`, comment)
+
+    }
+
     findById(orderId: number, q: Query) {
 
         return this.http.get<Order>(`${environment.api.orders}/${orderId}?filter=${JSON.stringify(q)}`)

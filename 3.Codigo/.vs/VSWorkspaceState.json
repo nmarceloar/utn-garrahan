@@ -1,13 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend-test\\server",
-    "\\backend-test\\server\\boot",
-    "\\backend-test\\server\\data",
+    "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\app\\internal-users",
-    "\\frontend\\src\\app\\users"
+    "\\frontend\\src\\app\\edit-order",
+    "\\frontend\\src\\environments"
   ],
-  "SelectedNode": "\\frontend",
+  "SelectedNode": "\\frontend\\src\\environments\\environment.ts",
   "PreviewInSolutionExplorer": false
 }

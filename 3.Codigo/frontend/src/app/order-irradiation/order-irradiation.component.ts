@@ -35,6 +35,10 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
     unitCodeDoesNotExist: boolean = false;
     order: Order
 
+    commentForm: FormGroup = new FormGroup({
+        text: new FormControl("", [Validators.required])
+    })
+
     irradiationForm: FormGroup = new FormGroup({
         date: new FormControl(null, [Validators.required]),
         start: new FormControl(null, [Validators.required]),
@@ -90,7 +94,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
         { owner: { institution: true } },
         { conciliationComments: { operator: true } },
         { unitTypeMappings: { unitType: true } },
-        { units: { type: true } }
+        { units: { type: true } },
+        { comments: { operator: true } }
     ];
 
     constructor(
@@ -149,6 +154,9 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
     prepare(order: any) {
 
         [this.selectedTag, this.selectedUnitCode].forEach(d => d.reset())
+        this.commentForm.reset()
+
+        order.comments.sort((c1, c2) => c1.date > c2.date ? -1 : 1)
 
         this.order = order;
 
@@ -359,47 +367,41 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
                 this.intervalSubscription.unsubscribe();
 
-                this.showCommentModal().subscribe((comments) => {
+                this.showReloginModal()
+                    .subscribe(() => {
 
-                    this.showReloginModal()
-                        .subscribe(() => {
+                        this.selectedTag.enable();
+                        this.selectedUnitCode.enable();
 
-                            this.selectedTag.enable();
-                            this.selectedUnitCode.enable();
+                        this.isIrradiationInProcess = false;
 
-                            this.isIrradiationInProcess = false;
+                        let irradiation = {
+                            units: this.selectedUnits.map(u => u.id),
+                            irradiationStart: this.startTime,
+                            irradiationEnd: this.stopTime,
+                            irradiationTag: this.selectedTag.value,
+                            irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                            irradiatorId: this.currentUser.id
+                        }
 
-                            let irradiation = {
-                                units: this.selectedUnits.map(u => u.id),
-                                irradiationStart: this.startTime,
-                                irradiationEnd: this.stopTime,
-                                irradiationTag: this.selectedTag.value,
-                                irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
-                                irradiatorId: this.currentUser.id,
-                                comments: comments
-                            }
-
-                            this.orderService.addIrradiation(this.order.id, irradiation)
-                                .pipe(
-                                    catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
-                                    flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
-                                    catchError(err => throwError(new Error(`Error. ${err.message}`))),
-                            )
-                                .subscribe(
-                                    (d) => this.handleEndOfIrradiation(d),
-                                    (err) => this.handleFailingEndOfIrradiation(err)
-                                );
+                        this.orderService.addIrradiation(this.order.id, irradiation)
+                            .pipe(
+                                catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
+                                flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
+                                catchError(err => throwError(new Error(`Error. ${err.message}`))),
+                        )
+                            .subscribe(
+                                (d) => this.handleEndOfIrradiation(d),
+                                (err) => this.handleFailingEndOfIrradiation(err)
+                            );
 
 
 
-                        }, () => {
+                    }, () => {
 
-                            console.log(`Login modal closed or dismissed`)
+                        console.log(`Login modal closed or dismissed`)
 
-                        })
-
-
-                }, () => { })
+                    })
 
 
             }, () => {
@@ -423,47 +425,42 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
         this.startTime = new Date(new Date(year, month - 1, day, startHour, startMinute).toISOString())
         this.stopTime = new Date(new Date(year, month - 1, day, endHour, endMinute).toISOString())
 
-        this.showCommentModal().subscribe((comments) => {
+        this.showReloginModal()
+            .subscribe(() => {
 
-            this.showReloginModal()
-                .subscribe(() => {
+                this.selectedTag.enable();
+                this.selectedUnitCode.enable();
 
-                    this.selectedTag.enable();
-                    this.selectedUnitCode.enable();
+                this.isIrradiationInProcess = false;
 
-                    this.isIrradiationInProcess = false;
+                let irradiation = {
+                    units: this.selectedUnits.map(u => u.id),
+                    irradiationStart: this.startTime,
+                    irradiationEnd: this.stopTime,
+                    irradiationTag: this.selectedTag.value,
+                    irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
+                    irradiatorId: this.currentUser.id
+                }
 
-                    let irradiation = {
-                        units: this.selectedUnits.map(u => u.id),
-                        irradiationStart: this.startTime,
-                        irradiationEnd: this.stopTime,
-                        irradiationTag: this.selectedTag.value,
-                        irradiationTime: Math.ceil((this.stopTime.getTime() - this.startTime.getTime()) / 1000 / 60),
-                        irradiatorId: this.currentUser.id,
-                        comments: comments
-                    }
-
-                    this.orderService.addIrradiation(this.order.id, irradiation)
-                        .pipe(
-                            catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
-                            flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
-                            catchError(err => throwError(new Error(`Error. ${err.message}`))),
-                    )
-                        .subscribe(
-                            (d) => this.handleEndOfIrradiation(d),
-                            (err) => this.handleFailingEndOfIrradiation(err)
-                        );
+                this.orderService.addIrradiation(this.order.id, irradiation)
+                    .pipe(
+                        catchError(err => throwError(new Error(`Error al intentar registro de irradiación. ${err.message}`))),
+                        flatMap(() => this.orderService.findById(this.order.id, { include: this.orderIncludes })),
+                        catchError(err => throwError(new Error(`Error. ${err.message}`))),
+                )
+                    .subscribe(
+                        (d) => this.handleEndOfIrradiation(d),
+                        (err) => this.handleFailingEndOfIrradiation(err)
+                    );
 
 
 
-                }, () => {
+            }, () => {
 
-                    console.log(`Login modal closed or dismissed`)
+                console.log(`Login modal closed or dismissed`)
 
-                })
+            })
 
-
-        }, () => { })
 
 
     }
@@ -521,7 +518,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
         this.appMessagesService.irradiationEnded()
 
-        this.router.navigateByUrl(`/operadores/ordenes/${this.order.id}/revisión`)
+        this.ngOnInit()
 
     }
 
@@ -564,6 +561,15 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
     canDeactivate() {
 
         return !this.isIrradiationInProcess
+
+    }
+
+    postComment() {
+
+
+        this.orderService.addComment(this.order.id, { ...this.commentForm.value })
+            .subscribe((comment) => this.ngOnInit(), err => this.handleErr(err))
+
 
     }
 
