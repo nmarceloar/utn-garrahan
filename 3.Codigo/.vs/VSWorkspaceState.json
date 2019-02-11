@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\app\\order-conciliation"
+    "\\frontend\\src\\app\\edit-order",
+    "\\frontend\\src\\environments"
   ],
-  "SelectedNode": "\\backend",
+  "SelectedNode": "\\frontend\\src\\environments\\environment.ts",
   "PreviewInSolutionExplorer": false
 }

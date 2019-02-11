@@ -112,6 +112,8 @@
                     <div *ngIf="canModify" class="d-flex flex-wrap justify-content-end">
                         <button class="btn btn-primary rounded-0 px-5 ml-2" (click)="acceptOrder()">Aceptar</button>
                         <button class="btn btn-danger rounded-0 px-5 ml-2" (click)="rejectOrder()">Rechazar</button>
+                        <span class="text-primary py-2 mx-2">|</span>
+                        <button class="btn btn-secondary rounded-0 px-5" (click)="editOrder()">Editar</button>
                     </div>
 
                     <h6 class="text-primary  mt-3">Historial de revisiones</h6>

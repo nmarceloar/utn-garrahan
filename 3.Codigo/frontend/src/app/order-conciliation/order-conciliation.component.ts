@@ -187,6 +187,13 @@ export class OrderConciliationComponent implements OnInit, OnDestroy {
 
     }
 
+
+    editOrder() {
+
+        this.router.navigateByUrl(`/operadores/ordenes/${this.order.id}/editar`)
+
+    }
+
     get hasOrder() {
 
         return !!this.order;

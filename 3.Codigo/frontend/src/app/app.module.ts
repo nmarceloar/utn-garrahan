@@ -70,6 +70,7 @@ import { OperatorUsbConfigComponent } from './operator-usb-config/operator-usb-c
 import { StockSimulationComponent } from './stock-simulation/stock-simulation.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { InternalUsersComponent } from './internal-users/internal-users.component';
+import { OperatorEditOrderComponent } from './operator-edit-order/operator-edit-order.component';
 
 
 const httpInterceptorProviders = [
@@ -127,7 +128,8 @@ const httpInterceptorProviders = [
         OperatorUsbConfigComponent,
         StockSimulationComponent,
         EditUserComponent,
-        InternalUsersComponent
+        InternalUsersComponent,
+        OperatorEditOrderComponent
     ],
     imports: [
         NgbModule.forRoot(),
