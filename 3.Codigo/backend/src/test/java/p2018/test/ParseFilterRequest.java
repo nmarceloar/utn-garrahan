@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,14 +32,18 @@ public class ParseFilterRequest {
 	
 	private String filter_2 = "{\"where\":{\"institutionId\":\"5\"},\"limit\":5,\"order\":[\"creationDate DESC\"]}";
 	
+	private String filter_3 = "{\"where\":{\"and\":[{\"code\":{\"regexp\":\".*xucHQNny.*\"}}]},\"skip\":0,\"limit\":20,\"order\":[\"lastModified DESC\"],\"include\":[{\"units\":{\"type\":true}},{\"status\":true},{\"priority\":true},{\"owner\":true},{\"institution\":true}]}";
 	
+	private String filter_4 = "{\"where\":{\"and\":[{\"or\":[{\"creationDate\":\"2018-12-01T03:00:00.000Z\"},{\"creationDate\":{\"gt\":\"2018-12-01T03:00:00.000Z\"}}]},{\"or\":[{\"creationDate\":\"2019-02-11T03:00:00.000Z\"},{\"creationDate\":{\"lt\":\"2019-02-11T03:00:00.000Z\"}}]}]},\"skip\":0,\"limit\":20,\"order\":[\"lastModified DESC\"],\"include\":[{\"units\":{\"type\":true}},{\"status\":true},{\"priority\":true},{\"owner\":true},{\"institution\":true}]}";
+	
+	@Test
 	public void ParseFilter(){
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Specification value = null;
 		
 		try {
-			JsonNode actualTree = mapper.readTree(filter);
+			JsonNode actualTree = mapper.readTree(filter_4);
 			//JsonNode whereTree = actualTree.get("where");
 			Iterator<JsonNode> i = this.fetchFilterParameter(actualTree.toString());
 			Integer checkPosition = 0;
@@ -81,6 +84,22 @@ public class ParseFilterRequest {
 					checkPosition++;
 				}
 				
+				if(jsonNode.get("code") != null) {
+					String code = jsonNode.get("code").toString();
+					
+					code = code.replace("{\"regexp\":\".*", "");
+					code = code.replace(".*\"}", "");
+					code = "%" + code + "%";
+							
+					OrderInfoSpecification spec = new OrderInfoSpecification(new SearchCriteria("code", "like", code));
+					if(checkPosition == 0) {
+						value = Specification.where(spec);
+					}else{
+						value = value.and(spec);
+					}
+					checkPosition++;
+				}
+				
 			}
 			
 			assertTrue(!actualTree.equals(null));
@@ -93,7 +112,7 @@ public class ParseFilterRequest {
 	
 	private Iterator<JsonNode> fetchFilterParameter(String filter) {
 		
-		 String result = null;
+		 String result = filter;
 		 Iterator<JsonNode> iterator = null;
 		 
 		 try {
@@ -101,11 +120,14 @@ public class ParseFilterRequest {
 			 ObjectMapper mapper = new ObjectMapper();
 			 
 			 if(filter.contains("and")) {
-				 result = filter.replace("{\"and\":", "");
+				 result = result.replace("{\"and\":", "");
 				 result = result.replace("]},", "],");
 				 result = result.replace("\"{\"where", "{\"where");
-			 } else {
-				 result = filter;
+			 }
+			 
+			 if(filter.contains("or")) {
+				 result = result.replace("[{\"or\":[", "");
+				 result = result.replace("", "");
 			 }
 			 
 			 JsonNode node = mapper.readTree(result);
@@ -147,7 +169,7 @@ public class ParseFilterRequest {
 		
 	}
 	
-	@Test
+
 	public void ParseDateTest() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
 		Date dateParsed = null;

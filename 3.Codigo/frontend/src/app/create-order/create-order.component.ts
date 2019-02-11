@@ -227,7 +227,7 @@ export class CreateOrderComponent implements OnInit {
             carrier: this.selectedCarrier.value,
             priorityId: this.selectedPriority.value.id,
             ownerId: this.currentUser.id,
-            institutionId: this.currentUser.institution.id,
+            institutionId: this.currentUser.institutionId,
             units: this.units.map((u) => ({
                 code: u.code,
                 unitTypeId: u.type.id

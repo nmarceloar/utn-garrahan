@@ -108,6 +108,22 @@ public class RequestFilterParser {
 					checkPosition++;
 				}
 				
+				if(jsonNode.get("code") != null) {
+					String code = jsonNode.get("code").toString();
+					
+					code = code.replace("{\"regexp\":\".*", "");
+					code = code.replace(".*\"}", "");
+					//code = "%" + code + "%";
+							
+					OrderInfoSpecification spec = new OrderInfoSpecification(new SearchCriteria("code", ":", code));
+					if(checkPosition == 0) {
+						value = Specification.where(spec);
+					}else{
+						value = value.and(spec);
+					}
+					checkPosition++;
+				}
+				
 			}
 			
 		} catch (IOException e) {

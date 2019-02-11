@@ -7,10 +7,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +37,9 @@ import p2018.backend.entities.InstitutionType;
 import p2018.backend.entities.OrderInfo;
 import p2018.backend.entities.OrderInfoDTO;
 import p2018.backend.entities.OrderTransition;
+import p2018.backend.entities.Unit;
 import p2018.backend.entities.UnitType;
+import p2018.backend.entities.UnitTypeMappings;
 import p2018.backend.exceptions.GarrahanAPIException;
 import p2018.backend.repository.InstitutionRepository;
 import p2018.backend.repository.InstitutionTypeRepository;
@@ -42,6 +47,7 @@ import p2018.backend.repository.OrderInfoDTORepository;
 import p2018.backend.repository.OrderRepository;
 import p2018.backend.repository.OrderTransitionRepository;
 import p2018.backend.repository.UnitRepository;
+import p2018.backend.repository.UnitTypeMappingsRepository;
 import p2018.backend.repository.UnitTypeRepository;
 import p2018.backend.utils.RequestFilterParser;
 
@@ -73,6 +79,9 @@ public class OrderController {
 	
 	@Autowired
 	private UnitTypeRepository unitTypeRepository;
+	
+	@Autowired
+	private UnitTypeMappingsRepository unitTypeMappingsRepository;
 	
 	@GetMapping("/orders")
 	public List<OrderInfo> getOrders(){
@@ -110,9 +119,24 @@ public class OrderController {
 	}
 	
 	@PostMapping("/orders")
-	public OrderInfo createUnit(@RequestBody OrderInfoDTO order){
+	public OrderInfo createOrder(@RequestBody OrderInfoDTO order){
+		
 		order.setUnitCount(order.getUnits().size());
 		OrderInfoDTO orderDTO =  orderInfoDTORepository.save(order);
+		
+		List<UnitType> unitTypes = unitTypeRepository.findAll();
+		for (Iterator<UnitType> iterator = unitTypes.iterator(); iterator.hasNext();) {
+			
+			UnitType unitType = (UnitType) iterator.next();
+			UnitTypeMappings unitTypeMaping = new UnitTypeMappings();
+			unitTypeMaping.setOrderId(orderDTO.getId());
+			unitTypeMaping.setUnitTypeId(unitType.getId());
+			
+			int occurrences = Collections.frequency(order.getUnits(), "bat");
+			unitTypeMaping.setCount(occurrences);
+			
+		}
+		
 		return orderrepository.getOne(orderDTO.getId());
 	}
 	
@@ -132,6 +156,21 @@ public class OrderController {
 		partialUpdate.setId(new Long(id));
 		orderTransitionRepository.save(partialUpdate);
 		OrderInfo order = orderrepository.getOne(new Long(id));
+		Set<Unit> units = order.getUnits();
+		
+		for (Iterator<Unit> iterator = units.iterator(); iterator.hasNext();) {
+			
+			Unit unit = (Unit) iterator.next();
+			Long typeId = unit.getType().getId();
+			
+			UnitTypeMappings unitTypeMapping = new UnitTypeMappings();
+			unitTypeMapping.setCount(1);
+			unitTypeMapping.setUnitTypeId(typeId);
+			unitTypeMapping.setOrderId(new Long(id));
+			
+			unitTypeMappingsRepository.save(unitTypeMapping);
+			
+		}
 		
 	    return ResponseEntity.ok(order);
 	}

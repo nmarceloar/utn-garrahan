@@ -5,13 +5,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -59,12 +57,7 @@ public class OrderInfo extends AuditableEntity implements Serializable {
     @JoinColumn(name = "ownerId")
 	private User owner;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "UnitTypeMapping", 
-        joinColumns = { @JoinColumn(name = "orderId") }, 
-        inverseJoinColumns = { @JoinColumn(name = "unitTypeId")}
-    )
+	@OneToMany(mappedBy = "orderInfo")
 	private Set<Unit> units = new HashSet<>();
 	
 	@OneToMany(mappedBy = "orderInfo")
@@ -72,6 +65,9 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 	
 	@OneToMany(mappedBy = "orderInfo")
 	private Set<Irradiation> irradiations;
+	
+	@OneToMany(mappedBy = "orderInfo")
+	private Set<UnitTypeMappings> unitTypeMappings;
 
 	public String getCode() {
 		return code;
@@ -200,6 +196,14 @@ public class OrderInfo extends AuditableEntity implements Serializable {
 
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
+	}
+	
+	public Set<UnitTypeMappings> getUnitTypeMappings() {
+		return unitTypeMappings;
+	}
+
+	public void setUnitTypeMappings(Set<UnitTypeMappings> unitTypeMappings) {
+		this.unitTypeMappings = unitTypeMappings;
 	}
 
 	public OrderInfo(String code, String carrier, Date acceptedOn, Date completionDate, Integer unitCount,

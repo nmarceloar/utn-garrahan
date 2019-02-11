@@ -3,11 +3,7 @@ package p2018.backend.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Unit")
@@ -38,9 +34,10 @@ public class UnitDTO extends AuditableEntity implements Serializable {
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
-	public UnitDTO(String code, Long unitTypeId) {
+	public UnitDTO(String code, Long unitTypeId, Long orderId) {
 		this.code = code;
 		this.unitTypeId = unitTypeId;
+		this.orderId = orderId;
 	}
 	public UnitDTO() {
 

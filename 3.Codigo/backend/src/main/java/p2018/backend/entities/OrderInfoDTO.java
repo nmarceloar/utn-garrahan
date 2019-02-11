@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -21,7 +20,9 @@ public class OrderInfoDTO extends AuditableEntity implements Serializable {
 
 	private static final long serialVersionUID = -1724711655558804770L;
 	
-	private static final String INITIAL_STATUS = "PENDIENTE";
+	public static final String INITIAL_STATUS = "PENDIENTE";
+	public static final String FINAL_STATUS = "IRRADIADA";
+	
 	private String carrier;
 	private String code;
 	private Long institutionId;

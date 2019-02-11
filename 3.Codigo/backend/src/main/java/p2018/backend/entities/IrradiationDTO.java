@@ -12,16 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Irradiation")
-public class Irradiation implements Serializable {
+public class IrradiationDTO implements Serializable {
 
 	private static final long serialVersionUID = 2083148371987532538L;
 	
@@ -50,8 +50,8 @@ public class Irradiation implements Serializable {
 	@JsonIgnore
 	private OrderInfo orderInfo;
 	
-	@OneToMany(mappedBy = "irradiation")
-	private Set<Unit> units;
+	@Transient
+	private Set<Long> units;
 
 	public Long getId() {
 		return id;
@@ -133,11 +133,11 @@ public class Irradiation implements Serializable {
 		this.irradiatorId = irradiatorId;
 	}
 	
-	public Set<Unit> getUnits() {
+	public Set<Long> getUnits() {
 		return units;
 	}
 
-	public void setUnits(Set<Unit> units) {
+	public void setUnits(Set<Long> units) {
 		this.units = units;
 	}
 	
@@ -149,7 +149,7 @@ public class Irradiation implements Serializable {
 		this.unitCount = unitCount;
 	}
 
-	public Irradiation(Long id, Date irradiationStart, Date irradiationEnd, String irradiationTag,
+	public IrradiationDTO(Long id, Date irradiationStart, Date irradiationEnd, String irradiationTag,
 			Integer irradiationTime, Long irradiatorId, String comments) {
 		this.id = id;
 		this.irradiationStart = irradiationStart;
@@ -160,7 +160,7 @@ public class Irradiation implements Serializable {
 		this.comments = comments;
 	}
 
-	public Irradiation() {
+	public IrradiationDTO() {
 	
 	}
 

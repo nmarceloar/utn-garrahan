@@ -152,7 +152,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
         this.order = order;
 
-        this.unitCodeInvalidCharCount = +order.owner.institution.invalidCharCount
+        this.unitCodeInvalidCharCount = +order.institution.invalidCharCount
 
         this.irradiations = order.irradiations.sort((a, b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
 
