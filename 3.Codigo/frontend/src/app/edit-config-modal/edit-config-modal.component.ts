@@ -21,19 +21,6 @@ export class EditConfigModalComponent implements OnInit {
 
     update() {
 
-        this.configService.updateByName(
-            this.configElem.controls.name.value,
-            this.configElem.value
-        ).subscribe(() => {
-
-            this.activeModal.close();
-
-        }, (err) => {
-
-            this.activeModal.dismiss()
-
-        })
-
     }
 
     cancel() {

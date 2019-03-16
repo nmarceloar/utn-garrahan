@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { ConfigService, Config } from '../config.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EditConfigModalComponent } from '../edit-config-modal/edit-config-modal.component';
 import { from } from 'rxjs';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MessageService } from '../message.service';
 
 @Component({
     selector: 'app-config-management',
@@ -11,22 +13,51 @@ import { from } from 'rxjs';
 })
 export class ConfigManagementComponent implements OnInit {
 
-    config: {}[] = [];
+    config: Config
+
+    configForm: FormGroup = new FormGroup({
+        minTimeOfIrradiationInMinutes: new FormControl(0, [Validators.required, Validators.pattern(/^[0-9](\.[0-9]+)?$/)])
+    })
+
+    submited: boolean = false
 
     constructor(
+        private messageService: MessageService,
         private configService: ConfigService,
         private modalService: NgbModal) { }
 
     ngOnInit() {
 
-        this.configService.findAll()
-            .subscribe(c => this.setConfig(c), err => console.error(err))
+        this.configService.get()
+            .subscribe(c => this.setConfig(c), err => this.messageService.error(err.message))
 
     }
 
     private setConfig(c) {
 
-        this.config = c
+        console.log(this.configForm.value)
+
+        this.config = c;
+        this.configForm.patchValue(c, { emitEvent: false });
+
+        console.log(this.configForm.value)
+
+    }
+
+    updateConfig() {
+
+        if (this.configForm.invalid) {
+            this.submited = true;
+            return;
+        }
+
+        this.configService.update(this.configForm.value)
+            .subscribe(
+                data => {
+                    this.setConfig(data)
+                    this.messageService.success(`La configuración se actualizó correctamente`)
+                },
+                err => this.messageService.error(err.message))
 
     }
 

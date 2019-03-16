@@ -1,44 +1,24 @@
 {
-  "name": "ConfigElement",
-  "plural": "config",
-  "base": "PersistedModel",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "properties": {
-    "name": {
-      "type": "string",
-      "id": true,
-      "required": true
+    "name": "ConfigElement",
+    "plural": "config",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
     },
-    "value": {
-      "type": "string",
-      "required": true
+    "properties": {
+        "minTimeOfIrradiationInMinutes": {
+            "type": "number",
+            "dataType": "float",
+            "required": true
+        },
+        "lastUpdated": {
+            "type": "date",
+            "required": true
+        }
     },
-    "description": {
-      "type": "string",
-      "required": true
-    },
-    "isInteger": {
-      "type": "boolean",
-      "required": true
-    },
-    "min": {
-      "type": "string",
-      "required": true
-    },
-    "max": {
-      "type": "string",
-      "required": true
-    },
-    "lastUpdated": {
-      "type": "date",
-      "required": false
-    }
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {}
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
 }

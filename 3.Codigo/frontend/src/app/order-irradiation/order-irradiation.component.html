@@ -4,13 +4,11 @@
 
         <div class="col-md-12 mx-auto">
 
-            <div *ngIf="isLoading" class="d-flex justify-content-center">
+            <div *ngIf="!order" class="d-flex justify-content-center">
                 <div class="loader"></div>
             </div>
 
-            <div *ngIf="!isLoading">
-
-
+            <div *ngIf="order">
 
                 <h5 class="text-primary mt-3">Órden</h5>
                 <h6 class="text-muted">{{order.id | leftzeroes}}</h6>
@@ -49,7 +47,7 @@
                         <span>{{order.owner.firstname}} {{order.owner.lastname}}</span>
                         <span> /</span>
                         <br />
-                        <span class="text-primary">{{order.institution.name}}</span>
+                        <span class="text-primary">{{order.owner.institution.name}}</span>
                     </div>
 
                     <div class="col-sm-2 col-md-3">

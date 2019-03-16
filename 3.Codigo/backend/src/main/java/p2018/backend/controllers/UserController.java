@@ -33,97 +33,100 @@ import p2018.backend.repository.UserRepository;
 import p2018.backend.utils.AuthenticationRequest;
 import p2018.backend.utils.Constants;
 
-
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins="http://localhost:4200", allowedHeaders="*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private OrderRepository orderRepository;
-	
+
 	@Autowired
-    private AuthenticationManager authenticationManager;
-	
+	private AuthenticationManager authenticationManager;
+
 	@GetMapping("/xusers")
-	public List<User> getUsers(){
+	public List<User> getUsers() {
 		return userRepository.findAll();
 	}
-	
+
 	@GetMapping("/xusers/{id}")
-	public User getUser(@PathVariable Long id){
+	public User getUser(@PathVariable Long id) {
 		return userRepository.getOne(id);
 	}
-	
+
 	@DeleteMapping("/xuser/{id}")
-	public boolean deleteUser(@PathVariable Long id){
-		 userRepository.deleteById(id);
-		 return true;
+	public boolean deleteUser(@PathVariable Long id) {
+		userRepository.deleteById(id);
+		return true;
 	}
-	
+
 	@PostMapping("/xusers")
-	public User createUser(@RequestBody User user){
+	public User createUser(@RequestBody User user) {
 		return userRepository.save(user);
 	}
-	
+
 	@PutMapping("/xusers")
-	public User updateUser(@RequestBody User user){
+	public User updateUser(@RequestBody User user) {
 		return userRepository.save(user);
 	}
-	
+
 	@GetMapping("/xusers/{id}/orders/count")
-	public Integer getUserOrdersCount(@PathVariable Long id){
-		return orderRepository.findOrderCountByUserId(id).intValue();
+	public Integer getUserOrdersCount(@PathVariable Long id) {
+		return orderRepository.findOrderCountByUserId(id)
+				.intValue();
 	}
-	
+
 	@PutMapping("/xusers/{id}/disable")
-	public void disableUser(@PathVariable Long id){
+	public void disableUser(@PathVariable Long id) {
 		User user = userRepository.getOne(id);
 		user.setActive(false);
 		userRepository.save(user);
 	}
-	
+
 	@PutMapping("/xusers/{id}/enable")
-	public void enableUser(@PathVariable Long id){
+	public void enableUser(@PathVariable Long id) {
 		User user = userRepository.getOne(id);
 		user.setActive(true);
 		userRepository.save(user);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/xusers/login")
 	public ResponseEntity login(@RequestBody AuthenticationRequest data) {
-		
-		try {
-            String username = data.getUsername();
-            User user = userRepository.findByUsername(username);
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
 
-            String token = Jwts.builder().setIssuedAt(new Date()).setIssuer(Constants.ISSUER_INFO)
-    				.setSubject(username)
-    				.setExpiration(new Date(System.currentTimeMillis() + Constants.TOKEN_EXPIRATION_TIME))
-    				.signWith(SignatureAlgorithm.HS512, Constants.SUPER_SECRET_KEY).compact();
-            
-            Map<Object, Object> model = new HashMap<>();
-            model.put("token", token);
-            model.put("user", user);
-            return ok(model);
-            
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
-        }
-	}	
-	
+		try {
+			String username = data.getUsername();
+			User user = userRepository.findByUsername(username);
+			Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,
+					data.getPassword()));
+
+			String token = Jwts.builder()
+					.setIssuedAt(new Date())
+					.setIssuer(Constants.ISSUER_INFO)
+					.setSubject(username)
+					.setExpiration(new Date(System.currentTimeMillis() + Constants.TOKEN_EXPIRATION_TIME))
+					.signWith(SignatureAlgorithm.HS512, Constants.SUPER_SECRET_KEY)
+					.compact();
+
+			Map<Object, Object> model = new HashMap<>();
+			model.put("token", token);
+			model.put("user", user);
+			return ok(model);
+
+		} catch (AuthenticationException e) {
+			throw new BadCredentialsException("Invalid username/password supplied");
+		}
+	}
+
 	@PostMapping("/xusers/verifyCredentials")
 	public User verifyCredentials(@RequestBody AuthenticationRequest data) {
-		
+
 		String encryptPassword = BCrypt.hashpw(data.getPassword(), BCrypt.gensalt());
 		return userRepository.findByUserNameAndPass(data.getUsername(), encryptPassword);
-		
+
 	}
-	
-	
+
 }

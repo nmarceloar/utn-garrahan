@@ -22,9 +22,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import p2018.backend.entities.User;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-	
+
 	private AuthenticationManager authenticationManager;
-	
+
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
@@ -32,11 +32,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
+
 		try {
 			User credenciales = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
-			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					credenciales.getUsername(), credenciales.getPassword(), new ArrayList<>()));
+			return authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(credenciales.getUsername(),
+							credenciales.getPassword(),
+							new ArrayList<>()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -46,10 +49,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
 
-		String token = Jwts.builder().setIssuedAt(new Date()).setIssuer(Constants.ISSUER_INFO)
-				.setSubject(((User)auth.getPrincipal()).getUsername())
+		String token = Jwts.builder()
+				.setIssuedAt(new Date())
+				.setIssuer(Constants.ISSUER_INFO)
+				.setSubject(((User) auth.getPrincipal()).getUsername())
 				.setExpiration(new Date(System.currentTimeMillis() + Constants.TOKEN_EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, Constants.SUPER_SECRET_KEY).compact();
+				.signWith(SignatureAlgorithm.HS512, Constants.SUPER_SECRET_KEY)
+				.compact();
+
 		response.addHeader(Constants.HEADER_AUTHORIZACION_KEY, Constants.TOKEN_BEARER_PREFIX + " " + token);
+
 	}
 }

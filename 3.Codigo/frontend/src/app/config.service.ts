@@ -4,10 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "./../environments/environment";
 import { map } from 'rxjs/operators';
 
-export interface ConfigElement {
-    name: string,
-    value: string,
-    description: string
+export interface Config {
+
+    minTimeOfIrradiationInMinutes: number
+
 }
 
 @Injectable({ providedIn: "root" })
@@ -15,21 +15,16 @@ export class ConfigService {
 
     constructor(private http: HttpClient) { }
 
-    public findAll() {
+    public get() {
 
-        return this.http.get<ConfigElement[]>(`${environment.api.config}`)
-
-    }
-
-    public updateByName(name: string, config: ConfigElement) {
-
-        return this.http.put<ConfigElement>(`${environment.api.config}/${name}`, config);
+        return this.http.get<Config>(`${environment.api.config}`)
 
     }
 
-    public updateAll(elems: ConfigElement[]) {
 
-        return this.http.put(`${environment.api.config}`, elems);
+    public update(config) {
+
+        return this.http.put<Config>(`${environment.api.config}`, config);
 
     }
 

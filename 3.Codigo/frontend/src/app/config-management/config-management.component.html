@@ -2,36 +2,28 @@
 
     <div class="row">
 
-        <div class="col-12 mx-auto">
+        <div class="col-12 mx-auto" *ngIf="config">
 
             <h5 class="text-primary font-weight-normal mt-4">Configuración del sistema</h5>
             <span class="text-muted">Parámetros principales</span>
             <hr />
 
-            <div class="table-responsive">
+            <form [formGroup]="configForm" (submit)="updateConfig()">
 
-                <table class="table table-stripped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Valor</th>
-                            <th>Descripción</th>
-                            <th>Última actualización</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let configelem of config">
-                            <td>{{configelem.name}}</td>
-                            <td>{{configelem.value}}</td>
-                            <td>{{configelem.description}}</td>
-                            <td>{{configelem.lastUpdated | date: "dd/MM/yyyy hh:mm"}}</td>
-                            <td><button class="btn btn-link m-0 p-0" (click)="openModal(configelem)">Editar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Tiempo mínimo de irradiación</label>
+                            <input type="text" formControlName="minTimeOfIrradiationInMinutes" class="form-control" />
+                            <span class="text-muted">Tiempo mínimo de irradiación expresado en minutos (Última actualización: {{config.lastUpdated | date: "dd/MM/yyyy hh:mm:ss"}})</span>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary rounded-0 px-3" type="submit" [disabled]="configForm.invalid">Guardar</button>
+                        </div>
+                    </div>
+                </div>
 
-            </div>
+            </form>
 
 
         </div>

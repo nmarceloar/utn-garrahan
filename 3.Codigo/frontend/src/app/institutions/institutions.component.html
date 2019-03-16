@@ -7,6 +7,19 @@
             <h5 class="text-primary font-weight-normal">Instituciones</h5>
             <hr />
 
+            <form [formGroup]="searchForm">
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="text-primary">Busqueda</label>
+                            <input type="text" class="form-control" formControlName="name" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <hr />
+
             <div class="table-responsive">
 
                 <table class="table table-bordered table-hover">

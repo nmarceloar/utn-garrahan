@@ -7,6 +7,7 @@ const member = require("./../middleware/authorization.member")
 const isAdmin = require("./../middleware/is-admin")
 const isInternal = require("./../middleware/is-internal")
 
+
 orders.get("/page", [authentication], (req, res) => {
 
     let q = JSON.parse(req.query.filter);
@@ -33,6 +34,39 @@ orders.get("/page", [authentication], (req, res) => {
                 }
             })
         })
+
+})
+
+orders.put("/:id(\\d+)/status", async function (req, res) {
+
+    let order
+
+    try {
+
+        await app.dataSources.db.transaction(async models => {
+
+            const { Order, OrderStatus } = models
+
+            order = await Order.findById(req.params.id)
+
+            if (!order)
+                throw new Error(`La orden no existe`)
+
+            let newStatus = await OrderStatus.findById(req.body.statusId)
+
+            if (!newStatus)
+                throw new Error(`No existe el estado`)
+
+            await order.markAs(newStatus)
+
+        }, { isolationLevel: `REPEATABLE READ` })
+
+        res.status(200).json(order)
+
+    } catch (err) {
+
+        res.status(500).json({ message: err.message })
+    }
 
 })
 

@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node server/app.js",
+    "prestart": "node server/create-db.js",
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "loopback-component-explorer": "^4.0.0",
     "loopback-connector-mongodb": "^1.18.1",
     "loopback-connector-mysql": "^2.4.1",
+    "mysql": "^2.16.0",
     "randexp": "^0.5.3",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"

@@ -18,23 +18,21 @@ const configuration = app.loopback.Router()
 
 configuration.get("/", [authentication, isInternal], async function (req, res) {
 
-    let configElements = await app.models.ConfigElement.find();
+    let config = await app.models.ConfigElement.findOne();
 
-    res.json(configElements);
+    res.json(config);
 
 })
 
-configuration.put("/:name", [authentication, isAdmin], async function (req, res) {
+configuration.put("/", [authentication, isAdmin], async function (req, res) {
 
-    let d = await app.models.ConfigElement.findOne({ where: { name: req.params.name } })
+    let config = await app.models.ConfigElement.findOne()
 
-    d = await d.updateAttributes({
-        value: req.body.value,
-        description: req.body.description,
-        lastUpdated: new Date()
+    config = await config.updateAttributes({
+        ...req.body
     })
 
-    res.json(d);
+    res.json(config);
 
 
 })

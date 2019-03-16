@@ -1,29 +1,29 @@
 {
-    "name": "Comment",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "Comment",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "text": {
+      "type": "string",
+      "required": true
     },
-    "properties": {
-        "text": {
-            "type": "string",
-            "required": true
-        },
-        "date": {
-            "type": "date",
-            "required": true,
-            "defaultFn": "now"
-        }
-    },
-    "validations": [],
-    "relations": {
-        "operator": {
-            "type": "belongsTo",
-            "model": "XUser",
-            "foreignKey": "operatorId"
-        }
-    },
-    "acls": [],
-    "methods": {}
+    "date": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "operator": {
+      "type": "belongsTo",
+      "model": "XUser",
+      "foreignKey": "operatorId"
+    }
+  },
+  "acls": [],
+  "methods": {}
 }

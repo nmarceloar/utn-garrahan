@@ -13,48 +13,55 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * This configuration class defines the security applied to the routing 
- * and the encryption type used for the user password
+ * This configuration class defines the security applied to the routing and the
+ * encryption type used for the user password
  * 
  * @author gmolina
  *
  */
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	 
+
 	@Autowired
 	private UserDetailsService userDatilsService;
-	
+
 	@Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-	
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-	    auth.userDetailsService(userDatilsService).passwordEncoder(bCryptPasswordEncoder());
+		auth.userDetailsService(userDatilsService)
+				.passwordEncoder(bCryptPasswordEncoder());
 	}
-	
+
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.cors().and()
-		.csrf().disable()
-		.authorizeRequests().antMatchers(HttpMethod.POST, Constants.LOGIN_URL).permitAll()
-		.anyRequest().authenticated().and().formLogin().and()
-		.httpBasic()
-		.and()
-			.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-			.addFilter(new JWTAuthorizationFilter(authenticationManager()));
-    }
-	
+	protected void configure(HttpSecurity http) throws Exception {
+
+		http.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.cors()
+				.and()
+				.csrf()
+				.disable()
+				.authorizeRequests()
+				.antMatchers(HttpMethod.POST, Constants.LOGIN_URL)
+				.permitAll()
+				.anyRequest()
+				.authenticated()
+				.and()
+				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager()));
+	}
+
 	/*
 	 * @Bean public WebMvcConfigurer corsConfigurer() { return new
 	 * WebMvcConfigurerAdapter() {

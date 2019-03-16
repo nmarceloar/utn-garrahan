@@ -1,11 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\backend-test\\server",
+    "\\backend-test\\server\\boot",
+    "\\backend-test\\server\\configuration",
+    "\\backend-test\\server\\data",
+    "\\backend-test\\server\\models",
     "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\app\\edit-order",
-    "\\frontend\\src\\environments"
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\edit-config-modal",
+    "\\frontend\\src\\app\\order-irradiation"
   ],
-  "SelectedNode": "\\frontend\\src\\environments\\environment.ts",
+  "SelectedNode": "\\frontend\\src\\app\\order-irradiation\\order-irradiation.component.html",
   "PreviewInSolutionExplorer": false
 }

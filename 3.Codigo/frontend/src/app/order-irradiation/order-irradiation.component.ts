@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order } from '../order.service';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { interval, GroupedObservable, Observable, from as fromPromise, timer, throwError, from } from 'rxjs';
+import { interval, GroupedObservable, Observable, from as fromPromise, timer, throwError, from, of, zip } from 'rxjs';
 import { map, flatMap, tap, take, catchError } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
@@ -15,7 +15,6 @@ import { CancelConfirmationModalComponent } from '../cancel-confirmation-modal/c
 import { ModalReloginComponent } from '../modal-relogin/modal-relogin.component';
 import { SelectUnitModalComponent } from '../select-unit-modal/select-unit-modal.component';
 import { ConfigService } from '../config.service';
-import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { ConfirmActionModalComponent } from '../confirm-action-modal/confirm-action-modal.component';
 import { CanComponentDeactivate } from '../can-component-deactivate';
 import { AppMessagesService } from '../app-messages.service';
@@ -33,6 +32,7 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
     cargaManual: FormControl = new FormControl(false);
 
     unitCodeDoesNotExist: boolean = false;
+
     order: Order
 
     commentForm: FormGroup = new FormGroup({
@@ -113,54 +113,36 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
                 this.currentUser = s.user
             })
 
-        this.irradiationForm.valueChanges.subscribe(data => console.log(data))
-
     }
 
     ngOnInit() {
 
-        this.route.params
-            .pipe(
-                map((params) => params.id),
-                tap(() => this.isLoading = true),
-                flatMap((id) => this.orderService.findById(id, { include: this.orderIncludes })),
-                tap(
-                    () => this.isLoading = false,
-                    () => this.isLoading = false
-                )
-            )
-            .subscribe(
-                (order) => this.prepare(order),
-                (err) => this.handleErr(err)
-            )
+        zip(
+            this.orderService.findById(+this.route.snapshot.params.id, { include: this.orderIncludes }),
+            this.configService.get()
+        )
+            .subscribe(([order, config]) => {
 
+                this.prepare(order)
 
-        this.configService.findAll()
-            .subscribe((config) => {
+                this.minTimeOfIrradiation = config.minTimeOfIrradiationInMinutes * 60 * 1000
 
-                this.tagCodeInvalidCharCount = +((config.filter(d => (d as any).name === "tagCodeInvalidCharCount")[0] as any).value)
-                this.minTimeOfIrradiation =
-                    +((config.filter(d => (d as any).name === "minTimeOfIrradiationInMinutes")[0] as any).value) * 60 * 1000;
-
-            }, (err) => {
-                this.handleErr(err)
-            })
-
+            }, err => this.messageService.error(err.message))
 
     }
 
     ngOnDestroy() { }
 
-    prepare(order: any) {
+    prepare(order) {
+
+        this.order = order;
 
         [this.selectedTag, this.selectedUnitCode].forEach(d => d.reset())
         this.commentForm.reset()
 
         order.comments.sort((c1, c2) => c1.date > c2.date ? -1 : 1)
 
-        this.order = order;
-
-        this.unitCodeInvalidCharCount = +order.institution.invalidCharCount
+        this.unitCodeInvalidCharCount = +order.owner.institution.invalidCharCount
 
         this.irradiations = order.irradiations.sort((a, b) => a.irradiationStart > b.irradiationStart ? -1 : 1)
 
@@ -327,6 +309,8 @@ export class OrderIrradiationComponent implements OnInit, OnDestroy, CanComponen
 
 
     startIrradiation() {
+
+        console.log(this.minTimeOfIrradiation)
 
         this.startTime = new Date();
 
